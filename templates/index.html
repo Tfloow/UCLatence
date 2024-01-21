@@ -8,10 +8,8 @@
 </head>
 <body>
     <h1>Is it down ?</h1>
-    <ul>
         {% for site in serviceList %} 
-            <li> <a href={{ site }}> {{ site }} </a> </li>
+            <iframe src="/{{ site }}" id="flex-container">  </iframe> 
         {% endfor %}
-    </ul>
 </body>
 </html>

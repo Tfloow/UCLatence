@@ -26,6 +26,7 @@ def statusService(services, service):
     needToCheck = jsonUtility.deltaTimeService(services, service)
     
     if needToCheck:
+        print(f"[LOG]: HTTP request for {services[service]["url"]}")
         response = requests.get(url).status_code < 400 # Starting 400 codes are error for HTTP GET
         
         jsonUtility.updateStatus(services, service, response)

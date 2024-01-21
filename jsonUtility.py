@@ -2,7 +2,7 @@ import json
 import datetime
 
 datetimeFormat = "%d/%m/%Y %H:%M:%S"
-timeCheck = 300
+timeCheck = 600 # Check every 300 seconds (in production)
 
 def timeUpdate():
     with open("services.json", "r") as f:

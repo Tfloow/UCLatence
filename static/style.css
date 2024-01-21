@@ -2,6 +2,25 @@ body {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+h1{
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+iframe{
+    width: 420px;
+    height: 200px;
+    border: 0;
+
+    flex: 1; /* Allow the div to grow and shrink based on available space */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
 /* Default link style */
 a {
     color: blue;
@@ -11,4 +30,10 @@ a {
 /* Visited link style */
 a:visited {
     color: blue; /* Set the color for visited links */
+}
+
+#services-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
+    justify-content: space-around; /* Align items with space around them */
 }

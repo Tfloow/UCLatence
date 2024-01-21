@@ -2,6 +2,18 @@ body {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Default link style */
+a {
+    color: rgb(47, 47, 228);
+    text-decoration: none; /* Remove underline */
+}
+
+/* Visited link style */
+a:visited {
+    color: rgb(47, 47, 228); /* Set the color for visited links */
+}
+
+
 .itemWebsiteDiv {
     background-color: rgb(114, 187, 120);
     color: white;
@@ -35,7 +47,6 @@ body {
     max-width: 300px;
     min-width: 40px;
 
-    text-align: center;
     flex: 1; /* Allow the div to grow and shrink based on available space */
 
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
