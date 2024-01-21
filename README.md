@@ -8,6 +8,8 @@
   - [Roadmap](#roadmap)
   - [License](#license)
 
+Test the app [here](https://uclouvaindown-ed3979a045e6.herokuapp.com/)
+
 ## Introduction
 
 This website is displaying which website or service related to the UCLouvain is down at the moment.
