@@ -4,6 +4,7 @@
   - [Introduction](#introduction)
   - [How does it work ?](#how-does-it-work-)
   - [Roadmap](#roadmap)
+  - [License](#license)
 
 ## Introduction
 
@@ -30,4 +31,7 @@ I am tracking and storing the last status in the JSON and only doing request eve
 - [ ] A nice and clear home page with all current status
 - [ ] Deployed locally
 - [ ] Deployed globally 
-- 
+
+## License
+
+This work is protected under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). For the favicon, I used the UCLouvain's logo and 2 images that doesn't belong to me but to their rightful owner (*Check compliance with the license*).

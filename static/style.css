@@ -8,6 +8,12 @@ h1{
     justify-content: center; /* Center horizontally */
 }
 
+.homepanel{
+    display: inline-block; /* or inline */
+    text-align: center;
+
+}
+
 iframe{
     width: 420px;
     height: 200px;

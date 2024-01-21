@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCLouvain Down</title>
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 </head>
 <body>
     <h1>Is it down ?</h1>
+    <div class="homepanel">
         {% for site in serviceList %} 
             <iframe src="/{{ site }}" id="flex-container">  </iframe> 
         {% endfor %}
+    </div>
 </body>
 </html>
