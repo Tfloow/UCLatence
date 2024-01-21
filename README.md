@@ -3,6 +3,8 @@
 - [UCLouvain website DownDetector](#uclouvain-website-downdetector)
   - [Introduction](#introduction)
   - [How does it work ?](#how-does-it-work-)
+  - [How to run it ?](#how-to-run-it-)
+    - [Explanation of the steps](#explanation-of-the-steps)
   - [Roadmap](#roadmap)
   - [License](#license)
 
@@ -23,6 +25,20 @@ I am using Flask to run the website and handle all interaction between the user 
 To know if a service is down simply go to the `/<service>` on the website.
 
 I am tracking and storing the last status in the JSON and only doing request every 5 minutes.
+
+## How to run it ?
+
+First, make sure to get the latest version of python (I am using 3.12). then follow these steps:
+
+1. `git clone git@github.com:Tfloow/UCLouvainDown.git` (*or fork it*)
+2. `pip install -r requirements.txt`
+3. `flask --app main run --host=0.0.0.0`
+
+### Explanation of the steps
+
+1. Clone the repo so you can get the code
+2. In the main directory, install all needed dependencies and the correct version without hassle in one command
+3. Run the app. It will host locally on your pc and you can access it through other devices connected on the same network as your pc
 
 ## Roadmap
 

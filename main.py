@@ -1,6 +1,5 @@
 from flask import Flask, render_template
 import json
-from pprint import pprint
 import requests
 
 # My modules
