@@ -17,7 +17,14 @@ h1{
 iframe{
     width: 420px;
     height: 200px;
-    border: 0;
+
+    margin: 10px;
+    border: 10;
+    border-radius: 25px;
+    border-style: dotted;
+    border-color: rgb(78, 65, 37);
+
+    background-color: rgb(247, 247, 247);
 
     flex: 1; /* Allow the div to grow and shrink based on available space */
     align-items: center; /* Center vertically */
@@ -42,4 +49,13 @@ a:visited {
     display: flex;
     flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
     justify-content: space-around; /* Align items with space around them */
+}
+
+footer{
+    text-align: center;
+    color: rgb(121, 121, 121);
+}
+
+footer .github-footer{
+    color: rgb(121, 121, 121);
 }

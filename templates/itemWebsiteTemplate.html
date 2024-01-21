@@ -2,11 +2,11 @@
     <h2>Status for {{ service }} @ <a href={{ url }}> {{ url }} </a> </h2>
 
     {% if UP %}
-        <div class="itemWebsiteDiv" id="flex-container">
-            <a href="/{{ service }}" style="color: white;" target="_blank"> Up </a>
-        </div>
+    <div class="itemWebsiteDiv" id="up-container">
+        <a href="/{{ service }}" style="color: white;" target="_blank"> Up </a>
+    </div>
     {% else %}
-        <div class="itemWebsiteDivDown" id="flex-container">
+        <div class="itemWebsiteDivDown" id="down-container" style="background-color: red;">
             <a href="/{{ service }}" style="color: white;" target="_blank"> Down </a>
         </div>
     {% endif %}
