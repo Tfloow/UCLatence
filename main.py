@@ -3,6 +3,9 @@ import json
 from pprint import pprint
 import requests
 
+# My modules
+import jsonUtility
+
 # Load JSON services
 f = open("services.json")
 if f == None:
@@ -20,8 +23,16 @@ def statusService(services, service):
         print("[LOG]: You passed a service that is not tracked")
         return False
     
-    response = requests.get(url)
-    return response.status_code < 400 # Starting 400 codes are error for HTTP GET
+    needToCheck = jsonUtility.deltaTimeService(services, service)
+    
+    if needToCheck:
+        response = requests.get(url).status_code < 400 # Starting 400 codes are error for HTTP GET
+        
+        jsonUtility.updateStatus(services, service, response)
+        
+        return response
+    else:
+        return services[service]["Last status"]
 
 
 # Start the Flask app
@@ -29,7 +40,7 @@ app = Flask("UCLouvainDown")
 
 @app.route("/")
 def index():
-    return render_template("itemWebsite.html")
+    return render_template("index.html", serviceList=services.keys())
 
 @app.route("/<service>")
 def service(service):

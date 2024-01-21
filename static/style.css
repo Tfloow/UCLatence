@@ -1,0 +1,14 @@
+body {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Default link style */
+a {
+    color: blue;
+    text-decoration: none; /* Remove underline */
+}
+
+/* Visited link style */
+a:visited {
+    color: blue; /* Set the color for visited links */
+}
