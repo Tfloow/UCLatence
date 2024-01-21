@@ -3,17 +3,17 @@ body {
 }
 
 /* Default link style */
-a {
+#urlTO {
     color: rgb(47, 47, 228);
     text-decoration: none; /* Remove underline */
 }
 
 /* Visited link style */
-a:visited {
+#urlTO:visited {
     color: rgb(47, 47, 228); /* Set the color for visited links */
 }
 
-
+/* OLD STYLING USED FOR REFERENCE */
 .itemWebsiteDiv {
     background-color: rgb(114, 187, 120);
     color: white;
@@ -37,36 +37,40 @@ a:visited {
 
 }
 
-.itemWebsiteDivDown{
-    background-color: rgb(187, 123, 114);
+
+
+
+.container {
+    max-width: 100%; /* Set your desired maximum width */
+    min-width: 100px; /* Set your desired minimum width */
+    text-align: center; /* Center the content horizontally */
+
     color: white;
-    text-align: center;
 
-    display: flex;
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    border: 20px;
+}
 
-    height: 50px;
-    max-width: 300px;
-    min-width: 40px;
+#up {
+    display: inline-block; /* Ensure the link behaves like a block-level element */
+    padding: 10px 150px 10px 150px; /* Optional: Add padding for better visual appearance */
+    background-color: rgb(114, 187, 120); /* Optional: Add background color */
+    color: white; /* Optional: Set text color */
+    text-decoration: none; /* Optional: Remove underline */
+    border-radius: 25px; /* Optional: Add border radius for rounded corners */
 
-    flex: 1; /* Allow the div to grow and shrink based on available space */
+    margin-left: auto;
+    margin-right: auto;
 
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 25px;
-    border-radius: 25px;
 }
 
-#down-container {
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
-    justify-content: space-around; /* Align items with space around them */
+#down{
+    background-color: rgb(187, 125, 114);
+    display: inline-block; /* Ensure the link behaves like a block-level element */
+    padding: 10px 150px 10px 150px; /* Optional: Add padding for better visual appearance */
+    color: white; /* Optional: Set text color */
+    text-decoration: none; /* Optional: Remove underline */
+    border-radius: 25px; /* Optional: Add border radius for rounded corners */
 
-}
-
-#down-container {
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
-    justify-content: space-around; /* Align items with space around them */
-
+    font-size: 25px;
 }
