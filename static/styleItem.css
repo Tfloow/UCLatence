@@ -108,6 +108,8 @@ button{
 
     margin: 10px;
     padding: 5px 15px 5px 15px;
+
+    color: rgb(235, 234, 234);
 }
 
 button:hover{
@@ -128,4 +130,8 @@ button.yes:hover{
 
 button.no:hover{
     background-color: rgb(114, 77, 71);
+}
+
+#result{
+    height: 20px;
 }

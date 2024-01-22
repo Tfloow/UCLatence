@@ -2,7 +2,7 @@ import json
 import datetime
 import pytz # For timezone
 
-datetimeFormat = "%d/%m/%Y %H:%M:%S"
+datetimeFormat = "%Y-%m-%dT%H:%M:%S"
 timeCheck = 600 # Check every 300 seconds (in production)
 
 def timeUpdate():
@@ -65,7 +65,7 @@ def addNewService(service, url):
         j = json.load(f)
         
     j[service]["url"] = url
-    j[service]["Last access time"] = "22/01/2024 06:35:29" # Random date 
+    j[service]["Last access time"] = "2024-01-22T10:51:30" # Random date 
     j[service]["Last status"] = False
     
     with open("services.json", "w") as out:
@@ -73,6 +73,7 @@ def addNewService(service, url):
     
         
 if __name__ == "__main__":
+    
     with open("services.json", "r") as f:
         j = json.load(f)
         
