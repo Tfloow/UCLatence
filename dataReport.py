@@ -63,8 +63,8 @@ def plot(service):
         ax.axvline(x=timeNow, linestyle="--", color="gray", alpha=0.5)
         ax.set_xlim(timeArray[0] - np.timedelta64(3, "m"), timeNow + np.timedelta64(3, "m"))
         
-        now_kwargs = dict(color="red")
-        ax.text(timeNow + np.timedelta64(20, "s"), 1, "Now", **now_kwargs)
+        now_kwargs = dict(color="red",ha='left', va='bottom')
+        ax.text(timeNow - np.timedelta64((timeNow - timeArray[0]))*0.34 , 0.5, f"Last Report\n{timeNow}", **now_kwargs)
         
         
         ax.set_title(f"Status reported by users for {service}")

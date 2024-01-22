@@ -135,3 +135,12 @@ button.no:hover{
 #result{
     height: 20px;
 }
+
+footer{
+    text-align: center;
+    color: rgb(121, 121, 121);
+}
+
+footer .github-footer{
+    color: rgb(121, 121, 121);
+}
