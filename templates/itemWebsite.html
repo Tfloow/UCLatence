@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item</title>
-    <link rel="stylesheet" href="../static/styleItem.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
     {% if service.is_up %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoUP.png">
     {% else %}
@@ -23,5 +24,26 @@
         <a href="/{{ service.name }}"  target="_blank" id="down"> Down </a>
     </div>
     {% endif %}
-</body>
-</html>
+
+    <br>
+
+    <p id="down-user">
+        <h3>Is this website currently working for you ?</h3>
+        <br>
+        <button class="yes" onclick="sendChoice('yes', '{{ service.name }}')">Yes ! </button>
+        <button class="no" onclick="sendChoice('no', '{{ service.name }}')">No ! </button>
+    </p>
+
+    <div id="result"></div>
+
+    <div class="container">
+        <div id="log-plot">
+            <img src="../static/img/log/{{ service.name }}.png" alt="Graph for {{ service.name }}" id="graph">
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="../static/script/itemWebsite.js"></script>
+{% endblock %}
