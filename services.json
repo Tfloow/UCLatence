@@ -3,54 +3,54 @@
     "name": "404-Test",
     "url": "https://www.google.com/404",
     "is_up": false,
-    "last_checked": "2024-01-22T17:57:12.175718"
+    "last_checked": "2024-01-22T19:30:32.362421"
   },
   {
     "name": "ADE",
     "url": "https://horaire.uclouvain.be/direct/",
     "is_up": true,
-    "last_checked": "2024-01-22T17:57:12.393022"
+    "last_checked": "2024-01-22T19:30:33.070730"
   },
   {
     "name": "ADE-Scheduler",
     "url": "https://ade-scheduler.info.ucl.ac.be/calendar/",
     "is_up": true,
-    "last_checked": "2024-01-22T17:57:12.531979"
+    "last_checked": "2024-01-22T19:30:54.600391"
   },
   {
     "name": "Comproved",
     "url": "https://app.comproved.com/universite-de-louvain",
     "is_up": true,
-    "last_checked": "2024-01-22T17:57:12.686285"
+    "last_checked": "2024-01-22T19:30:55.162931"
   },
   {
     "name": "Gradescope",
     "url": "https://www.gradescope.com/",
     "is_up": true,
-    "last_checked": "2024-01-22T17:57:12.810856"
+    "last_checked": "2024-01-22T19:30:55.719434"
   },
   {
     "name": "Intranet",
     "url": "https://intranet.uclouvain.be",
     "is_up": true,
-    "last_checked": "2024-01-22T17:57:13.887644"
+    "last_checked": "2024-01-22T19:30:57.316137"
   },
   {
     "name": "Moodle",
     "url": "https://moodle.uclouvain.be/",
     "is_up": true,
-    "last_checked": "2024-01-22T17:57:14.114402"
+    "last_checked": "2024-01-22T19:30:58.441437"
   },
   {
     "name": "Pilou-Pilou",
     "url": "https://perso.uclouvain.be/vincent.legat/zoulab/",
     "is_up": false,
-    "last_checked": "2024-01-22T17:57:14.636752"
+    "last_checked": "2024-01-22T19:30:59.544299"
   },
   {
     "name": "UCLouvain",
     "url": "https://www.uclouvain.be/",
     "is_up": true,
-    "last_checked": "2024-01-22T17:57:14.750357"
+    "last_checked": "2024-01-22T19:31:00.088426"
   }
 ]

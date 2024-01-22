@@ -34,8 +34,6 @@
 }
 
 
-
-
 .container {
     max-width: 100%; /* Set your desired maximum width */
     min-width: 100px; /* Set your desired minimum width */
@@ -81,6 +79,17 @@
 #down:hover{
     transition-duration: 100ms;
     background-color: rgb(153, 103, 95);
+}
+
+/*For mobile*/
+@media (max-width: 600px) {
+    #down {
+        padding: 10px 100px 10px 100px;
+    }
+
+    #up {
+        padding: 10px 115px 10px 115px;
+    }
 }
 
 /* Define the CSS class */

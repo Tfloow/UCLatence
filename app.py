@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.wsgi import WSGIMiddleware
 from api import router
 
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, send_from_directory
 import json
 import requests
 import csv
@@ -66,6 +66,14 @@ def service(service):
 
     return render_template("itemWebsite.html", service=service, url=url, UP=UP)
 
+@app.route("/serviceList")
+def serviceList():
+    dictService = []
+    
+    for service in services:
+        dictService.append(dict(service=service, url=services[service]["url"], reportedStatus=dataReport.getLastReport(service), Status=services[service]["Last status"]))
+        
+    return render_template("serviceList.html", serviceInfo=dictService)
 
 # To handle error reporting
 @app.route('/process', methods=['GET'])
@@ -118,6 +126,11 @@ def extractLog():
         return response
     else:
         return 404
+    
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 if __name__ == "__main__":
     uvicorn.run(api)

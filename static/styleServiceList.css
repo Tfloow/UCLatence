@@ -1,0 +1,70 @@
+table{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+
+    border-collapse: collapse;
+}
+
+/* Default link style */
+a {
+    color: blue;
+    text-decoration: none; /* Remove underline */
+}
+
+/* Visited link style */
+a:visited {
+    color: blue; /* Set the color for visited links */
+}
+
+h3{
+    font-style: italic;
+}
+
+h4{
+    color: rgb(50, 56, 61);
+}
+
+th, td{
+    text-align: center;
+    margin-top:12px;
+    border-bottom: 1px solid #adacac;
+    padding-left: 10px;
+}
+
+.report-up{
+    color: green;
+}
+
+.report-down{
+    color: red;
+}
+
+.report-none{
+    color: lightslategray;
+    align-items: center;
+}
+
+.thumb{
+    background-color: lightgray;
+    width: 70px;
+    font-size: 20px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 15px;
+    border-style:solid;
+    border-width: 2px;
+
+    margin: 0 auto;
+}
+
+.line-sep{
+    display: block;
+    border-bottom: 1px solid #dddddd; /* Add a bottom border for the divider */
+    margin-bottom: 4px; /* Adjust margin for better spacing */
+    background-color: red;
+}

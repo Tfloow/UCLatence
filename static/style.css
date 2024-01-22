@@ -13,7 +13,7 @@ h1{
 iframe{
     overflow: hidden; /* So I don't have any scroll */
 
-    width: 420px;
+    width: 400px;
     height: 200px;
 
     margin: 10px;
@@ -30,6 +30,13 @@ iframe{
 
     align-items: center; /* Center vertically */
     justify-content: center; /* Center horizontally */
+}
+
+/*For mobile*/
+@media (max-width: 600px) {
+    iframe {
+        width: 320px;
+    }
 }
 
 /* Default link style */
