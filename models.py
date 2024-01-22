@@ -22,7 +22,7 @@ class Service:
         if not isinstance(self.last_access_time, dt.datetime):
             self.last_access = dt.datetime.fromisoformat(self.last_access_time)
 
-    def refresh_status(self) -> bool:
+    async def refresh_status(self) -> bool:
         """Refresh the status for this site if not updated recently. Makes an HTTP request to do so."""
         currentDate = dt.datetime.now()
         if (currentDate - self.last_access).total_seconds() > RECHECK_AFTER:
@@ -39,12 +39,12 @@ class Services:
 
         self.filename = filename
 
-    def refresh_status(self, service: str = None):
+    async def refresh_status(self, service: str = None):
         """Refresh the status for all monitored sites (if not updated recently)."""
         if not service:
-            [site.refresh_status() for site in self.services]
+            [await site.refresh_status() for site in self.services]
         else:
-            self.services_dict[service].refresh_status()
+            await self.services_dict[service].refresh_status()
         self.dump_json()
 
     def dump_json(self, filename: str = None):
