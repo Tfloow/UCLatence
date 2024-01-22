@@ -1,46 +1,51 @@
 {
     "404-Test": {
-        "Last access time": "2024-01-22T21:41:59",
+        "Last access time": "2024-01-22T22:06:07",
         "Last status": false,
         "url": "https://www.google.com/404"
     },
     "ADE": {
-        "Last access time": "2024-01-22T21:32:55",
+        "Last access time": "2024-01-22T22:06:28",
         "Last status": true,
         "url": "https://horaire.uclouvain.be/direct/"
     },
     "ADE-Scheduler": {
-        "Last access time": "2024-01-22T21:31:56",
+        "Last access time": "2024-01-22T22:06:07",
         "Last status": true,
         "url": "https://ade-scheduler.info.ucl.ac.be/calendar/"
     },
     "Comproved": {
-        "Last access time": "2024-01-22T21:31:38",
+        "Last access time": "2024-01-22T22:06:07",
         "Last status": true,
         "url": "https://app.comproved.com/universite-de-louvain"
     },
     "Gradescope": {
-        "Last access time": "2024-01-22T21:31:39",
+        "Last access time": "2024-01-22T22:06:09",
         "Last status": true,
         "url": "https://www.gradescope.com/"
     },
     "Intranet": {
-        "Last access time": "2024-01-22T21:31:39",
+        "Last access time": "2024-01-22T22:06:09",
         "Last status": true,
         "url": "https://intranet.uclouvain.be"
     },
+    "LEPL1104": {
+        "Last access time": "2024-01-22T22:11:28",
+        "Last status": true,
+        "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1104.php"
+    },
+    "LEPL1201": {
+        "Last access time": "2024-01-22T22:11:28",
+        "Last status": true,
+        "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1201.php"
+    },
     "Moodle": {
-        "Last access time": "2024-01-22T21:31:38",
+        "Last access time": "2024-01-22T22:06:09",
         "Last status": true,
         "url": "https://moodle.uclouvain.be/"
     },
-    "Pilou-Pilou": {
-        "Last access time": "2024-01-22T21:31:39",
-        "Last status": false,
-        "url": "https://perso.uclouvain.be/vincent.legat/zoulab/"
-    },
     "UCLouvain": {
-        "Last access time": "2024-01-22T21:31:40",
+        "Last access time": "2024-01-22T22:06:10",
         "Last status": true,
         "url": "https://www.uclouvain.be/"
     }

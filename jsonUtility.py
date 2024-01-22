@@ -1,6 +1,8 @@
 import json
 import datetime
 import pytz # For timezone
+import csv
+import os
 
 datetimeFormat = "%Y-%m-%dT%H:%M:%S"
 timeCheck = 600 # Check every 300 seconds (in production)
@@ -63,20 +65,47 @@ def updateStatus(services, service, newStatus):
 def addNewService(service, url):
     with open("services.json", "r") as f:
         j = json.load(f)
-        
+    
+    j[service] = {}
+    
     j[service]["url"] = url
     j[service]["Last access time"] = "2024-01-22T10:51:30" # Random date 
     j[service]["Last status"] = False
     
     with open("services.json", "w") as out:
         json.dump(j, out, indent=4, sort_keys=True, default=str)
+        
+def addBlankCSVService(service):
+    filepath = "data/"
+    cols = "date,UP\n"
+
+    try:
+        os.mkdir(filepath + service)        
+        
+    except FileExistsError:
+        pass 
+    except:
+        raise ValueError(f"[LOG]: Something went wrong with creating the folder {service}")
+    
+    with open(filepath + service + "/log.csv", "w") as log:
+            log.write(cols)        
+
+def acceptRequest():
+    with open("data\\request\\log.csv", "r") as f:
+        read = csv.reader(f, delimiter=",")
+        next(read, None)
+        
+        for row in read:
+            addNewService(row[1], row[2])
+            dataReport.addBlankCSVService(row[1])
+            
+    
+    with open("data\\request\\log.csv", "w") as f:
+        f.write("time,service,url,reason\n")
     
         
 if __name__ == "__main__":
     
-    with open("services.json", "r") as f:
-        j = json.load(f)
-        
-    timeUpdate()
+    acceptRequest()
     #print(deltaTimeService(j, "UCLouvain"))
     

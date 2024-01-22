@@ -9,6 +9,10 @@
     color: rgb(47, 47, 228); /* Set the color for visited links */
 }
 
+h2{
+    transition-duration: 200ms;
+}
+
 /* OLD STYLING USED FOR REFERENCE */
 .itemWebsiteDiv {
     background-color: rgb(114, 187, 120);
@@ -72,9 +76,14 @@
 }
 
 /*For mobile*/
-@media (max-width: 600px) {
+@media (max-width: 350px) {
     #down, #up,body {
         font-size: 15px;
+    }
+
+    h2{
+        font-size: 20px;
+        transition-duration: 500ms;
     }
 }
 
