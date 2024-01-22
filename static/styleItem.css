@@ -1,8 +1,3 @@
-body {
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
-}
-
 /* Default link style */
 #urlTO {
     color: rgb(47, 47, 228);
@@ -136,11 +131,10 @@ button.no:hover{
     height: 20px;
 }
 
-footer{
-    text-align: center;
-    color: rgb(121, 121, 121);
-}
+#graph{
+    flex:1;
 
-footer .github-footer{
-    color: rgb(121, 121, 121);
+    max-width: 600px;
+    min-width: 200px;
+    width: 100%;
 }

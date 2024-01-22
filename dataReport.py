@@ -61,10 +61,15 @@ def plot(service):
         
         ax.plot(timeArray, UPArray, marker = "o")
         ax.axvline(x=timeNow, linestyle="--", color="gray", alpha=0.5)
-        ax.set_xlim(timeArray[0] - np.timedelta64(3, "m"), timeNow + np.timedelta64(3, "m"))
         
         now_kwargs = dict(color="red",ha='left', va='bottom')
-        ax.text(timeNow - np.timedelta64((timeNow - timeArray[0]))*0.34 , 0.5, f"Last Report\n{timeNow}", **now_kwargs)
+        
+        # To protect against unwanted behavior
+        if timeArray.size > 2: 
+            ax.set_xlim(timeArray[0] - np.timedelta64(3, "m"), timeNow + np.timedelta64(3, "m"))
+            ax.text(timeNow - np.timedelta64((timeNow - timeArray[0]))*0.34 , 0.5, f"Last Report\n{timeNow}", **now_kwargs)
+        else:
+            ax.text(timeNow, 0.5, f"Last Report\n{timeNow}", **now_kwargs)
         
         
         ax.set_title(f"Status reported by users for {service}")
@@ -101,7 +106,7 @@ def addReport(service, user_choice):
         
 
 if __name__ == "__main__":
-    # addBlankCSV()
+    addBlankCSV()
     
     # For test purposes
     # addReport("404-Test", datetime.now(), False)

@@ -45,6 +45,9 @@ def index():
 
 @app.route("/<service>")
 def service(service):
+    if service not in services.keys():
+        return render_template("404.html")
+    
     url = urlOfService(services, service)
     UP = statusService(services, service)
     
@@ -78,6 +81,10 @@ def process():
         return 'The website is down for me too.'
     else:
         return 'Invalid choice or no choice provided'
+    
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

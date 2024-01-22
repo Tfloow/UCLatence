@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-
 {% block head %}
-    <title>UCLouvain Down</title>
+    <title>404</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 {% endblock %}
@@ -13,11 +12,7 @@
         <span class="header-button"> <b>ServiceList</b> </span>
     </div>
 
-    <h1>Is it down ?</h1>
-    <div class="homepanel">
-        {% for site in serviceList %} 
-            <iframe src="/{{ site }}" id="flex-container" scrolling="no">  </iframe> 
-        {% endfor %}
-    </div>
+    <h1>404 - Not Found</h1>
+    <h2>The page you are looking for is certainly not here</h2>
 
 {% endblock %}
