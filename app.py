@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 import json
 import requests
+import csv
 
 # My modules
 import jsonUtility
@@ -85,6 +86,25 @@ def process():
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("404.html")
+
+@app.route("/extract")
+def extractLog():
+    get_what_to_extract = request.args.get("get")
+    
+    if get_what_to_extract in services.keys():
+        with open("data/" + get_what_to_extract + "/log.csv", "r") as file:
+            csv_data = list(csv.reader(file, delimiter=","))
+            
+        response = make_response()
+        csv_write = csv.writer(response.stream)
+        csv_write.writerows(csv_data)
+        
+        response.headers["Content-Type"] = "text/csv"
+        response.headers["Content-Disposition"] = "attachment; filename=data.csv"
+        
+        return response
+    else:
+        return 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

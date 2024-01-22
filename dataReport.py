@@ -9,6 +9,7 @@ import numpy as np
 filepath = "data/"
 cols = "date,UP\n"
 serviceList = jsonUtility.listServices()
+url = "https://uclouvaindown-ed3979a045e6.herokuapp.com/"
 
 def addBlankCSV():
     """Simple utility that is use to generate a skeleton of logs
@@ -103,12 +104,10 @@ def addReport(service, user_choice):
     plot(service) # To keep updated the graph         
         
         
+def dataExtraction():
+    for service in serviceList:
+        os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
         
 
 if __name__ == "__main__":
-    addBlankCSV()
-    
-    # For test purposes
-    # addReport("404-Test", datetime.now(), False)
-    for service in serviceList:
-        plot(service)
+    dataExtraction()
