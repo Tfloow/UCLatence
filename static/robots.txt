@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+Disallow: /cgi-bin/
+Sitemap: https://uclouvaindown-ed3979a045e6.herokuapp.com/sitemap.xml
