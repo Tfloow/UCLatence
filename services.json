@@ -1,11 +1,11 @@
 {
     "404-Test": {
-        "Last access time": "2024-01-22T17:55:49",
+        "Last access time": "2024-01-22T18:10:01",
         "Last status": false,
         "url": "https://www.google.com/404"
     },
     "ADE": {
-        "Last access time": "2024-01-22T17:56:09",
+        "Last access time": "2024-01-22T18:10:22",
         "Last status": true,
         "url": "https://horaire.uclouvain.be/direct/"
     },
@@ -15,32 +15,32 @@
         "url": "https://ade-scheduler.info.ucl.ac.be/calendar/"
     },
     "Comproved": {
-        "Last access time": "2024-01-22T17:55:49",
+        "Last access time": "2024-01-22T18:10:01",
         "Last status": true,
         "url": "https://app.comproved.com/universite-de-louvain"
     },
     "Gradescope": {
-        "Last access time": "2024-01-22T17:55:50",
+        "Last access time": "2024-01-22T18:10:02",
         "Last status": true,
         "url": "https://www.gradescope.com/"
     },
     "Intranet": {
-        "Last access time": "2024-01-22T17:55:50",
+        "Last access time": "2024-01-22T18:10:02",
         "Last status": true,
         "url": "https://intranet.uclouvain.be"
     },
     "Moodle": {
-        "Last access time": "2024-01-22T17:55:50",
+        "Last access time": "2024-01-22T18:10:02",
         "Last status": true,
         "url": "https://moodle.uclouvain.be/"
     },
     "Pilou-Pilou": {
-        "Last access time": "2024-01-22T17:55:50",
+        "Last access time": "2024-01-22T18:10:02",
         "Last status": false,
         "url": "https://perso.uclouvain.be/vincent.legat/zoulab/"
     },
     "UCLouvain": {
-        "Last access time": "2024-01-22T17:55:51",
+        "Last access time": "2024-01-22T18:10:03",
         "Last status": true,
         "url": "https://www.uclouvain.be/"
     }
