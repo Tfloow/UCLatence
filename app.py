@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, send_from_directory
 import json
 import requests
 import csv
@@ -114,6 +114,11 @@ def extractLog():
         return response
     else:
         return 404
+    
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
