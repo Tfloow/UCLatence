@@ -15,18 +15,17 @@ app = Flask("UCLouvainDown")
 async def index():
     """Render homepage, with an overview of all services."""
     print(f"[LOG]: HTTP request for homepage")
-    print(services)
-    await services.refresh_status()
+    services.refresh_status()
     return render_template("index.html", serviceList=services)
 
 
-@app.route(f"/<any({services.names()}):service>")
+@app.route(f"/<any({[*services.names(), '']}):service>")
 async def service_details(service: str):
     """Render a page with details of one service."""
     print(f"[LOG]: HTTP request for {service}")
     service_object = services.get_site(service)
 
-    await services.refresh_status(service)
+    services.refresh_status(service)
     return render_template("itemWebsite.html", service=service_object)
 
 

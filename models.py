@@ -23,13 +23,16 @@ class Service:
             self.last_access = dt.datetime.fromisoformat(self.last_access_time)
 
     async def refresh_status(self) -> bool:
-        """Refresh the status for this site if not updated recently. Makes an HTTP request to do so."""
+        """Refresh the status for this site if not updated recently. Makes an HTTP request to do so.
+        Returns True if refresh was necessary and yielded a different result, False if not."""
         currentDate = dt.datetime.now()
         if (currentDate - self.last_access).total_seconds() > RECHECK_AFTER:
+            previous_status = self.last_status
             self.last_status = requests.get(self.url).status_code < 400
             self.last_access_time = dt.datetime.now()
+            return self.last_status != previous_status
 
-        return self.last_status
+        return False
 
 
 class Services:
@@ -40,23 +43,24 @@ class Services:
         self.filename = filename
 
     async def refresh_status(self, service: str = None):
-        """Refresh the status for all monitored sites (if not updated recently)."""
+        """Refresh the status for all monitored services (if not updated recently).
+        If there are differences, update the json file."""
         if not service:
-            [await site.refresh_status() for site in self.services]
+            [service.refresh_status() for service in self.services]
         else:
-            await self.services_dict[service].refresh_status()
+            self.services_dict[service].refresh_status()
         self.dump_json()
 
     def dump_json(self, filename: str = None):
-        """Dump the monitored sites back into a json file. If no file is specified, overwrites the file given at
+        """Dump the monitored services back into a json file. If no file is specified, overwrites the file given at
          initialisation."""
         filename = filename if filename else self.filename
         with open(filename, "w") as out:
             json.dump([asdict(service) for service in self.services], out, indent=4, default=str)
 
-    def names(self):
+    def names(self) -> List[str]:
         """Get a list of names of all monitored sites."""
-        return self.services_dict.keys()
+        return [*self.services_dict.keys()]
 
     def get_site(self, service: str) -> Service | None:
         """Get a site from the list, or None if it isn't monitored."""
