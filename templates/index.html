@@ -7,17 +7,24 @@
 {% endblock %}
 
 {% block content %}
-    <div id="header">
-        <a href="/"><span class="header-button"> <b>Home</b> </span></a>
-        <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
-        <span class="header-button"> <b>ServiceList</b> </span>
-    </div>
-
     <h1>Is it down ?</h1>
     <div class="homepanel">
         {% for site in serviceList %} 
-            <iframe src="/{{ site }}" id="flex-container" scrolling="no">  </iframe> 
+            <iframe src="/{{ site }}" id="flex-container" class="scrolled" scrolling="no" onload="adjustScrollPosition()">  </iframe> 
         {% endfor %}
     </div>
 
+{% endblock %}
+
+{% block script %}
+    <script>
+        function adjustScrollPosition() {
+            var iframes = document.querySelectorAll('.scrolled');
+            if (iframes) {
+                iframes.forEach(function (iframe) {
+                    iframe.contentWindow.scrollTo({ top: 42, behavior: 'smooth' }); // Adjust the scroll position here
+                });
+            }
+        }
+    </script>
 {% endblock %}
