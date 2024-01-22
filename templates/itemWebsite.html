@@ -24,6 +24,7 @@
     {% endif %}
 
     <br>
+    <br>
 
     <p id="down-user">
         <h3>Is this website currently working for you ?</h3>
@@ -39,6 +40,10 @@
             <img src="../static/img/log/{{ service }}.png" alt="Graph for {{ service }}" id="graph">
         </div>
     </div>
+
+    <a href="/extract?get={{ service }}" id="urlTO">Download Log</a> &nbsp; - &nbsp;
+    <a href="{{ url_for("static", filename='img/log/' + service + '.png') }}" download="{{ service }}-log.png" id="urlTO">Download Graph</a>
+
 
 {% endblock %}
 

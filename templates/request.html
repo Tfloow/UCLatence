@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content%}
-<form>
+<form id="form">
     <label for="service-name">Service Name:</label><br>
     <input type="text" id="service-name" name="service-name"><br>
 
@@ -17,6 +17,7 @@
     <label for="info">Extra Info:</label><br>
     <textarea id="info" name="info" rows="4" cols="50"></textarea><br>
 
-    <input type="submit" value="Submit" id="submit">
+    <input type="submit" value="Submit" id="submit" >
+    <div id="feedback">{{ feedback }}</div>
 </form>
 {% endblock %}

@@ -71,6 +71,13 @@
     transition-duration: 500ms;
 }
 
+/*For mobile*/
+@media (max-width: 600px) {
+    #down, #up,body {
+        font-size: 15px;
+    }
+}
+
 #up:hover{
     transition-duration: 100ms;
     background-color: rgb(92, 151, 97);

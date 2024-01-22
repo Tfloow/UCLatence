@@ -38,3 +38,7 @@ textarea{
     background-color: rgb(114, 110, 110);
     cursor: pointer;
 }
+
+#feedback{
+    height: 20px;
+}

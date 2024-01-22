@@ -40,6 +40,14 @@ a.header-button{
     transition: 50ms;
 }
 
+/*For mobile*/
+@media (max-width: 600px) {
+    .header-button{
+        width:60px;
+        font-size: 13px;
+    }
+}
+
 footer{
     text-align: center;
     color: rgb(121, 121, 121);

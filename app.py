@@ -68,13 +68,17 @@ def requestServie():
     serviceName = request.args.get('service-name', "")
     url = request.args.get('url', "")
     info = request.args.get('info', "")
+    
+    # No form submitted No feedback
+    feedback = "" 
             
     if len(serviceName) > 0:
         # If someone wrote in the form
         dataReport.newRequest(serviceName, url, info)
+        feedback = "Form submitted successfully!"
     
     
-    return render_template("request.html")
+    return render_template("request.html", feedback=feedback)
 
 # To handle error reporting
 @app.route('/process', methods=['GET'])
@@ -122,7 +126,7 @@ def extractLog():
         csv_write.writerows(csv_data)
         
         response.headers["Content-Type"] = "text/csv"
-        response.headers["Content-Disposition"] = "attachment; filename=data.csv"
+        response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.csv"
         
         return response
     else:

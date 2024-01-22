@@ -128,7 +128,7 @@ def newRequest(serviceName, url, info):
     log = "data/request/log.csv"
     
     with open(log, "a") as file:
-        file.write(date + "," + serviceName + "," + url + "," + info)
+        file.write(date + "," + serviceName + "," + url + "," + info + "\n")
 
 
 if __name__ == "__main__":
