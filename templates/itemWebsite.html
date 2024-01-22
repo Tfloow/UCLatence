@@ -23,5 +23,22 @@
         <a href="/{{ service }}"  target="_blank" id="down"> Down </a>
     </div>
     {% endif %}
+
+    <span class="big-gap">
+        <br>
+        <br>
+        <br>
+    </span>
+
+    <p>
+        <h3>Is this website currently working for you ?</h3>
+        <br>
+        <button class="yes" onclick="sendChoice('yes', '{{ service }}')">Yes ! </button>
+        <button class="no" onclick="sendChoice('no', '{{ service }}')">No ! </button>
+    </p>
+
+    <div id="result"></div>
+
+    <script src="../static/script/itemWebsite.js"></script> 
 </body>
 </html>

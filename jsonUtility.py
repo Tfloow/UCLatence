@@ -15,6 +15,12 @@ def timeUpdate():
     with open("services.json", "w") as out:
         json.dump(j, out, indent=4, sort_keys=True, default=str)
 
+def listServices():
+    with open("services.json", "r") as f:
+        j = json.load(f)
+    
+    return j.keys()
+
 def statusUpdate():
     with open("services.json", "r") as f:
         j = json.load(f)
@@ -53,6 +59,18 @@ def updateStatus(services, service, newStatus):
     
     with open("services.json", "w") as out:
         json.dump(services, out, indent=4, sort_keys=True, default=str)
+        
+def addNewService(service, url):
+    with open("services.json", "r") as f:
+        j = json.load(f)
+        
+    j[service]["url"] = url
+    j[service]["Last access time"] = "22/01/2024 06:35:29" # Random date 
+    j[service]["Last status"] = False
+    
+    with open("services.json", "w") as out:
+        json.dump(j, out, indent=4, sort_keys=True, default=str)
+    
         
 if __name__ == "__main__":
     with open("services.json", "r") as f:

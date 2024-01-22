@@ -1,9 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import json
 import requests
 
 # My modules
 import jsonUtility
+import dataReport
 
 # Load JSON services
 f = open("services.json")
@@ -48,6 +49,35 @@ def service(service):
     UP = statusService(services, service)
     
     return render_template("itemWebsite.html", service=service, url=url, UP=UP)
+
+# To handle error reporting
+@app.route('/process', methods=['GET'])
+def process():
+    user_choice = request.args.get('choice', 'default_value')
+    service = request.args.get('service', None)
+    
+    
+
+    if user_choice == 'yes':
+        print('Great! The website is working for you.')
+        
+        if service is None:
+            print("[LOG]: Something went wrong with the service reporting, please investigate")
+        else:
+            dataReport.addReport(service, True)
+        
+        return 'Great! The website is working for you.'
+    elif user_choice == 'no':
+        print('The website is down for me too.')
+        
+        if service is None:
+            print("[LOG]: Something went wrong with the service reporting, please investigate")
+        else:
+            dataReport.addReport(service, False)
+            
+        return 'The website is down for me too.'
+    else:
+        return 'Invalid choice or no choice provided'
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

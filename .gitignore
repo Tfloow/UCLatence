@@ -263,7 +263,6 @@ pyrightconfig.json
 *.asp
 *.cer
 *.csr
-*.js
 *.jsp
 *.php
 *.rss

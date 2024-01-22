@@ -34,7 +34,7 @@ First, make sure to get the latest version of python (I am using 3.12). then fol
 
 1. `git clone git@github.com:Tfloow/UCLouvainDown.git` (*or fork it*)
 2. `pip install -r requirements.txt`
-3. `flask --app main run --host=0.0.0.0`
+3. `flask run --host=0.0.0.0`
 
 ### Explanation of the steps
 
@@ -47,8 +47,11 @@ First, make sure to get the latest version of python (I am using 3.12). then fol
 - [x] Working pages
 - [x] Home Page with links to other subpages
 - [ ] A nice and clear home page with all current status
-- [ ] Deployed locally
-- [ ] Deployed globally 
+- [x] Deployed locally
+- [x] Deployed globally 
+- [ ] Tracking downtime 
+- [ ] User button to report if a website is down
+- [ ] Database that collect persistent data about outage
 
 ## License
 
