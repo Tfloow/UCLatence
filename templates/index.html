@@ -4,23 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCLouvain Down</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 </head>
 <body>
     <h1>Is it down ?</h1>
     <div class="homepanel">
         {% for site in serviceList %} 
-            <iframe src="/{{ site.name }}" id="flex-container">  </iframe>
+            <iframe src="/{{ site.name }}" id="flex-container" class="scrolled" scrolling="no" onload="adjustScrollPosition()">  </iframe> 
         {% endfor %}
     </div>
 
-    <footer>
-        <p> 
-            <a href="https://github.com/Tfloow/UCLouvainDown" class="github-footer">Github</a> -
-            <a href="https://github.com/Tfloow/UCLouvainDown/issues" class="github-footer">Issue or Request ?</a> -
-            <a href="https://github.com/Tfloow/UCLouvainDown#introduction" class="github-footer">What is this ?</a>
-        </p>
-    </footer>
+{% endblock %}
+  
+  
+{% block script %}
+    <script>
+        function adjustScrollPosition() {
+            var iframes = document.querySelectorAll('.scrolled');
+            if (iframes) {
+                iframes.forEach(function (iframe) {
+                    iframe.contentWindow.scrollTo({ top: 42, behavior: 'smooth' }); // Adjust the scroll position here
+                });
+            }
+        }
+    </script>
+{% endblock %}
+
 </body>
 </html>
+

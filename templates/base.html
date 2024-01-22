@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 
     {% block head %}
     <title>UCLouvain Down</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
     {% endblock %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
+    <div id="header">
+        <a href="/"><span class="header-button"> <b>Home</b> </span></a>
+        <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
+        <span class="header-button"> <b>ServiceList</b> </span>
+    </div>
+    
     {% block content %}
 
     {% endblock %}

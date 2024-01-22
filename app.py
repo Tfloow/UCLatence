@@ -1,5 +1,9 @@
-from flask import Flask, render_template
 from models import *
+
+from flask import Flask, render_template, request, make_response
+import json
+import requests
+import csv
 
 
 # Load JSON file #######################################################################################################
@@ -27,6 +31,17 @@ async def service_details(service: str):
 
     services.refresh_status(service)
     return render_template("itemWebsite.html", service=service_object)
+
+
+@app.route("/<service>")
+def service(service):
+    if service not in services.keys():
+        return render_template("404.html")
+    
+    url = urlOfService(services, service)
+    UP = statusService(services, service)
+    
+    return render_template("itemWebsite.html", service=service, url=url, UP=UP)
 
 
 # To handle error reporting
@@ -57,6 +72,29 @@ def process():
         return 'The website is down for me too.'
     else:
         return 'Invalid choice or no choice provided'
+    
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html")
+
+@app.route("/extract")
+def extractLog():
+    get_what_to_extract = request.args.get("get")
+    
+    if get_what_to_extract in services.keys():
+        with open("data/" + get_what_to_extract + "/log.csv", "r") as file:
+            csv_data = list(csv.reader(file, delimiter=","))
+            
+        response = make_response()
+        csv_write = csv.writer(response.stream)
+        csv_write.writerows(csv_data)
+        
+        response.headers["Content-Type"] = "text/csv"
+        response.headers["Content-Disposition"] = "attachment; filename=data.csv"
+        
+        return response
+    else:
+        return 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
