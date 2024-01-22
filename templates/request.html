@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block head %}
+    <title>Request</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleRequest.css') }}">
+    <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleServiceList.css') }}">
+{% endblock %}
+
+{% block content%}
+<form>
+    <label for="service-name">Service Name:</label><br>
+    <input type="text" id="service-name" name="service-name"><br>
+
+    <label for="url">Service's URL:</label><br>
+    <input type="url" id="url" name="url"><br>
+
+    <label for="info">Extra Info:</label><br>
+    <textarea id="info" name="info" rows="4" cols="50"></textarea><br>
+
+    <input type="submit" value="Submit" id="submit">
+</form>
+{% endblock %}

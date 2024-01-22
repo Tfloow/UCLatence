@@ -30,6 +30,7 @@ body {
 
 a.header-button{
     color: white;
+    text-decoration: none;
 }
 
 .header-button:hover{

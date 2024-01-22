@@ -105,6 +105,9 @@ def addReport(service, user_choice):
         
         
 def dataExtraction():
+    # To get User's request
+    os.system(f'cmd /c "curl {url}/extract?get=request -o data/request/log.csv"')
+    
     for service in serviceList:
         os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
         
@@ -119,6 +122,14 @@ def getLastReport(service):
         if lastValue == "True":
             return True
         return None
+
+def newRequest(serviceName, url, info):
+    date = datetime.now(pytz.utc).strftime(jsonUtility.datetimeFormat)
+    log = "data/request/log.csv"
+    
+    with open(log, "a") as file:
+        file.write(date + "," + serviceName + "," + url + "," + info)
+
 
 if __name__ == "__main__":
     dataExtraction()

@@ -63,6 +63,19 @@ def serviceList():
         
     return render_template("serviceList.html", serviceInfo=dictService)
 
+@app.route("/request")
+def requestServie():
+    serviceName = request.args.get('service-name', "")
+    url = request.args.get('url', "")
+    info = request.args.get('info', "")
+            
+    if len(serviceName) > 0:
+        # If someone wrote in the form
+        dataReport.newRequest(serviceName, url, info)
+    
+    
+    return render_template("request.html")
+
 # To handle error reporting
 @app.route('/process', methods=['GET'])
 def process():
@@ -100,7 +113,7 @@ def page_not_found(error):
 def extractLog():
     get_what_to_extract = request.args.get("get")
     
-    if get_what_to_extract in services.keys():
+    if get_what_to_extract in services.keys() or get_what_to_extract == "request":
         with open("data/" + get_what_to_extract + "/log.csv", "r") as file:
             csv_data = list(csv.reader(file, delimiter=","))
             
