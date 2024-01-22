@@ -97,7 +97,7 @@ def acceptRequest():
         
         for row in read:
             addNewService(row[1], row[2])
-            dataReport.addBlankCSVService(row[1])
+            addBlankCSVService(row[1])
             
     
     with open("data\\request\\log.csv", "w") as f:
@@ -107,5 +107,6 @@ def acceptRequest():
 if __name__ == "__main__":
     
     acceptRequest()
+    
     #print(deltaTimeService(j, "UCLouvain"))
     
