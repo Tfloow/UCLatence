@@ -15,19 +15,19 @@ class Service:
     name: str
     url: str
     last_status: bool
-    last_access: dt.datetime | str
+    last_access_time: dt.datetime | str
 
     def __post_init__(self):
         # Make sure last_access is an instance of dt.datetime
-        if not isinstance(self.last_access, dt.datetime):
-            self.last_access = dt.datetime.fromisoformat(self.last_access)
+        if not isinstance(self.last_access_time, dt.datetime):
+            self.last_access = dt.datetime.fromisoformat(self.last_access_time)
 
     def refresh_status(self) -> bool:
         """Refresh the status for this site if not updated recently. Makes an HTTP request to do so."""
         currentDate = dt.datetime.now()
         if (currentDate - self.last_access).total_seconds() > RECHECK_AFTER:
             self.last_status = requests.get(self.url).status_code < 400
-            self.last_access = dt.datetime.now()
+            self.last_access_time = dt.datetime.now()
 
         return self.last_status
 
