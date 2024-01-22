@@ -1,6 +1,10 @@
+"""TODO ajouter inginious"""
+import uvicorn as uvicorn
 from flask import Flask, render_template
 from models import *
-
+from fastapi import FastAPI
+from fastapi.middleware.wsgi import WSGIMiddleware
+from api import router
 
 # Load JSON file #######################################################################################################
 JSON_FILE = "services.json"
@@ -13,22 +17,39 @@ app = Flask("UCLouvainDown")
 
 @app.route("/")
 async def index():
-    """Render homepage, with an overview of all services."""
+    """Render homepage, with an overview of all __root__."""
     print(f"[LOG]: HTTP request for homepage")
-    services.refresh_status()
-    return render_template("index.html", serviceList=services)
+    await services.refresh_status()
+    return render_template("index.html", serviceList=services.root)
 
 
 @app.route(f"/<any({[*services.names(), '']}):service>")
 async def service_details(service: str):
     """Render a page with details of one service."""
     print(f"[LOG]: HTTP request for {service}")
-    service_object = services.get_site(service)
+    service_object = services.get_service(service)
 
-    services.refresh_status(service)
+    await services.refresh_status(service)
     return render_template("itemWebsite.html", service=service_object)
 
 
+api = FastAPI(
+    title="UCLouvainDown",
+    version="0.1.0",
+    description="A small API",
+    redoc_url="/api/redoc",
+    terms_of_service="",
+    contact={
+
+    },
+    license_info={},
+)
+
+# !!! DO NOT change the order of the following two lines !!!
+api.include_router(router, prefix="/api")
+api.mount("", WSGIMiddleware(app))
+
+"""
 # To handle error reporting
 @app.route('/process', methods=['GET'])
 def process():
@@ -57,6 +78,9 @@ def process():
         return 'The website is down for me too.'
     else:
         return 'Invalid choice or no choice provided'
+"""
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    uvicorn.run(api)
+    # app.run(host="0.0.0.0", debug=True)

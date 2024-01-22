@@ -2,3 +2,6 @@ Flask[async]>=3.0.0
 requests>=2.31.0
 gunicorn>=21.2.0
 matplotlib>=3.8.2
+fastapi>=0.100.0
+uvicorn~=0.26.0
+pydantic~=2.5.3

@@ -1,86 +1,85 @@
-from dataclasses import asdict, dataclass
 import datetime as dt
-import json
+from pydantic import BaseModel, Field, ValidationError, RootModel
 import requests
-from typing import List
-
+from typing import List, Dict, Set
 
 RECHECK_AFTER = 300  # [s]
 # Follow ISO guidelines
-# DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+# DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 
-@dataclass
-class Service:
-    name: str
-    url: str
-    last_status: bool
-    last_access_time: dt.datetime | str
+class Service(BaseModel):
+    name: str = Field(
+        description="The name by which the service is known.",
+        examples=["Inginious", "ADE-Scheduler"])
+    url: str = Field(
+        description="The link to the service.",
+        examples=["https://inginious.info.ucl.ac.be/", "https://ade-scheduler.info.ucl.ac.be/calendar"])
+    is_up: bool = Field(
+        description="The current state of the service: `true` if it is up and running, `false` if it is down.",
+        examples=[True])
 
-    def __post_init__(self):
-        # Make sure last_access is an instance of dt.datetime
-        if not isinstance(self.last_access_time, dt.datetime):
-            self.last_access = dt.datetime.fromisoformat(self.last_access_time)
+    last_checked: dt.datetime = Field(
+        description="The date and time at which the status of the service was last checked, in ISO formatting "
+                    "(`'YYYY'-'MM'-'DD'T'HH':'MM':'SS'.'SSSSS'`).", examples=["2024-01-22T17:46:55.480345"])
 
-    async def refresh_status(self) -> bool:
-        """Refresh the status for this site if not updated recently. Makes an HTTP request to do so.
+    def refresh_status(self) -> bool:
+        """Refresh the status for this service if not updated recently. Makes an HTTP request to do so.
         Returns True if refresh was necessary and yielded a different result, False if not."""
-        currentDate = dt.datetime.now()
-        if (currentDate - self.last_access).total_seconds() > RECHECK_AFTER:
-            previous_status = self.last_status
-            self.last_status = requests.get(self.url).status_code < 400
-            self.last_access_time = dt.datetime.now()
-            return self.last_status != previous_status
+        now = dt.datetime.utcnow()
+        if (now - self.last_checked).total_seconds() > RECHECK_AFTER:
+            was_up = self.is_up
+            self.is_up = requests.get(self.url).status_code < 400
+            self.last_checked = now
+            return self.is_up != was_up
 
         return False
 
 
-class Services:
-    def __init__(self, services: List[Service], filename: str):
-        self.services = services
-        self.services_dict = {site.name: site for site in self.services}
+class Services(RootModel):
+    root: List[Service]
 
-        self.filename = filename
+    __services_dict: Dict[str, Service] = None
+    __filename: str = None
 
     async def refresh_status(self, service: str = None):
         """Refresh the status for all monitored services (if not updated recently).
         If there are differences, update the json file."""
         if not service:
-            [service.refresh_status() for service in self.services]
+            [service.refresh_status() for service in self.root]
         else:
-            self.services_dict[service].refresh_status()
+            self.__services_dict[service].refresh_status()
+
         self.dump_json()
 
-    def dump_json(self, filename: str = None):
-        """Dump the monitored services back into a json file. If no file is specified, overwrites the file given at
-         initialisation."""
-        filename = filename if filename else self.filename
-        with open(filename, "w") as out:
-            json.dump([asdict(service) for service in self.services], out, indent=4, default=str)
-
     def names(self) -> List[str]:
-        """Get a list of names of all monitored sites."""
-        return [*self.services_dict.keys()]
+        """Get a list of names of all monitored services."""
+        return [*self.__services_dict.keys()]
 
-    def get_site(self, service: str) -> Service | None:
-        """Get a site from the list, or None if it isn't monitored."""
-        return self.services_dict.get(service, None)
+    def get_service(self, service: str) -> Service | None:
+        """Get a service from the list, or None if it isn't monitored."""
+        return self.__services_dict.get(service, None)
 
-    def __iter__(self):
-        return self.services.__iter__()
-
-    @staticmethod
-    def load_from_json_file(filename: str):
-        """Load a Services instance from a the json file."""
+    def dump_json(self, filename: str = None):
+        if not filename:
+            filename = self.__filename
         try:
-            f = open(filename, "r")
-        except OSError | IOError as _:
-            raise ValueError("[LOG]: Error when opening services.json")
+            with open(filename, "w") as f:
+                f.write(self.model_dump_json(indent=2))
+        except OSError | IOError:
+            raise Exception("[LOG]: Error when writing services.json")
 
+    @classmethod
+    def load_from_json_file(cls, filename: str):
         try:
-            retval = Services(json.load(f, object_hook=lambda value: Service(**value)), filename)
-        except Exception as _:
+            with open(filename, "r") as f:
+                return cls.model_validate_json(f.read()).add_private_vars(filename)
+        except OSError | IOError:
+            raise Exception("[LOG]: Error when opening/reading services.json")
+        except ValueError | ValidationError:
             raise Exception("[LOG]: Error when parsing services.json")
 
-        f.close()
-        return retval
+    def add_private_vars(self, filename: str):
+        self.__services_dict = {service.name: service for service in self.root}
+        self.__filename = filename
+        return self
