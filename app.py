@@ -1,53 +1,33 @@
 from flask import Flask, render_template
-import json
-import requests
-
-# My modules
-import jsonUtility
-
-# Load JSON services
-f = open("services.json")
-if f == None:
-    ValueError("[LOG]: Error when opening the services.json")
-services = json.load(f)
-
-def urlOfService(services, service):
-    if service in services:
-        return services[service]["url"]
-    return "NaN"
-
-def statusService(services, service):
-    url = urlOfService(services, service)
-    if url == "NaN":
-        print("[LOG]: You passed a service that is not tracked")
-        return False
-    
-    needToCheck = jsonUtility.deltaTimeService(services, service)
-    
-    if needToCheck:
-        print(f"[LOG]: HTTP request for {services[service]["url"]}")
-        response = requests.get(url).status_code < 400 # Starting 400 codes are error for HTTP GET
-        
-        jsonUtility.updateStatus(services, service, response)
-        
-        return response
-    else:
-        return services[service]["Last status"]
+from models import *
 
 
-# Start the Flask app
+# Load JSON file #######################################################################################################
+JSON_FILE = "services.json"
+services = Services.load_from_json_file(JSON_FILE)
+
+
+# Start Flask app ######################################################################################################
 app = Flask("UCLouvainDown")
+
 
 @app.route("/")
 def index():
-    return render_template("index.html", serviceList=services.keys())
+    """Render homepage, with an overview of all services."""
+    print(f"[LOG]: HTTP request for homepage")
+    services.refresh_status()
+    return render_template("index.html", serviceList=services)
 
-@app.route("/<service>")
-def service(service):
-    url = urlOfService(services, service)
-    UP = statusService(services, service)
+
+@app.route(f"/<any({services.names()}):service>")
+def service_details(service: str):
+    """Render a page with details of one service."""
+    print(f"[LOG]: HTTP request for {service}")
+    services.refresh_status(service)
+    service_object = services.get_site(service)
     
-    return render_template("itemWebsite.html", service=service, url=url, UP=UP)
+    return render_template("itemWebsite.html", service=service_object)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
