@@ -1,27 +1,28 @@
 import datetime as dt
 from pydantic import BaseModel, Field, ValidationError, RootModel
 import requests
-from typing import List, Dict, Set
+from typing import List, Dict, Annotated
 
 RECHECK_AFTER = 300  # [s]
 # Follow ISO guidelines
 # DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 
-class Service(BaseModel):
-    name: str = Field(
-        description="The name by which the service is known.",
-        examples=["Inginious", "ADE-Scheduler"])
-    url: str = Field(
-        description="The link to the service.",
-        examples=["https://inginious.info.ucl.ac.be/", "https://ade-scheduler.info.ucl.ac.be/calendar"])
-    is_up: bool = Field(
-        description="The current state of the service: `true` if it is up and running, `false` if it is down.",
-        examples=[True])
+# Models used for backend ##############################################################################################
 
-    last_checked: dt.datetime = Field(
-        description="The date and time at which the status of the service was last checked, in ISO formatting "
-                    "(`'YYYY'-'MM'-'DD'T'HH':'MM':'SS'.'SSSSS'`).", examples=["2024-01-22T17:46:55.480345"])
+class Service(BaseModel):
+    name: Annotated[str, Field(
+        description="The name by which the service is referenced.",
+        examples=["Inginious", "ADE-Scheduler"])]
+    url: Annotated[str, Field(
+        description="The link to the service.",
+        examples=["https://inginious.info.ucl.ac.be/", "https://ade-scheduler.info.ucl.ac.be/calendar"])]
+    is_up: Annotated[bool, Field(
+        description="The current state of the service: `true` if it is up and running, `false` if it is down.",
+        examples=[True, False])]
+    last_checked: Annotated[dt.datetime, Field(
+        description="The date and time (UTC) at which the status of the service was last checked, in ISO formatting "
+                    "(`yyyy-MM-dd'T'HH:mm:ss.SSSXXX`).", examples=["2024-01-22T17:46:55.480345"])]
 
     def refresh_status(self) -> bool:
         """Refresh the status for this service if not updated recently. Makes an HTTP request to do so.
@@ -63,6 +64,7 @@ class Services(RootModel):
     def dump_json(self, filename: str = None):
         if not filename:
             filename = self.__filename
+
         try:
             with open(filename, "w") as f:
                 f.write(self.model_dump_json(indent=2))
@@ -83,3 +85,9 @@ class Services(RootModel):
         self.__services_dict = {service.name: service for service in self.root}
         self.__filename = filename
         return self
+
+
+# Response-only models #################################################################################################
+class ServiceStatuses(RootModel):
+    root: Dict[str, bool] = Field()
+
