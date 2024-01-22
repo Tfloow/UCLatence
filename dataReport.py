@@ -108,6 +108,17 @@ def dataExtraction():
     for service in serviceList:
         os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
         
+def getLastReport(service):
+    with open("data/" + service + "/log.csv", "r") as file:
+        f = file.readlines()
+        lastValue = f[-1].split(",")[1].strip("\n") 
+        
+
+        if lastValue == "False":
+            return False
+        if lastValue == "True":
+            return True
+        return None
 
 if __name__ == "__main__":
     dataExtraction()

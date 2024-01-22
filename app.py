@@ -54,6 +54,15 @@ def service(service):
     
     return render_template("itemWebsite.html", service=service, url=url, UP=UP)
 
+@app.route("/serviceList")
+def serviceList():
+    dictService = []
+    
+    for service in services:
+        dictService.append(dict(service=service, url=services[service]["url"], reportedStatus=dataReport.getLastReport(service), Status=services[service]["Last status"]))
+        
+    return render_template("serviceList.html", serviceInfo=dictService)
+
 # To handle error reporting
 @app.route('/process', methods=['GET'])
 def process():
