@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block head %}
     <title>Item</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
     {% if service.is_up %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoUP.png">
     {% else %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
     {% endif %}
-</head>
-<body>
+{% endblock %}
+
+
+{% block content %}
     <h2>Status for {{ service.name }} @ <a href={{ service.url }} id="urlTO"> {{ service.url }} </a> </h2>
 
     {% if service.is_up %}
