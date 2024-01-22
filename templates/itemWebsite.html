@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item</title>
     <link rel="stylesheet" href="../static/styleItem.css">
-    {% if UP %}
+    {% if service.last_status %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoUP.png">
     {% else %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
     {% endif %}
 </head>
 <body>
-    <h2>Status for {{ service }} @ <a href={{ url }} id="urlTO"> {{ url }} </a> </h2>
+    <h2>Status for {{ service.name }} @ <a href={{ service.url }} id="urlTO"> {{ service.url }} </a> </h2>
 
-    {% if UP %}
+    {% if service.last_status %}
     <div class="container">
-        <a href="/{{ service }}" target="_blank" id="up"> Up </a>
+        <a href="/{{ service.name }}" target="_blank" id="up"> Up </a>
     </div>
     {% else %}
     <div class="container">
-        <a href="/{{ service }}"  target="_blank" id="down"> Down </a>
+        <a href="/{{ service.name }}"  target="_blank" id="down"> Down </a>
     </div>
     {% endif %}
 </body>

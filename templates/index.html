@@ -11,7 +11,7 @@
     <h1>Is it down ?</h1>
     <div class="homepanel">
         {% for site in serviceList %} 
-            <iframe src="/{{ site }}" id="flex-container">  </iframe> 
+            <iframe src="{{ site.url }}" id="flex-container">  </iframe>
         {% endfor %}
     </div>
 
