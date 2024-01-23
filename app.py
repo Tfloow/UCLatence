@@ -1,27 +1,24 @@
-"""
-TODO ajouter inginious
-"""
-from enum import Enum
-from typing import Annotated
+try:
+    import uvicorn as uvicorn
 
-import uvicorn as uvicorn
-from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-from flask import Flask, render_template
-from fastapi import FastAPI, Path, HTTPException, Request, APIRouter
-from fastapi.middleware.wsgi import WSGIMiddleware
+    from fastapi import APIRouter, FastAPI, Path, Request
+    from fastapi.exceptions import RequestValidationError
+    from fastapi.responses import JSONResponse
+    from fastapi.middleware.wsgi import WSGIMiddleware
 
+    from flask import Flask, render_template, request, make_response, send_from_directory
 
-from flask import Flask, render_template, request, make_response, send_from_directory
-import json
-import requests
-import csv
+    import csv
 
-# import dataReport
-from models import *
-from fastapi_custom import *
-from utilities import *
+    # import dataReport
+    from models import *
+    from fastapi_custom import ALL_HTTP_METHODS, hide_422, hide_default_responses, use_route_names_as_operation_ids
+    from utilities import *
+except ImportError:
+    print("[LOG] Error on startup: not all packages could be properly imported.")
+    raise exit(1)
+except ImportWarning as w:
+    print(f"[LOG] Warning on startup: not all packages could be properly imported:\n{w}")
 
 
 # Load JSON files ######################################################################################################
@@ -116,15 +113,25 @@ def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])
 
 
-# Define the FastAPI app ###############################################################################################
+# Define the FastAPI app and its routes ################################################################################
+# !!! DO NOT move the `api.mount(...)` statement before the `@api....` functions !!! ###################################
 api = FastAPI(
     title="UCLouvainDown API",
     version="v0.1.0",
     summary="**A simple interface with the *UCLouvainDown* backend!**",
-    description="This API provides an interface with the *UCLouvainDown* backend, allowing to check if services of the "
-                "University of Louvain (UCLouvain), as well as some other services often used by students, "
-                "are up and running (or not). Non-developpers might be better of using the [UCLouvainDown website](/) "
-                "rather than passing by this API.",
+    # Do not descend the following line after the """ down, it will break openapi
+    description="""This API provides an interface with the *UCLouvainDown* backend, allowing to check if services of the 
+    University of Louvain (UCLouvain), as well as some other services often used by its students, are up and running 
+    (or not).
+    </br>
+    <ul>
+      <li>Non-developpers might be better of using the [UCLouvainDown website](/) rather than passing by this API. It
+        is a graphic representation of the same data.</li>
+      <li>A webhook interface is also provided, please refer to [the webhook section](/api/docs#tag/Webhooks) of the 
+        documentation for the details.</li>
+    </ul>
+    An issue or request? Please let us know [over on github](https://github.com/Tfloow/UCLouvainDown).
+    """,
     docs_url=None,
     redoc_url="/api/docs",
     # terms_of_service="", TODO
@@ -134,20 +141,38 @@ api = FastAPI(
     },
     # license_info={}, TODO
 )
-api_404_response = JSONResponse(
-    content={"error": "Not found",
-             "detail": "Sorry, could not find that URL. Please check the documentation at '/api/docs'!"}
+
+# Define common responses
+api_unkown_url_response = JSONResponse(
+    content={"detail": "Sorry, could not find that URL. Please check the documentation at '/api/docs'!"},
+    status_code=404
 )
+api_unkown_service_response = JSONResponse(
+    content={"detail": "The requested service is not tracked by this application. Pleasy verify the listed "
+                       "services at '/api/services/overview'!"},
+    status_code=404
+)
+webhook_400_response = JSONResponse(
+    content={"detail": "One or more of the services listed as those to track, aren't tracked by the application. "
+                       "Pleasy verify the listed services at '/api/services/overview'."},
+    status_code=400)
+webhook_403_response = JSONResponse(
+    content={"detail": "The given password does not correspond to the one given when creating the webhook. If entered "
+                       "manually, please verify you made no typo."},
+    status_code=403)
+webhook_404_response = JSONResponse(
+    content={"detail": "The webhook for which modifications were asked can't be found."},
+    status_code=404)
 
 
-# Couple the Flask app and the FastAPI app #############################################################################
-# !!! DO NOT move the `api.mount` statement before the `@api....` functions !!! ########################################
-SupportedServices = Enum("SupportedServices", {service: service for service in services.names()})
-
-
-@api.get("/api/services/overview", response_model=List[str],
-         responses={"200": {"content": {"application/json": {"schema": {
-                  "examples": [["Inginious", "ADE-scheduler"]]}}}}})
+# FastAPI routes
+@api.get(
+    "/api/services/overview",
+    response_model=List[str],
+    responses={
+        "200": {"content": {"application/json": {"schema": {"examples": [["Inginious", "ADE-scheduler"]]}}}}
+    }
+)
 def services_overview():
     """
     Get a list of the names of all services that are tracked (that is, regularly checked on their status) by this
@@ -157,9 +182,13 @@ def services_overview():
     return services.names()
 
 
-@api.get("/api/services/up/all", response_model=Dict[str, bool],
-         responses={"200": {"content": {"application/json": {"schema": {
-                    "examples": [{"Inginious": True, "ADE-scheduler": False}]}}}}})
+@api.get(
+    "/api/services/up/all",
+    response_model=Dict[str, bool],
+    responses={"200": {"content": {"application/json": {"schema": {"examples": [
+        {"Inginious": True, "ADE-scheduler": False}]}}}}
+    }
+)
 async def all_service_statuses():
     """
     Get the current status (up or down) for all tracked services. The keys in the response are the name of a
@@ -177,15 +206,22 @@ async def all_service_statuses():
     return {service.name: service.is_up for service in services.root}
 
 
-@api.get("/api/services/up/{service:str}", response_model=bool,
-         responses={"200": {"content": {"application/json": {"schema": {"title": None}}}},
-                    "404": {"detail": "Service not tracked", "model": HTTPError}})
+@api.get(
+    "/api/services/up/{service:str}",
+    response_model=bool,
+    responses={
+        "200": {"content": {"application/json": {"schema": {"title": None}}}},
+        "404": {"detail": "Service not tracked", "model": HTTPError}
+    }
+)
 async def service_status(
         service: Annotated[
             str,
             Path(
                 description="The service for which to get the status. It must be in the list of tracked services"
-                            "that can be requested at [this endpoint](/api/docs#operation/services_overview).")]):
+                            "that can be requested at [this endpoint](/api/docs#operation/services_overview).")
+        ]
+):
     """
     Get the status of a specific service: `true` if the service is up and running, `false` if it is down.
 
@@ -198,16 +234,17 @@ async def service_status(
     Service shall be a valid service, werkzeug already checks this for us with the enumeration of supported services.
     """
     if service not in services.names():
-        return JSONResponse(
-            content={"detail": "The requested service is not tracked by this application. Pleasy verify the listed"
-                               " services at '/api/services/overview'."}, status_code=404)
+        return api_unkown_service_response
 
     service_object = services.get_service(service)
     await services.refresh_status(service)
     return service_object.is_up
 
 
-@api.get("/api/services/all", response_model=Services)
+@api.get(
+    "/api/services/all",
+    response_model=Services
+)
 async def all_service_details():
     """
     Get the following information on all tracked services:
@@ -224,14 +261,21 @@ async def all_service_details():
     return services
 
 
-@api.get("/api/services/{service:str}", response_model=Service,
-         responses={"404": {"detail": "Service not tracked", "model": HTTPError}})
+@api.get(
+    "/api/services/{service:str}",
+    response_model=Service,
+    responses={
+        "404": {"detail": "Service not tracked", "model": HTTPError}
+    }
+)
 async def service_details(
         service: Annotated[
             str,
             Path(
                 description="The service for which to get the information. It must be in the list of tracked services"
-                            "that can be requested at [this endpoint](/api/docs#operation/services_overview).")]):
+                            "that can be requested at [this endpoint](/api/docs#operation/services_overview).")
+        ]
+):
     """
     Get the following information on a service by passing its name:
       * The service url.
@@ -247,28 +291,14 @@ async def service_details(
     Service shall be a valid service, werkzeug already checks this for us with the enumeration of supported services.
     """
     if service not in services.names():
-        return JSONResponse(
-            content={"detail": "The requested service is not tracked by this application. Pleasy verify the listed"
-                               " services at '/api/services/overview'."}, status_code=404)
+        return api_unkown_service_response
 
     service_object = services.get_service(service)
     await services.refresh_status(service)
     return service_object
 
 
-webhook_400_response = JSONResponse(
-    content={"detail": "One or more of the services listed as those to track, aren't tracked by the application. "
-                       "Pleasy verify the listed services at '/api/services/overview'."},
-    status_code=400)
-webhook_403_response = JSONResponse(
-    content={"detail": "The given password does not correspond to the one given when creating the webhook. If entered "
-                       "manually, please verify you made no typo."},
-    status_code=403)
-webhook_404_response = JSONResponse(
-    content={"detail": "The webhook for which modifications were asked can't be found."},
-    status_code=404)
-
-
+# Purely for the openapi documentation for the webhook callbacks: create an APIRouter
 webhook_callback_router = APIRouter()
 
 
@@ -285,15 +315,23 @@ def status_change_notification(_: ServiceStatusChange):
     pass
 
 
-@api.post("/api/webhooks", status_code=201, response_model=WebhookResponse, tags=["Webhooks"],
-          responses={
-              "400": {"model": HTTPError, "description": "Unkown service tracking requested"}},
-          callbacks=webhook_callback_router.routes)
-def create_webhook(webhook: Webhook,
-                   password: Annotated[
-                       str, Body(
-                           description="A password associated with the webhook, needed to update or delete it later.")
-                   ]):
+@api.post(
+    "/api/webhooks",
+    response_model=WebhookResponse,
+    status_code=201,
+    tags=["Webhooks"],
+    responses={
+        "400": {"model": HTTPError, "description": "Unkown service tracking requested"}
+    },
+    callbacks=webhook_callback_router.routes
+)
+def create_webhook(
+        webhook: Webhook,
+        password: Annotated[
+            str, Body(
+                description="A password associated with the webhook, needed to update or delete it later.")
+        ]
+):
     """
     Create a webhook to receive updates if the status of one of the requested tracked sites changes.
     """
@@ -307,18 +345,24 @@ def create_webhook(webhook: Webhook,
     return webhooks.add_webhook(webhook, password=password)
 
 
-@api.patch("/api/webhooks/{hook_id:int}", response_model=WebhookResponse, tags=["Webhooks"],
-           responses={
-               "400": {"model": HTTPError, "description": "Unkown service tracking requested"},
-               "403": {"model": HTTPError, "description": "Wrong password"},
-               "404": {"model": HTTPError, "description": "Webhook id unkown"}},
-           callbacks=webhook_callback_router.routes)
-def update_webhook(hook_id: Annotated[int, Path(description="The id of the webhook to update.")],
-                   webhook_patches: WebhookPatches,
-                   password: Annotated[str, Body(
-                       description="A password associated with the webhook, must be the same as the one given when "
-                                   "creating the webhook.")]
-                   ):
+@api.patch(
+    "/api/webhooks/{hook_id:int}",
+    response_model=WebhookResponse,
+    tags=["Webhooks"],
+    responses={
+        "400": {"model": HTTPError, "description": "Unkown service tracking requested"},
+        "403": {"model": HTTPError, "description": "Wrong password"},
+        "404": {"model": HTTPError, "description": "Webhook id unkown"}},
+    callbacks=webhook_callback_router.routes
+)
+def update_webhook(
+        hook_id: Annotated[int, Path(description="The id of the webhook to update.")],
+        webhook_patches: WebhookPatches,
+        password: Annotated[str, Body(
+            description="A password associated with the webhook, must be the same as the one given when creating "
+                        "the webhook.")
+        ]
+):
     """
     Update a created webhook to track other services, or to change the callback url.
     """
@@ -338,16 +382,22 @@ def update_webhook(hook_id: Annotated[int, Path(description="The id of the webho
 
 
 @hide_422
-@api.delete("/api/webhooks/{hook_id:int}", status_code=204, tags=["Webhooks"],
-            responses={
-               "403": {"model": HTTPError, "description": "Wrong password"},
-               "404": {"model": HTTPError, "description": "Webhook id unkown"}
-            })
-def delete_webhook(hook_id: Annotated[int, Path(description="The id of the webhook to delete.")],
-                   password: Annotated[str, Body(
-                       description="A password associated with the webhook, must be the same as the one given when "
-                                   "creating the webhook.")]
-                   ):
+@api.delete(
+    "/api/webhooks/{hook_id:int}",
+    status_code=204,
+    tags=["Webhooks"],
+    responses={
+        "403": {"model": HTTPError, "description": "Wrong password"},
+        "404": {"model": HTTPError, "description": "Webhook id unkown"}
+    }
+)
+def delete_webhook(
+        hook_id: Annotated[int, Path(description="The id of the webhook to delete.")],
+        password: Annotated[str, Body(
+            description="A password associated with the webhook, must be the same as the one given when creating "
+                        "the webhook.")
+        ]
+):
     """
     Delete a created webhook. No more callbacks will be made based on its content.
     """
@@ -359,42 +409,41 @@ def delete_webhook(hook_id: Annotated[int, Path(description="The id of the webho
     webhooks.delete_webhook(hook_id)
 
 
-all_http_methods = ["CONNECT", "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT", "TRACE"]
-
-
-@api.api_route("/api", status_code=404, include_in_schema=False, methods=all_http_methods)
+# Add FastAPI error handling ###########################################################################################
+@api.api_route("/api", status_code=404, include_in_schema=False, methods=ALL_HTTP_METHODS)
 def api_request_not_found() -> JSONResponse:
     """
     Any paths with `/api` and `/api/...` that have not been catched before are invalid.
     If this endpoint wasn't added, the client would recieve the 404 HTML site from the UCLouvainDown website.
     """
-    return api_404_response
+    return api_unkown_url_response
 
 
-@api.api_route("/api/test", status_code=204, include_in_schema=False, methods=all_http_methods)
-def ignore_tests():
-    """Test requests can be sent to this endpoint"""
-    pass
-
-
-@api.api_route("/api/{_:path}", status_code=404, include_in_schema=False, methods=all_http_methods)
-def error_404(_: str = "") -> JSONResponse:
+@api.api_route("/api/{_:path}", status_code=404, include_in_schema=False, methods=ALL_HTTP_METHODS)
+def api_request_not_found_bis(_: str = "") -> JSONResponse:
+    """See `api_request_not_found`."""
     return api_request_not_found()
 
 
 @api.exception_handler(RequestValidationError)
 def custom_exception_handler(request_: Request, exc: RequestValidationError):
+    """
+    If the `hook_id` given in /api/webhooks/{hook_id} requests is incorrect, that should be a 404 response,
+    not a 422 pydantic ValidationError response.
+    """
     if request_.url.path[:14] == "/api/webhooks/":
         for err in exc.errors():
             if err['loc'][0] == 'path' and err['loc'][1] == 'hook_id':
                 return webhook_404_response
 
+    # If no error was catched, just return the 422 error as normal
     return JSONResponse(
         status_code=422,
         content={'detail': exc.errors(), 'body': exc.body},
     )
 
 
+# Couple the Flask app and the FastAPI app #############################################################################
 api.mount("/", WSGIMiddleware(app))
 
 
