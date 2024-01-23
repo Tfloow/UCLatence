@@ -1,51 +1,51 @@
 {
     "404-Test": {
-        "Last access time": "2024-01-23T17:42:05",
+        "Last access time": "2024-01-23T19:48:44",
         "Last status": false,
         "url": "https://www.google.com/404"
     },
     "ADE": {
-        "Last access time": "2024-01-23T17:42:05",
+        "Last access time": "2024-01-23T19:48:44",
         "Last status": true,
         "url": "https://horaire.uclouvain.be/direct/"
     },
     "ADE-Scheduler": {
-        "Last access time": "2024-01-23T17:42:05",
+        "Last access time": "2024-01-23T19:48:45",
         "Last status": true,
         "url": "https://ade-scheduler.info.ucl.ac.be/calendar/"
     },
     "Comproved": {
-        "Last access time": "2024-01-23T17:42:05",
+        "Last access time": "2024-01-23T19:48:46",
         "Last status": true,
         "url": "https://app.comproved.com/universite-de-louvain"
     },
     "Gradescope": {
-        "Last access time": "2024-01-23T17:42:06",
+        "Last access time": "2024-01-23T19:48:48",
         "Last status": true,
         "url": "https://www.gradescope.com/"
     },
     "Intranet": {
-        "Last access time": "2024-01-23T17:42:06",
+        "Last access time": "2024-01-23T19:48:49",
         "Last status": true,
         "url": "https://intranet.uclouvain.be"
     },
     "LEPL1104": {
-        "Last access time": "2024-01-23T17:42:06",
+        "Last access time": "2024-01-23T19:48:49",
         "Last status": true,
         "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1104.php"
     },
     "LEPL1201": {
-        "Last access time": "2024-01-23T17:42:06",
+        "Last access time": "2024-01-23T19:48:50",
         "Last status": true,
         "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1201.php"
     },
     "Moodle": {
-        "Last access time": "2024-01-23T17:42:06",
+        "Last access time": "2024-01-23T19:48:51",
         "Last status": true,
         "url": "https://moodle.uclouvain.be/"
     },
     "UCLouvain": {
-        "Last access time": "2024-01-23T17:42:07",
+        "Last access time": "2024-01-23T19:48:53",
         "Last status": true,
         "url": "https://www.uclouvain.be/"
     }

@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, make_response, send_from_dire
 import json
 import requests
 import csv
+from apscheduler.schedulers.background import BackgroundScheduler # To schedule the check
+import datetime
+import logging
 
 # My modules
 import jsonUtility
@@ -18,26 +21,40 @@ def urlOfService(services, service):
         return services[service]["url"]
     return "NaN"
 
+def updateStatusService(services, service):
+    url = urlOfService(services, service)
+    if url == "NaN":
+        print("[LOG]: You passed a service that is not tracked")
+        return False
+    
+    print(f"[LOG]: HTTP request for {services[service]["url"]}")
+    response = requests.get(url).status_code < 400 # Starting 400 codes are error for HTTP GET
+    
+    jsonUtility.updateStatus(services, service, response)
+    
+    return response
+
 def statusService(services, service):
     url = urlOfService(services, service)
     if url == "NaN":
         print("[LOG]: You passed a service that is not tracked")
         return False
     
-    needToCheck = jsonUtility.deltaTimeService(services, service)
-    
-    if needToCheck:
-        print(f"[LOG]: HTTP request for {services[service]["url"]}")
-        response = requests.get(url).status_code < 400 # Starting 400 codes are error for HTTP GET
-        
-        jsonUtility.updateStatus(services, service, response)
-        
-        return response
-    else:
-        return services[service]["Last status"]
+    return services[service]["Last status"]
 
+def refreshServices(services):
+    print("[LOG]: Refreshing the services")
+    for service in services.keys():
+        updateStatusService(services, service)
 
-# Start the Flask app
+# Setup Scheduler to periodically check the status of the website
+scheduler = BackgroundScheduler()
+scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+
+# Start the scheduler
+scheduler.start()
+
+# ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")
 
 @app.route("/")
@@ -135,7 +152,7 @@ def extractLog():
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
-    return send_from_directory(app.static_folder, request.path[1:])
+    return send_from_directory(app.static_folder, request.path[1:])   
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
