@@ -49,7 +49,7 @@ def refreshServices(services):
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
 
 # Start the scheduler
 scheduler.start()
