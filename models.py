@@ -1,11 +1,75 @@
 import datetime as dt
-from pydantic import BaseModel, Field, ValidationError, RootModel
+
+from fastapi import Body
+from pydantic import BaseModel, Field, ValidationError, RootModel, HttpUrl
 import requests
-from typing import List, Dict, Annotated
+from typing import List, Dict, Annotated, Optional
+
+from utilities import hash_password
 
 RECHECK_AFTER = 300  # [s]
 # Follow ISO guidelines
 # DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
+
+
+# Response-only models #################################################################################################
+class HTTPError(BaseModel):
+    detail: Annotated[
+        str,
+        Field(description="Details on the type of error, the reasons why it was raised and/or how to solve it.")
+    ]
+
+
+webhook_tracked_services = Body(
+            description="The services for which to receive updates. An empty list default to all tracked services.",
+            examples=[["Inginous", "ADE-scheduler"], []]
+        )
+webhook_callback_url = Body(
+            description="The url to which should be sent the `POST` requests containing updates.",
+            examples=["https://somesite/api/webhooks/UCLouvainDownResponses"]
+        )
+
+
+class Webhook(BaseModel):
+    tracked_services: Annotated[
+        List[str],
+        webhook_tracked_services]
+    callback_url: Annotated[
+        HttpUrl,
+        webhook_callback_url]
+
+
+class WebhookPatches(Webhook):
+    """The updates to be made to the webhook."""
+    tracked_services: Annotated[List[str], webhook_tracked_services] = None
+    callback_url: Annotated[str, webhook_callback_url] = None
+
+
+class WebhookResponse(Webhook):
+    hook_id: Annotated[
+        int,
+        Field(
+            description="The id of the webhook, to be used in the future for `PATCH` or `DELETE` requests.",
+            examples=[123, 1])]
+
+
+class WebhookComplete(WebhookResponse):
+    """\f this class shall never be used as a return type on an api call!!!"""
+    password_hash: str
+
+
+# TODO check if needs to inherit from Service ?
+class ServiceStatusChange(BaseModel):
+    name: Annotated[str, Field(
+        description="The name by which the service is referenced.",
+        examples=["Inginious", "ADE-Scheduler"])]
+    url: Annotated[str, Field(
+        description="The link to the service.",
+        examples=["https://inginious.info.ucl.ac.be/", "https://ade-scheduler.info.ucl.ac.be/calendar"])]
+    is_up: Annotated[bool, Field(
+        description="The current state of the service: `true` if it is up and running, `false` if it is down. "
+                    "If it was down before, its state now will be `true` and inversely.",
+        examples=[True, False])]
 
 
 # Models used for backend ##############################################################################################
@@ -87,7 +151,97 @@ class Services(RootModel):
         return self
 
 
-# Response-only models #################################################################################################
-class ServiceStatuses(RootModel):
-    root: Dict[str, bool] = Field()
+class Webhooks(RootModel):
+    root: List[WebhookComplete]
+
+    __webhook_dict: Dict[int, WebhookComplete] = {}
+    __webhook_post_dict: Dict[str, List[int]] = {}
+    __filename: str = None
+    __max_id: int = 0
+
+    @classmethod
+    def load_from_json_file(cls, filename: str):
+        try:
+            with open(filename, "r") as f:
+                return cls.model_validate_json(f.read()).add_private_vars(filename)
+        except OSError | IOError:
+            raise Exception("[LOG]: Error when opening/reading services.json")
+        except ValueError | ValidationError:
+            raise Exception("[LOG]: Error when parsing services.json")
+
+    def dump_json(self, filename: str = None):
+        if not filename:
+            filename = self.__filename
+
+        try:
+            with open(filename, "w") as f:
+                f.write(self.model_dump_json(indent=2))
+        except OSError | IOError:
+            raise Exception("[LOG]: Error when writing services.json")
+
+    def add_private_vars(self, filename: str):
+        for webhook in self.root:
+            self.__webhook_dict[webhook.hook_id] = webhook
+            if webhook.hook_id > self.__max_id:
+                self.__max_id = webhook.hook_id
+            for service in webhook.tracked_services:
+                if service in self.__webhook_post_dict:
+                    self.__webhook_post_dict[service].append(webhook.hook_id)
+                else:
+                    self.__webhook_post_dict[service] = [webhook.hook_id]
+
+        self.__filename = filename
+        return self
+
+    def hook_id_exists(self, hook_id: int) -> bool:
+        return hook_id in self.__webhook_dict
+
+    def get_password_hash(self, hook_id: int):
+        """Supposes hook_id exists"""
+        return self.__webhook_dict[hook_id].password_hash
+
+    def add_webhook(self, webhook: Webhook, password: str = None, password_hash: str = None, hook_id: int = None) -> WebhookResponse:
+        if not hook_id:
+            self.__max_id += 1
+            hook_id = self.__max_id
+        webhook_response = WebhookResponse(**webhook.model_dump(), hook_id=hook_id)
+        if password:
+            hook = WebhookComplete(**webhook_response.model_dump(), password_hash=hash_password(password))
+        elif password_hash:
+            hook = WebhookComplete(**webhook_response.model_dump(), password_hash=password_hash)
+        else:
+            raise Exception("Either password or password_hash must be given.")
+
+        self.root.append(hook)
+        self.__webhook_dict[hook.hook_id] = hook
+        for service in hook.tracked_services:
+            if service in self.__webhook_post_dict:
+                self.__webhook_post_dict[service].append(hook.hook_id)
+            else:
+                self.__webhook_post_dict[service] = [hook.hook_id]
+
+        self.dump_json()
+        return webhook_response
+
+    def update_webhook(self, hook_id: int, updates: WebhookPatches):
+        """Supposes hook_id exists"""
+        if updates.callback_url:
+            self.__webhook_dict[hook_id].callback_url = updates.callback_url
+
+        if updates.tracked_services:
+            old_webhook = self.__webhook_dict[hook_id]
+            self.delete_webhook(hook_id)
+            return self.add_webhook(Webhook(callback_url=old_webhook.callback_url, tracked_services=updates.tracked_services), password_hash=old_webhook.password_hash, hook_id=hook_id)
+
+        self.dump_json()
+        return WebhookResponse(**self.__webhook_dict[hook_id].model_dump(exclude={"password_hash"}))
+
+    def delete_webhook(self, hook_id: int):
+        """Supposes hook_id exists"""
+        webhook = self.__webhook_dict.pop(hook_id)
+        self.root.remove(webhook)
+        for service in webhook.tracked_services:
+            self.__webhook_post_dict[service].remove(hook_id)
+
+        self.dump_json()
 
