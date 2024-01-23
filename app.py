@@ -10,6 +10,7 @@ try:
 
     import csv
 
+    # Own modules
     # import dataReport
     from models import *
     from fastapi_custom import ALL_HTTP_METHODS, hide_422, hide_default_responses, use_route_names_as_operation_ids
@@ -236,9 +237,8 @@ async def service_status(
     if service not in services.names():
         return api_unkown_service_response
 
-    service_object = services.get_service(service)
     await services.refresh_status(service)
-    return service_object.is_up
+    return services.get_service(service).is_up
 
 
 @api.get(
@@ -293,9 +293,8 @@ async def service_details(
     if service not in services.names():
         return api_unkown_service_response
 
-    service_object = services.get_service(service)
     await services.refresh_status(service)
-    return service_object
+    return services.get_service(service)
 
 
 # Purely for the openapi documentation for the webhook callbacks: create an APIRouter
@@ -338,8 +337,7 @@ def create_webhook(
     for service in webhook.tracked_services:
         if service not in services.names():
             return webhook_400_response
-
-    if not webhook.tracked_services:
+    if not webhook.tracked_services:  # Empty list
         webhook.tracked_services = services.names()
 
     return webhooks.add_webhook(webhook, password=password)
@@ -372,11 +370,11 @@ def update_webhook(
         return webhook_403_response
 
     if webhook_patches.tracked_services is not None:
-        if not webhook_patches.tracked_services:
-            webhook_patches.tracked_services = services.names()
         for service in webhook_patches.tracked_services:
             if service not in services.names():
                 return webhook_400_response
+        if not webhook_patches.tracked_services:  # Empty list
+            webhook_patches.tracked_services = services.names()
 
     return webhooks.update_webhook(hook_id, webhook_patches)
 
