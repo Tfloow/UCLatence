@@ -60,6 +60,9 @@ def refreshServices(services):
         updateStatusService(services, service, session)
     
     session.close()
+    
+    # To archive the current report daily to spare some memory
+    dataReport.archiveStatus()
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()

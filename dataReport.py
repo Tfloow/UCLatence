@@ -186,6 +186,33 @@ def reportStatus(services, service):
     plot(service, True)
     print("[LOG]: Finished plot")
 
+def archiveStatus():
+    # We archive between 2 AM and 2 AM + time for a request
+    start_archive = datetime.time(2,0)
+    end_archive = datetime.time(2, jsonUtility.timeCheck/60)
+    currentTime = datetime.utcnow()
+    
+    if start_archive <= currentTime <= end_archive:
+        print("[LOG]: Starting archiving")
+        
+        for service in serviceList:
+            # Check if there is a file to report the archive
+            if not os.path.exists(filepath + service + "/outageReportArchive.csv"):
+                with open(filepath + service + "/outageReportArchive.csv", "w") as newArchive:
+                    newArchive.write(cols)
+            
+            # Open the old file
+            with open(filepath + service + "/outageReport.csv", "r") as current:
+                content = current.readlines()[1:] # Remove the head of the csv
+                    
+            # Append it to the archive
+            with open(filepath + service + "/outageReportArchive.csv", "a") as archive:
+                archive.writelines(content)
+            
+            # Start with a fresh blank file
+            with open(filepath + service + "/outageReport.csv", "w") as blankCurrent:
+                blankCurrent.write(cols)
+                
     
     
 
