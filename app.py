@@ -444,7 +444,10 @@ def update_webhook(
 ):
     """
     Update a created webhook to track other services, or to change the callback url.
+
+    TODO: NOT YET IMPLEMENTED
     """
+    return JSONResponse(status_code=405, content={"detail": "Not yet implemented."})
     if not webhooks.hook_id_exists(hook_id):
         return webhook_404_response
     if not verify_password(webhooks.get_password_hash(hook_id), password):
@@ -479,7 +482,10 @@ def delete_webhook(
 ):
     """
     Delete a created webhook. No more callbacks will be made based on its content.
+
+    TODO: NOT YET IMPLEMENTED
     """
+    return JSONResponse(status_code=405, content={"detail": "Not yet implemented."})
     if not webhooks.hook_id_exists(hook_id):
         return webhook_404_response
     if not verify_password(webhooks.get_password_hash(hook_id), password):
