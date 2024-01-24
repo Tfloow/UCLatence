@@ -92,6 +92,9 @@ def plot(service, onlyOutageReport=False):
             fig.savefig("static/img/log/" + service + ".png")
         else:
             fig.savefig("static/img/log/" + report + service + ".png")  
+        
+        # Important to avoid an ever increasing ram usage
+        plt.close(fig) 
 
 def addReport(service, user_choice):
     """Function to add a new line to the logs of each service
@@ -157,7 +160,7 @@ def blankStatus():
 
     for service in serviceList:
         with open(filepath + service + "/outageReport.csv", "w") as log:
-                log.write(cols)
+            log.write(cols)
         
 def reportStatus(services, service):
     """Add the log of the current status of the site so we can track it throughout time

@@ -4,17 +4,17 @@ import requests
 import csv
 from apscheduler.schedulers.background import BackgroundScheduler # To schedule the check
 import datetime
-import logging
+import atexit
 
 # My modules
 import jsonUtility
 import dataReport
 
 # Load JSON services
-f = open("services.json")
-if f == None:
-    ValueError("[LOG]: Error when opening the services.json")
-services = json.load(f)
+with open("services.json") as f:
+    if f is None:
+        raise ValueError("[LOG]: Error when opening the services.json")
+    services = json.load(f)
 
 def urlOfService(services, service):
     if service in services:
@@ -58,6 +58,8 @@ def refreshServices(services):
     
     for service in services.keys():
         updateStatusService(services, service, session)
+    
+    session.close()
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
@@ -65,6 +67,9 @@ scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtil
 
 # Start the scheduler
 scheduler.start()
+
+# When the scheduler need to be stopped
+atexit.register(lambda: scheduler.shutdown())
 
 # ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")
