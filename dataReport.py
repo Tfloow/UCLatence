@@ -1,8 +1,10 @@
+from matplotlib.dates import date2num
 import jsonUtility
 import os
 from datetime import datetime, time
 import pytz # For timezone
 import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
 import numpy as np
 
 from logger_config import *
@@ -36,9 +38,10 @@ def addBlankCSV():
 
 def plot(service, onlyOutageReport=False):
     if not onlyOutageReport:
-        logger.info("[LOG]: also plotting for user Report")
+        logger.info("[LOG]: only plotting for user Report")
         toPlot = dict(userReport = filepath + service + "/log.csv")
     else:
+        logger.info("[LOG]: only plotting for Report")
         toPlot = dict(outageReport = filepath + service + "/outageReport.csv")
     
     
@@ -70,9 +73,25 @@ def plot(service, onlyOutageReport=False):
             timeArray = data["date"]
             UPArray = data["UP"]
             
+            timeArray = date2num(timeArray)
+            
             timeNow = np.datetime64("now")
             
-            ax.plot(timeArray, UPArray)
+            points = np.array([timeArray, UPArray]).T.reshape(-1, 1, 2)
+            segments = np.concatenate([points[:-1], points[1:]], axis=1)
+            
+            norm = plt.Normalize(0,1)
+            lc = LineCollection(segments, cmap='RdYlGn', norm=norm)
+            
+            lc.set_array(UPArray)
+            lc.set_linewidth(2)
+            
+            ax.add_collection(lc)
+            #fig.colorbar(line, ax=axs[0])
+
+            ax.set_ylim(-0.1,1.1)
+            
+            #ax.plot(timeArray, UPArray)
             ax.axvline(x=timeNow, linestyle="--", color="gray", alpha=0.5)
             ax.set_ylim(-0.1,1.1)
             
@@ -80,8 +99,9 @@ def plot(service, onlyOutageReport=False):
             
             # To protect against unwanted behavior
             if timeArray.size > 2: 
-                ax.set_xlim(timeArray[0] - np.timedelta64(3, "m"), timeNow + np.timedelta64(3, "m"))
-                ax.text(timeNow - np.timedelta64((timeNow - timeArray[0]))*0.34 , 0.5, f"Last Report\n{timeNow}", **now_kwargs)
+                logger.info("[LOG]: temp fix")
+                #ax.set_xlim(timeArray[0] - np.timedelta64(3, "m"), timeNow + np.timedelta64(3, "m"))
+                #ax.text(timeNow - np.timedelta64((timeNow - timeArray[0]))*0.34 , 0.5, f"Last Report\n{timeNow}", **now_kwargs)
             else:
                 ax.text(timeNow, 0.5, f"Last Report\n{timeNow}", **now_kwargs)
             
@@ -91,6 +111,8 @@ def plot(service, onlyOutageReport=False):
                 ax.set_title(f"Past status for {service}")
             ax.set_ylabel("Up or Down")
             ax.set_xlabel("Date and Time")
+            
+        logger.info(f"[LOG]: PLOT --> service:{service} and report:{report}")
         if not onlyOutageReport:
             fig.savefig("static/img/log/" + service + ".png")
         else:
@@ -98,6 +120,8 @@ def plot(service, onlyOutageReport=False):
         
         # Important to avoid an ever increasing ram usage
         plt.close(fig) 
+        
+        logger.info("[LOG]: Finished plotting")
 
 def addReport(service, user_choice):
     """Function to add a new line to the logs of each service
@@ -121,7 +145,8 @@ def addReport(service, user_choice):
     with open(log, "a") as file:
         file.write(date + "," + UP + "\n")
     
-    plot(service) # To keep updated the graph         
+    # Was causing bugs
+    #plot(service) # To keep updated the graph         
         
         
 def dataExtraction():
@@ -184,11 +209,17 @@ def reportStatus(services, service):
         out.write(date + "," + str(UP) + "\n")
     
     logger.info("[LOG]: Finished Report")
-    logger.info("[LOG]: starting plot")
+    logger.info("[LOG]: starting plot for outage")
 
     
     plot(service, True)
-    logger.info("[LOG]: Finished plot")
+    logger.info("[LOG]: Finished plot for outage")
+    
+    logger.info("[LOG]: starting plot for user report")
+
+    
+    plot(service, False)
+    logger.info("[LOG]: Finished plot for user report")
 
 def archiveStatus():
     # We archive between 2 AM and 2 AM + time for a request
