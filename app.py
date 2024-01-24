@@ -23,11 +23,11 @@ except ImportWarning as w:
 
 
 # Load JSON files ######################################################################################################
-JSON_FILE_SERVICES = "services.json"
-services = Services.load_from_json_file(JSON_FILE_SERVICES)
-
 JSON_FILE_WEBHOOKS = "webhooks.json"
 webhooks = Webhooks.load_from_json_file(JSON_FILE_WEBHOOKS)
+
+JSON_FILE_SERVICES = "services.json"
+services = Services.load_from_json_file(JSON_FILE_SERVICES, webhooks=webhooks)
 
 
 # Define the Flask app and its routes ##################################################################################
@@ -38,14 +38,14 @@ app = Flask("UCLouvainDown")
 async def index():
     """Render homepage, with an overview of all services."""
     print(f"[LOG]: HTTP request for homepage")
-    return render_template("index.html", serviceList=(await all_service_details()).root)
+    return render_template("index.html", serviceList=all_service_details().root)
 
 
 @app.route(f"/<any({[*services.names(), '']}):service>")
 async def service_details_app(service: str):
     """Render a page with details of one service."""
     print(f"[LOG]: HTTP request for {service}")
-    return render_template("itemWebsite.html", service=await service_details(service))
+    return render_template("itemWebsite.html", service=service_details(service))
 
 @app.route("/serviceList")
 def serviceList():
@@ -190,7 +190,7 @@ def services_overview():
         {"Inginious": True, "ADE-scheduler": False}]}}}}
     }
 )
-async def all_service_statuses():
+def all_service_statuses():
     """
     Get the current status (up or down) for all tracked services. The keys in the response are the name of a
     tracked service, values are booleans: `true` means the service is up and running, `false` means it is down.
@@ -203,7 +203,7 @@ async def all_service_statuses():
      [`All Service Details` endpoint](/api/docs#operation/all_service_details) or the
      [`Service Details` endpoint](/api/docs#operation/service_details).*
     """
-    await services.refresh_status()
+    services.status_changed()
     return {service.name: service.is_up for service in services.root}
 
 
@@ -215,7 +215,7 @@ async def all_service_statuses():
         "404": {"detail": "Service not tracked", "model": HTTPError}
     }
 )
-async def service_status(
+def service_status(
         service: Annotated[
             str,
             Path(
@@ -237,7 +237,7 @@ async def service_status(
     if service not in services.names():
         return api_unkown_service_response
 
-    await services.refresh_status(service)
+    services.status_changed(service)
     return services.get_service(service).is_up
 
 
@@ -245,7 +245,7 @@ async def service_status(
     "/api/services/all",
     response_model=Services
 )
-async def all_service_details():
+def all_service_details():
     """
     Get the following information on all tracked services:
       * The service url.
@@ -257,7 +257,7 @@ async def all_service_details():
     **Note**: *for most applications, the details for only a few services are needed. Please use the
       [`service details endpoint`](/api/docs#operation/service_details) instead in those cases!*
     """
-    await services.refresh_status()
+    services.status_changed()
     return services
 
 
@@ -268,7 +268,7 @@ async def all_service_details():
         "404": {"detail": "Service not tracked", "model": HTTPError}
     }
 )
-async def service_details(
+def service_details(
         service: Annotated[
             str,
             Path(
@@ -293,7 +293,7 @@ async def service_details(
     if service not in services.names():
         return api_unkown_service_response
 
-    await services.refresh_status(service)
+    services.status_changed(service)
     return services.get_service(service)
 
 
