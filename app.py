@@ -64,6 +64,7 @@ def refreshServices(services):
     # To archive the current report daily to spare some memory
     dataReport.archiveStatus()
 
+
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
 scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))

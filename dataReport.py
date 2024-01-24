@@ -1,6 +1,6 @@
 import jsonUtility
 import os
-from datetime import datetime
+from datetime import datetime, time
 import pytz # For timezone
 import matplotlib.pyplot as plt
 import numpy as np
@@ -188,11 +188,13 @@ def reportStatus(services, service):
 
 def archiveStatus():
     # We archive between 2 AM and 2 AM + time for a request
-    start_archive = datetime.time(2,0)
-    end_archive = datetime.time(2, jsonUtility.timeCheck/60)
+    start_archive = time(2, 0)
+    end_archive = time(2, int(jsonUtility.timeCheck/60))
     currentTime = datetime.utcnow()
-    
-    if start_archive <= currentTime <= end_archive:
+
+    print(start_archive)
+
+    if start_archive <= currentTime.time() <= end_archive:
         print("[LOG]: Starting archiving")
         
         for service in serviceList:
