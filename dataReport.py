@@ -89,7 +89,7 @@ def plot(service, onlyOutageReport=False):
             ax.set_ylabel("Up or Down")
             ax.set_xlabel("Date and Time")
         if not onlyOutageReport:
-            toPlot = dict(userReport = filepath + service + "/outageReport.csv")
+            fig.savefig("static/img/log/" + service + ".png")
         else:
             fig.savefig("static/img/log/" + report + service + ".png")  
 
