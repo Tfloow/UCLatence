@@ -34,10 +34,11 @@ def addBlankCSV():
 def plot(service, onlyOutageReport=False):
     if not onlyOutageReport:
         print("[LOG]: also plotting for user Report")
-        toPlot = dict(userReport = filepath + service + "/outageReport.csv")
+        toPlot = dict(userReport = filepath + service + "/log.csv")
     else:
         toPlot = dict(outageReport = filepath + service + "/outageReport.csv")
     
+    print(toPlot)
     
     for report in toPlot:
         path = toPlot[report]
@@ -123,6 +124,7 @@ def dataExtraction():
     
     for service in serviceList:
         os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
+        os.system(f'cmd /c "curl {url}/extract?get={service}_outage -o data/{service}/outageReport.csv"')
         
 def getLastReport(service):
     with open("data/" + service + "/log.csv", "r") as file:

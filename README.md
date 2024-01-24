@@ -6,6 +6,7 @@
   - [How to run it ?](#how-to-run-it-)
     - [Explanation of the steps](#explanation-of-the-steps)
   - [Roadmap](#roadmap)
+    - [API](#api)
   - [Documentation](#documentation)
   - [License](#license)
 
@@ -54,6 +55,12 @@ First, make sure to get the latest version of python (I am using 3.12). then fol
 - [x] User button to report if a website is down
 - [x] Database that collect persistent data about outage
 - [ ] Proper database
+  
+### API
+
+- [ ] Integrate a Fast API
+- [ ] Support for webhook
+- [ ] RSS
 
 ## Documentation
 
