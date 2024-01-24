@@ -282,7 +282,6 @@ def all_service_statuses():
      [`All Service Details` endpoint](/api/docs#operation/all_service_details) or the
      [`Service Details` endpoint](/api/docs#operation/service_details).*
     """
-    services.status_changed()
     return {service.name: service.is_up for service in services.root}
 
 
@@ -316,7 +315,6 @@ def service_status(
     if service not in services:
         return api_unkown_service_response
 
-    services.status_changed(service)
     return services.get_service(service).is_up
 
 
@@ -336,7 +334,6 @@ def all_service_details():
     **Note**: *for most applications, the details for only a few services are needed. Please use the
       [`service details endpoint`](/api/docs#operation/service_details) instead in those cases!*
     """
-    services.status_changed()
     return services
 
 
@@ -372,7 +369,6 @@ def service_details(
     if service not in services:
         return api_unkown_service_response
 
-    services.status_changed(service)
     return services.get_service(service)
 
 

@@ -1,3 +1,10 @@
 [
-
+  {
+    "tracked_services": [
+      "404-Test"
+    ],
+    "callback_url": "http://127.0.0.1:8000/api/callbackTest",
+    "hook_id": 2,
+    "password_hash": "testing"
+  }
 ]

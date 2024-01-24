@@ -1,7 +1,7 @@
 import datetime as dt
 
 from fastapi import Body
-from pydantic import BaseModel, Field, ValidationError, RootModel, HttpUrl
+from pydantic import BaseModel, Field, ValidationError, RootModel, HttpUrl, computed_field
 import requests
 from typing import List, Dict, Annotated, Set, Any, Iterable
 
@@ -35,7 +35,7 @@ class Webhook(BaseModel):
         HttpUrl,
         webhook_callback_url]
 
-    def send_callback(self, service) -> bool:  # : Service):
+    def send_callback(self, service) -> bool:
         """
         Check that this webhook tracks `service` and if so send a callback to the callback_url.
 
@@ -188,14 +188,15 @@ class Service(BaseModel):
     url: Annotated[str, Field(
         description="The link to the service.",
         examples=["https://inginious.info.ucl.ac.be/", "https://ade-scheduler.info.ucl.ac.be/calendar"])]
-    is_up: Annotated[bool, Field(
+    status: Annotated[bool, Field(
         description="The current state of the service: `true` if it is up and running, `false` if it is down.",
-        examples=[True, False])]
+        examples=[True, False], alias="is_up", alias_priority=1)]
     last_checked: Annotated[dt.datetime, Field(
         description="The date and time (UTC) at which the status of the service was last checked, in ISO formatting "
                     "(`yyyy-MM-dd'T'HH:mm:ss.SSSXXX`).", examples=["2024-01-22T17:46:55.480345"])]
 
     __webhooks: Dict[int, Webhook] = {}
+    __parent: None  # Services instance
 
     def status_changed(self, session=None):
         """
@@ -208,39 +209,33 @@ class Service(BaseModel):
         headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) "
                                  "Chrome/81.0.4044.141 Safari/537.36"}
 
-        if (now - self.last_checked).total_seconds() > RECHECK_AFTER:
+        if self.status is None or (now - self.last_checked).total_seconds() > RECHECK_AFTER:
             if session is None:
-                self.is_up = requests.head(self.url, headers=headers).status_code < 400
+                new_is_up = requests.head(self.url, headers=headers).status_code < 400
             else:
-                self.is_up = session.head(self.url, headers=headers).status_code < 400
+                new_is_up = session.head(self.url, headers=headers).status_code < 400
             self.last_checked = now
 
-        return False
+            if self.status is None:
+                self.status = new_is_up
+            elif self.status != new_is_up:
+                for webhook in self.__webhooks.values():
+                    webhook.send_callback(self)
+                self.status = new_is_up
+
+        self.__parent.dump_json()
 
     @property
     def is_up(self) -> bool:
         """
         Updates the value of `is_up` if necessary then returns it.
-
+        If value changes `is_up`, calls all webhooks associated with the service to
+        notify them of the status change.
         :return: `true` if the service is up, `false if not` (this value isn't 100% accurate: status checks don't
           happen every second).
         """
         self.status_changed()
-        return self.is_up
-
-    @is_up.setter
-    def is_up(self, value: bool):
-        """
-        Set `is_up` to `value`. If value changes `is_up`, calls all webhooks associated with the service to
-        notify them of the status change.
-        """
-        if not isinstance(value, bool):
-            raise TypeError()
-
-        if self.is_up != value:
-            for webhook in self.__webhooks.values():
-                webhook.send_callback(self)
-            self.is_up = value
+        return self.status
 
     def modify_webhooks(self, webhooks: Webhooks):
         """
@@ -254,6 +249,9 @@ class Service(BaseModel):
             # Or add the webhook
             elif self.name in webhook.tracked_services:
                 self.__webhooks[webhook.hook_id] = webhook
+
+    def _set_parent(self, parent):
+        self.__parent = parent
 
 
 class Services(RootModel):
@@ -301,7 +299,7 @@ class Services(RootModel):
 
         try:
             with open(filename, "w") as f:
-                f.write(self.model_dump_json(indent=2))
+                f.write(self.model_dump_json(indent=2, by_alias=True))
         except (OSError, IOError):
             raise Exception("[LOG]: Error when writing services.json")
 
@@ -329,6 +327,7 @@ class Services(RootModel):
         :param url: a url for the service
         """
         new_service = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow())
+        new_service._set_parent(self)
         self.root[name] = new_service
         self.__tracked_services.add(name)
         
@@ -364,6 +363,8 @@ class Services(RootModel):
         """
         self.__tracked_services = set(self.root.keys())
         self.__filename = filename
+        for service in self:
+            service._set_parent(self)
         if webhooks:
             for service in self.root.values():
                 service.modify_webhooks(webhooks)
