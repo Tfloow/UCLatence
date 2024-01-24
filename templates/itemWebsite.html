@@ -24,6 +24,7 @@
     {% endif %}
 
     <br>
+    <br>
 
     <p id="down-user">
         <h3>Is this website currently working for you ?</h3>
@@ -34,11 +35,23 @@
 
     <div id="result"></div>
 
-    <div class="container">
-        <div id="log-plot">
-            <img src="../static/img/log/{{ service.name }}.png" alt="Graph for {{ service.name }}" id="graph">
+    <div class="container-plot">
+        <div id="log-plot" class="graph-container">
+            <img src="../static/img/log/{{ service.name }}.png" alt="Graph for status reported by user for {{ service.name }}" class="graph">
+            <br>
+            <a href="/extract?get={{ service.name }}" id="urlTO">Download Log</a> &nbsp; - &nbsp;
+            <a href="{{ url_for("static", filename='img/log/' + service.name + '.png') }}" download="{{ service.name }}-log.png" id="urlTO">Download Graph</a>
+        </div>
+        <div id="down-plot" class="graph-container">
+            <img src="../static/img/log/outageReport{{ service.name }}.png" alt="Graph of previous status for {{ service.name }}" class="graph">
+            <br>
+            <a href="/extract?get={{ service.name }}_outage" id="urlTO">Download Log</a> &nbsp; - &nbsp;
+            <a href="{{ url_for("static", filename='img/log/outageReport' + service.name + '.png') }}" download="outageReport{{ service.name }}-log.png" id="urlTO">Download Graph</a>
         </div>
     </div>
+
+
+
 
 {% endblock %}
 

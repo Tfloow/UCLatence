@@ -30,6 +30,7 @@ body {
 
 a.header-button{
     color: white;
+    text-decoration: none;
 }
 
 .header-button:hover{
@@ -37,6 +38,14 @@ a.header-button{
     cursor: pointer;
 
     transition: 50ms;
+}
+
+/*For mobile*/
+@media (max-width: 600px) {
+    .header-button{
+        width:60px;
+        font-size: 13px;
+    }
 }
 
 footer{

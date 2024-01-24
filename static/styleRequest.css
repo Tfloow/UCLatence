@@ -1,0 +1,44 @@
+#info{
+    height: 200px;
+}
+
+form{
+    padding: 20px;
+}
+
+label{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+input, textarea{
+    background-color: lightgray;
+    width: 20%;
+    border-style: none;
+
+    font-size: 20px;
+
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+textarea{
+    resize: none;
+    font-size: 15px;
+}
+
+#submit{
+    background-color: rgb(144, 145, 150);
+    width: 10%;
+
+}
+
+#submit:hover{
+    background-color: rgb(114, 110, 110);
+    cursor: pointer;
+}
+
+#feedback{
+    height: 20px;
+}

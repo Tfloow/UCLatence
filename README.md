@@ -6,6 +6,8 @@
   - [How to run it ?](#how-to-run-it-)
     - [Explanation of the steps](#explanation-of-the-steps)
   - [Roadmap](#roadmap)
+    - [API](#api)
+  - [Documentation](#documentation)
   - [License](#license)
 
 Test the app [here](https://uclouvaindown-ed3979a045e6.herokuapp.com/)
@@ -18,7 +20,7 @@ You can find the list of all currently track services in this [json](services.js
 
 ## How does it work ?
 
-![Homepage](image.png)
+![Homepage](doc/img/image.png)![Alt text](image.png)
 
 Here is the control panel where every website is displayed.
 
@@ -45,13 +47,24 @@ First, make sure to get the latest version of python (I am using 3.12). then fol
 ## Roadmap
 
 - [x] Working pages
-- [x] Home Page with links to other subpages
+- [x] Home Page with links to other sub-pages
 - [ ] A nice and clear home page with all current status
 - [x] Deployed locally
 - [x] Deployed globally 
-- [ ] Tracking downtime 
-- [ ] User button to report if a website is down
-- [ ] Database that collect persistent data about outage
+- [x] Tracking downtime 
+- [x] User button to report if a website is down
+- [x] Database that collect persistent data about outage
+- [ ] Proper database
+  
+### API
+
+- [ ] Integrate a Fast API
+- [ ] Support for webhook
+- [ ] RSS
+
+## Documentation
+
+You can find the documentation and have a better understanding of what is going under the hood by reading [this](doc/doc.md). (*Please, open an issue with the tag "doc" to add any comments or when you need more information about a specific point of the doc*).
 
 ## License
 

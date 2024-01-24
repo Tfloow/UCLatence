@@ -9,12 +9,19 @@ try:
     from flask import Flask, render_template, request, make_response, send_from_directory
 
     import csv
-
-    # Own modules
+    from apscheduler.schedulers.background import BackgroundScheduler # To schedule the check
+    import datetime
+    import logging
+    
+        # Own modules
     # import dataReport
     from models import *
     from fastapi_custom import ALL_HTTP_METHODS, hide_422, hide_default_responses, use_route_names_as_operation_ids
     from utilities import *
+    
+    # For compatibility
+    import dataReport
+    import jsonUtility
 except ImportError:
     print("[LOG] Error on startup: not all packages could be properly imported.")
     raise exit(1)
@@ -29,8 +36,51 @@ services = Services.load_from_json_file(JSON_FILE_SERVICES)
 JSON_FILE_WEBHOOKS = "webhooks.json"
 webhooks = Webhooks.load_from_json_file(JSON_FILE_WEBHOOKS)
 
+def urlOfService(services, service):
+    if service in services.names():
+        return services.get_service(service).url
+    return "NaN"
 
-# Define the Flask app and its routes ##################################################################################
+def updateStatusService(services, service, session=None):
+    url = urlOfService(services, service)
+    if url == "NaN":
+        print("[LOG]: You passed a service that is not tracked")
+        return False
+    
+    print(f"[LOG]: HTTP request for {url}")
+    
+    services.get_service(service).refresh_status(session)
+    
+    
+    print("[LOG]: got status ")
+    dataReport.reportStatus(services, service)
+    
+    return True
+
+def statusService(services, service):
+    url = urlOfService(services, service)
+    if url == "NaN":
+        print("[LOG]: You passed a service that is not tracked")
+        return False
+    
+    return services[service]["Last status"]
+
+def refreshServices(services):
+    print("[LOG]: Refreshing the services")
+    session = requests.Session()
+    
+    for service in services.names():
+        print(service)
+        updateStatusService(services, service, session)
+
+# Setup Scheduler to periodically check the status of the website
+scheduler = BackgroundScheduler()
+scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+
+# Start the scheduler
+scheduler.start()
+
+# ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")
 
 
@@ -55,6 +105,23 @@ def serviceList():
         dictService.append(dict(service=service, url=services[service]["url"], reportedStatus=dataReport.getLastReport(service), Status=services[service]["Last status"]))
         
     return render_template("serviceList.html", serviceInfo=dictService)
+
+@app.route("/request")
+def requestServie():
+    serviceName = request.args.get('service-name', "")
+    url = request.args.get('url', "")
+    info = request.args.get('info', "")
+    
+    # No form submitted No feedback
+    feedback = "" 
+            
+    if len(serviceName) > 0:
+        # If someone wrote in the form
+        dataReport.newRequest(serviceName, url, info)
+        feedback = "Form submitted successfully!"
+    
+    
+    return render_template("request.html", feedback=feedback)
 
 # To handle error reporting
 @app.route('/process', methods=['GET'])
@@ -92,9 +159,19 @@ def page_not_found(error):
 @app.route("/extract")
 def extractLog():
     get_what_to_extract = request.args.get("get")
-
-    if services.get_service(get_what_to_extract) is not None:
-        with open("data/" + get_what_to_extract + "/log.csv", "r") as file:
+    log = False
+    if len(get_what_to_extract.split("_")) > 1 and services.get_service(get_what_to_extract) is not None:
+        # it means we want the outage log not the user's log
+        log = True
+    
+    if services.get_service(get_what_to_extract) is not None or get_what_to_extract == "request" or log:
+        if len(get_what_to_extract.split("_")) > 1:
+            # when we want to extract the past outages not the user outages
+            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReport.csv"
+        else:
+            path = "data/" + get_what_to_extract + "/log.csv"
+            
+        with open(path, "r") as file:
             csv_data = list(csv.reader(file, delimiter=","))
 
         response = make_response()
@@ -102,8 +179,8 @@ def extractLog():
         csv_write.writerows(csv_data)
 
         response.headers["Content-Type"] = "text/csv"
-        response.headers["Content-Disposition"] = "attachment; filename=data.csv"
-
+        response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.csv"
+        
         return response
     else:
         return render_template("404.html")
@@ -111,7 +188,7 @@ def extractLog():
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
-    return send_from_directory(app.static_folder, request.path[1:])
+    return send_from_directory(app.static_folder, request.path[1:])   
 
 
 # Define the FastAPI app and its routes ################################################################################

@@ -36,6 +36,7 @@ iframe{
 @media (max-width: 600px) {
     iframe {
         width: 320px;
+        height: 160px;
     }
 }
 

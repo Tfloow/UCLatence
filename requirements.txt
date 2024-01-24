@@ -5,3 +5,4 @@ matplotlib>=3.8.2
 fastapi>=0.100.0
 uvicorn~=0.26.0
 pydantic~=2.5.3
+APScheduler>=3.10.4

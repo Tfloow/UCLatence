@@ -88,13 +88,18 @@ class Service(BaseModel):
         description="The date and time (UTC) at which the status of the service was last checked, in ISO formatting "
                     "(`yyyy-MM-dd'T'HH:mm:ss.SSSXXX`).", examples=["2024-01-22T17:46:55.480345"])]
 
-    def refresh_status(self) -> bool:
+    def refresh_status(self, session=None) -> bool:
         """Refresh the status for this service if not updated recently. Makes an HTTP request to do so.
         Returns True if refresh was necessary and yielded a different result, False if not."""
         now = dt.datetime.utcnow()
+        headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36"}
+
         if (now - self.last_checked).total_seconds() > RECHECK_AFTER:
             was_up = self.is_up
-            self.is_up = requests.get(self.url).status_code < 400
+            if session is None:
+                self.is_up = requests.head(self.url, headers=headers).status_code < 400
+            else:
+                self.is_up = session.head(self.url, headers=headers).status_code < 400  # Using a session to speed up refresh in a batch
             self.last_checked = now
             return self.is_up != was_up
 
@@ -123,7 +128,7 @@ class Services(RootModel):
 
     def get_service(self, service: str) -> Service | None:
         """Get a service from the list, or None if it isn't monitored."""
-        return self.__services_dict.get(service, None)
+        return self.__services_dict.get(service, None)a
 
     def dump_json(self, filename: str = None):
         if not filename:
@@ -150,6 +155,12 @@ class Services(RootModel):
         self.__filename = filename
         return self
 
+    def add_service(self, name: str, url: str) -> bool:
+        newService = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow())
+        self.root.append(newService)
+        self.__services_dict[name] = newService        
+        self.dump_json()
+        return True
 
 class Webhooks(RootModel):
     root: List[WebhookComplete]

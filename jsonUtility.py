@@ -1,8 +1,15 @@
 import json
 import datetime
+import pytz # For timezone
+import csv
+import os
+from models import *
 
 datetimeFormat = "%Y-%m-%dT%H:%M:%S"
 timeCheck = 600 # Check every 300 seconds (in production)
+
+JSON_FILE_SERVICES = "services.json"
+services = Services.load_from_json_file(JSON_FILE_SERVICES)
 
 def timeUpdate():
     with open("services.json", "r") as f:
@@ -15,28 +22,18 @@ def timeUpdate():
         json.dump(j, out, indent=4, sort_keys=True, default=str)
 
 def listServices():
-    with open("services.json", "r") as f:
-        j = json.load(f)
-    
-    return j.keys()
+    return services.names()
 
 def statusUpdate():
-    with open("services.json", "r") as f:
-        j = json.load(f)
-
-    for k in j.keys():
-        j[k]["Last status"] = True
-
-    with open("services.json", "w") as out:
-        json.dump(j, out, indent=4, sort_keys=True, default=str)
+    for service in listServices():
+        service.refresh_status()
         
 def deltaTime():
-    with open("services.json", "r") as f:
-        j = json.load(f)
-
+    print("[LOG]: Deprecated")
+    
     currentDate = datetime.datetime.utcnow()
-    for k in j.keys():
-        pastDate = datetime.datetime.strptime(j[k]["Last access time"], datetimeFormat)
+    for k in listServices():
+        # pastDate = datetime.datetime.strptime(j[k]["Last access time"], datetimeFormat)
         print((currentDate - pastDate).total_seconds())
         
 def deltaTimeService(services, service):
@@ -57,22 +54,43 @@ def updateStatus(services, service, newStatus):
         json.dump(services, out, indent=4, sort_keys=True, default=str)
         
 def addNewService(service, url):
-    with open("services.json", "r") as f:
-        j = json.load(f)
+    services.add_service(service, url)
         
-    j[service]["url"] = url
-    j[service]["Last access time"] = "2024-01-22T10:51:30" # Random date 
-    j[service]["Last status"] = False
+def addBlankCSVService(service: Service):
+    service = service.name
+    filepath = "data/"
+    cols = "date,UP\n"
+
+    try:
+        os.mkdir(filepath + service)        
+        
+    except FileExistsError:
+        pass 
+    except:
+        raise ValueError(f"[LOG]: Something went wrong with creating the folder {service}")
     
-    with open("services.json", "w") as out:
-        json.dump(j, out, indent=4, sort_keys=True, default=str)
+    with open(filepath + service + "/log.csv", "w") as log:
+            log.write(cols)        
+
+def acceptRequest():
+    with open("data\\request\\log.csv", "r") as f:
+        read = csv.reader(f, delimiter=",")
+        next(read, None)
+        
+        for row in read:
+            addNewService(row[1], row[2])
+            addBlankCSVService(row[1])
+            
+    
+    with open("data\\request\\log.csv", "w") as f:
+        f.write("time,service,url,reason\n")
     
         
 if __name__ == "__main__":
     
-    with open("services.json", "r") as f:
-        j = json.load(f)
-        
-    timeUpdate()
+    #acceptRequest()
+    
+    services.add_service("test", "https://www.test.com")
+    
     #print(deltaTimeService(j, "UCLouvain"))
     

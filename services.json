@@ -42,12 +42,6 @@
     "last_checked": "2024-01-24T10:39:25.636106"
   },
   {
-    "name": "Pilou-Pilou",
-    "url": "https://perso.uclouvain.be/vincent.legat/zoulab/",
-    "is_up": false,
-    "last_checked": "2024-01-24T10:39:26.584856"
-  },
-  {
     "name": "UCLouvain",
     "url": "https://www.uclouvain.be/",
     "is_up": true,
@@ -70,5 +64,23 @@
     "url": "https://sites.uclouvain.be/uclsport/",
     "is_up": true,
     "last_checked": "2024-01-24T10:39:30.140147"
+  },
+  {
+    "name": "LEPL1104",
+    "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1104.php",
+    "is_up": true,
+    "last_checked": "2024-01-24T10:39:30.140147"
+  },
+  {
+    "name": "LEPL1201",
+    "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1201.php",
+    "is_up": true,
+    "last_checked": "2024-01-24T10:39:30.140147"
+  },
+  {
+    "name": "test",
+    "url": "https://www.test.com",
+    "is_up": true,
+    "last_checked": "2024-01-24T11:27:05.723166"
   }
 ]
