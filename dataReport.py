@@ -15,6 +15,22 @@ services = Services.load_from_json_file(JSON_FILE_SERVICES)
 serviceList = services.names()
 url = "https://uclouvaindown-ed3979a045e6.herokuapp.com/"
 
+def addService(name: str) -> bool:
+    try:
+        os.mkdir(filepath + name)        
+        
+    except FileExistsError:
+        pass 
+    except:
+        raise ValueError(f"[LOG]: Something went wrong with creating the folder {name}")
+    
+    with open(filepath + name + "/log.csv", "w") as log:
+        log.write(cols)
+        
+    with open(filepath + name + "/outageReport.csv", "w") as out:
+        out.write(cols)
+    
+
 def addBlankCSV():
     """Simple utility that is use to generate a skeleton of logs
 

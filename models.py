@@ -7,6 +7,11 @@ from typing import List, Dict, Annotated, Optional, Set
 
 from utilities import hash_password
 
+import os
+
+# Basic constant
+filepath = "data/"
+cols = "date,UP\n"
 RECHECK_AFTER = 300  # [s]
 # Follow ISO guidelines
 # DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
@@ -254,7 +259,7 @@ class Services(RootModel):
 
     def get_service(self, service: str) -> Service | None:
         """Get a service from the list, or None if it isn't monitored."""
-        return self.__services_dict.get(service, None)a
+        return self.__services_dict.get(service, None)
 
     @classmethod
     def load_from_json_file(cls, filename: str, webhooks: Webhooks = None):
@@ -283,8 +288,24 @@ class Services(RootModel):
         return self
     
     def add_service(self, name: str, url: str) -> bool:
-            newService = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow())
-            self.root.append(newService)
-            self.__services_dict[name] = newService        
-            self.dump_json()
-            return True
+        newService = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow())
+        self.root.append(newService)
+        self.__services_dict[name] = newService        
+        
+        # For the Data and Logs
+        try:
+            os.mkdir(filepath + name)        
+            
+        except FileExistsError:
+            pass 
+        except:
+            raise ValueError(f"[LOG]: Something went wrong with creating the folder {name}")
+        
+        with open(filepath + name + "/log.csv", "w") as log:
+            log.write(cols)
+            
+        with open(filepath + name + "/outageReport.csv", "w") as out:
+            out.write(cols)
+        
+        self.dump_json()
+        return True

@@ -30,6 +30,9 @@ except ImportWarning as w:
 
 
 # Load JSON files ######################################################################################################
+JSON_FILE_SERVICES = "services.json"
+services = Services.load_from_json_file(JSON_FILE_SERVICES)
+
 JSON_FILE_WEBHOOKS = "webhooks.json"
 webhooks = Webhooks.load_from_json_file(JSON_FILE_WEBHOOKS)
 
@@ -46,7 +49,7 @@ def updateStatusService(services, service, session=None):
     
     print(f"[LOG]: HTTP request for {url}")
     
-    services.get_service(service).refresh_status(session)
+    services.get_service(service).status_changed(session)
     
     
     print("[LOG]: got status ")

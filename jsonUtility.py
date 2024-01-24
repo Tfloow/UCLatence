@@ -90,7 +90,13 @@ if __name__ == "__main__":
     
     #acceptRequest()
     
-    services.add_service("test", "https://www.test.com")
+    """
+    name = [ "Inginious","UDS", "UCLSport","LEPL1104","LEPL1201"]
+    url = ["https://inginious.info.ucl.ac.be/","https://uds.siws.ucl.ac.be/","https://sites.uclouvain.be/uclsport/",
+           "https://perso.uclouvain.be/vincent.legat/zouLab/epl1104.php","https://perso.uclouvain.be/vincent.legat/zouLab/epl1201.php" ]
     
+    for i in range(len(name)):    
+        services.add_service(name[i], url[i])
+    """
     #print(deltaTimeService(j, "UCLouvain"))
     
