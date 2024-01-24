@@ -11,7 +11,7 @@ try:
     import csv
     from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
     import datetime
-    import logging
+    import atexit
     
     # Own modules
     from models import *
@@ -20,9 +20,8 @@ try:
     
     # For compatibility
     import dataReport
-    import jsonUtility
 except ImportError as e:
-    print(f"[LOG] Error on startup: not all packages could be properly imported:\n{e}")
+    print(f"[LOG] Error on startup: not all packages could be properly imported:\n{e}.")
     raise exit(1)
 except ImportWarning as w:
     print(f"[LOG] Warning on startup: not all packages could be properly imported:\n{w}")
@@ -69,13 +68,20 @@ def refreshServices():
         print(service)
         updateStatusService(service.name, session)
 
+    session.close()
+
+    # To archive the current report daily to spare some memory
+    dataReport.archiveStatus()
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-scheduler.add_job(refreshServices, "interval", minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
 
 # Start the scheduler
 scheduler.start()
+
+# When the scheduler need to be stopped
+atexit.register(lambda: scheduler.shutdown())
 
 # ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")
