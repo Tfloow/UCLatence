@@ -344,7 +344,6 @@ def all_service_details():
     services.status_changed()
     return services
 
-
 @api.get(
     "/api/services/{service:str}",
     response_model=Service,
