@@ -11,7 +11,7 @@ try:
     import csv
     from apscheduler.schedulers.background import BackgroundScheduler # To schedule the check
     import datetime
-    import logging
+    import atexit
     
         # Own modules
     # import dataReport
@@ -71,6 +71,11 @@ def refreshServices(services):
     for service in services.names():
         print(service)
         updateStatusService(services, service, session)
+    
+    session.close()
+    
+    # To archive the current report daily to spare some memory
+    dataReport.archiveStatus()
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
@@ -78,6 +83,9 @@ scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=RECHECK_
 
 # Start the scheduler
 scheduler.start()
+
+# When the scheduler need to be stopped
+atexit.register(lambda: scheduler.shutdown())
 
 # ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")

@@ -112,6 +112,9 @@ def plot(service, onlyOutageReport=False):
             fig.savefig("static/img/log/" + service + ".png")
         else:
             fig.savefig("static/img/log/" + report + service + ".png")  
+        
+        # Important to avoid an ever increasing ram usage
+        plt.close(fig) 
 
 def addReport(service, user_choice):
     """Function to add a new line to the logs of each service
@@ -177,7 +180,7 @@ def blankStatus():
 
     for service in serviceList:
         with open(filepath + service + "/outageReport.csv", "w") as log:
-                log.write(cols)
+            log.write(cols)
         
 def reportStatus(services, service):
     """Add the log of the current status of the site so we can track it throughout time
@@ -205,6 +208,33 @@ def reportStatus(services, service):
     plot(service, True)
     print("[LOG]: Finished plot")
 
+def archiveStatus():
+    # We archive between 2 AM and 2 AM + time for a request
+    start_archive = datetime.time(2,0)
+    end_archive = datetime.time(2, jsonUtility.timeCheck/60)
+    currentTime = datetime.utcnow()
+    
+    if start_archive <= currentTime <= end_archive:
+        print("[LOG]: Starting archiving")
+        
+        for service in serviceList:
+            # Check if there is a file to report the archive
+            if not os.path.exists(filepath + service + "/outageReportArchive.csv"):
+                with open(filepath + service + "/outageReportArchive.csv", "w") as newArchive:
+                    newArchive.write(cols)
+            
+            # Open the old file
+            with open(filepath + service + "/outageReport.csv", "r") as current:
+                content = current.readlines()[1:] # Remove the head of the csv
+                    
+            # Append it to the archive
+            with open(filepath + service + "/outageReportArchive.csv", "a") as archive:
+                archive.writelines(content)
+            
+            # Start with a fresh blank file
+            with open(filepath + service + "/outageReport.csv", "w") as blankCurrent:
+                blankCurrent.write(cols)
+                
     
     
 

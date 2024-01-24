@@ -70,7 +70,7 @@ def addBlankCSVService(service: Service):
         raise ValueError(f"[LOG]: Something went wrong with creating the folder {service}")
     
     with open(filepath + service + "/log.csv", "w") as log:
-            log.write(cols)        
+        log.write(cols)        
 
 def acceptRequest():
     with open("data\\request\\log.csv", "r") as f:
