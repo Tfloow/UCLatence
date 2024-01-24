@@ -93,7 +93,7 @@ def page_not_found(error):
 def extractLog():
     get_what_to_extract = request.args.get("get")
 
-    if get_what_to_extract in services.keys():
+    if services.get_service(get_what_to_extract) is not None:
         with open("data/" + get_what_to_extract + "/log.csv", "r") as file:
             csv_data = list(csv.reader(file, delimiter=","))
 
@@ -106,7 +106,7 @@ def extractLog():
 
         return response
     else:
-        return 404
+        return render_template("404.html")
     
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')

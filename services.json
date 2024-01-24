@@ -3,72 +3,72 @@
     "name": "404-Test",
     "url": "https://www.google.com/404",
     "is_up": false,
-    "last_checked": "2024-01-23T19:56:19.419575"
+    "last_checked": "2024-01-24T10:38:59.590787"
   },
   {
     "name": "ADE",
     "url": "https://horaire.uclouvain.be/direct/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:19.624097"
+    "last_checked": "2024-01-24T10:39:00.260632"
   },
   {
     "name": "ADE-Scheduler",
     "url": "https://ade-scheduler.info.ucl.ac.be/calendar/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:19.702309"
+    "last_checked": "2024-01-24T10:39:21.795630"
   },
   {
     "name": "Comproved",
     "url": "https://app.comproved.com/universite-de-louvain",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:19.827406"
+    "last_checked": "2024-01-24T10:39:22.403178"
   },
   {
     "name": "Gradescope",
     "url": "https://www.gradescope.com/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:19.945626"
+    "last_checked": "2024-01-24T10:39:23.086472"
   },
   {
     "name": "Intranet",
     "url": "https://intranet.uclouvain.be",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:21.031693"
+    "last_checked": "2024-01-24T10:39:24.546889"
   },
   {
     "name": "Moodle",
     "url": "https://moodle.uclouvain.be/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:21.326398"
+    "last_checked": "2024-01-24T10:39:25.636106"
   },
   {
     "name": "Pilou-Pilou",
     "url": "https://perso.uclouvain.be/vincent.legat/zoulab/",
     "is_up": false,
-    "last_checked": "2024-01-23T19:56:21.902052"
+    "last_checked": "2024-01-24T10:39:26.584856"
   },
   {
     "name": "UCLouvain",
     "url": "https://www.uclouvain.be/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:22.027034"
+    "last_checked": "2024-01-24T10:39:27.131215"
   },
   {
     "name": "Inginious",
     "url": "https://inginious.info.ucl.ac.be/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:22.027034"
+    "last_checked": "2024-01-24T10:39:28.655775"
   },
   {
     "name": "UDS",
     "url": "https://uds.siws.ucl.ac.be/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:22.027034"
+    "last_checked": "2024-01-24T10:39:29.589016"
   },
   {
     "name": "UCLSport",
     "url": "https://sites.uclouvain.be/uclsport/",
     "is_up": true,
-    "last_checked": "2024-01-23T19:56:22.027034"
+    "last_checked": "2024-01-24T10:39:30.140147"
   }
 ]
