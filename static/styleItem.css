@@ -48,6 +48,25 @@ h2{
     border: 20px;
 }
 
+.container-plot {
+    max-width: 100%; /* Set your desired maximum width */
+    min-width: 100px; /* Set your desired minimum width */
+    text-align: center; /* Center the content horizontally */
+
+    color: white;
+
+    border: 20px;
+    display: flex;
+
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+#graph-container{
+    flex:1;
+    margin-right: 10px;
+}
+
 #up {
     display: inline-block; /* Ensure the link behaves like a block-level element */
     padding: 10px 150px 10px 150px; /* Optional: Add padding for better visual appearance */
@@ -156,7 +175,7 @@ button.no:hover{
     height: 20px;
 }
 
-#graph{
+.graph{
     flex:1;
 
     max-width: 600px;

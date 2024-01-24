@@ -21,16 +21,26 @@ def urlOfService(services, service):
         return services[service]["url"]
     return "NaN"
 
-def updateStatusService(services, service):
+def updateStatusService(services, service, session=None):
     url = urlOfService(services, service)
     if url == "NaN":
         print("[LOG]: You passed a service that is not tracked")
         return False
     
     print(f"[LOG]: HTTP request for {services[service]["url"]}")
-    response = requests.get(url).status_code < 400 # Starting 400 codes are error for HTTP GET
     
+    headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36"}
+    if session is not None:
+        # This line is sooooo slow
+        response = session.head(url, headers=headers).status_code < 400  # Using a session to speed up refresh in a batch
+    else:
+        # This line is sooooo slow
+        response = requests.head(url, headers=headers).status_code < 400 # Starting 400 codes are error for HTTP GET
+    
+    
+    print("[LOG]: got status ")
     jsonUtility.updateStatus(services, service, response)
+    dataReport.reportStatus(services, service)
     
     return response
 
@@ -44,8 +54,10 @@ def statusService(services, service):
 
 def refreshServices(services):
     print("[LOG]: Refreshing the services")
+    session = requests.Session()
+    
     for service in services.keys():
-        updateStatusService(services, service)
+        updateStatusService(services, service, session)
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
@@ -133,9 +145,17 @@ def page_not_found(error):
 @app.route("/extract")
 def extractLog():
     get_what_to_extract = request.args.get("get")
+    print(get_what_to_extract.split("_"))
     
-    if get_what_to_extract in services.keys() or get_what_to_extract == "request":
-        with open("data/" + get_what_to_extract + "/log.csv", "r") as file:
+    if get_what_to_extract.split("_")[0] in services.keys() or get_what_to_extract == "request":
+        print("in keys")
+        if len(get_what_to_extract.split("_")) > 1:
+            # when we want to extract the past outages not the user outages
+            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReport.csv"
+        else:
+            path = "data/" + get_what_to_extract + "/log.csv"
+            
+        with open(path, "r") as file:
             csv_data = list(csv.reader(file, delimiter=","))
             
         response = make_response()
@@ -147,7 +167,7 @@ def extractLog():
         
         return response
     else:
-        return 404
+        return render_template("404.html")
     
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')

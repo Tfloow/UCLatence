@@ -35,14 +35,22 @@
 
     <div id="result"></div>
 
-    <div class="container">
-        <div id="log-plot">
-            <img src="../static/img/log/{{ service }}.png" alt="Graph for {{ service }}" id="graph">
+    <div class="container-plot">
+        <div id="log-plot" class="graph-container">
+            <img src="../static/img/log/{{ service }}.png" alt="Graph for status reported by user for {{ service }}" class="graph">
+            <br>
+            <a href="/extract?get={{ service }}" id="urlTO">Download Log</a> &nbsp; - &nbsp;
+            <a href="{{ url_for("static", filename='img/log/' + service + '.png') }}" download="{{ service }}-log.png" id="urlTO">Download Graph</a>
+        </div>
+        <div id="down-plot" class="graph-container">
+            <img src="../static/img/log/outageReport{{ service }}.png" alt="Graph of previous status for {{ service }}" class="graph">
+            <br>
+            <a href="/extract?get={{ service }}_outage" id="urlTO">Download Log</a> &nbsp; - &nbsp;
+            <a href="{{ url_for("static", filename='img/log/outageReport' + service + '.png') }}" download="outageReport{{ service }}-log.png" id="urlTO">Download Graph</a>
         </div>
     </div>
 
-    <a href="/extract?get={{ service }}" id="urlTO">Download Log</a> &nbsp; - &nbsp;
-    <a href="{{ url_for("static", filename='img/log/' + service + '.png') }}" download="{{ service }}-log.png" id="urlTO">Download Graph</a>
+
 
 
 {% endblock %}
