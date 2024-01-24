@@ -21,7 +21,6 @@ try:
     
     # For compatibility
     import dataReport
-    import jsonUtility
 except ImportError:
     print("[LOG] Error on startup: not all packages could be properly imported.")
     raise exit(1)
@@ -75,7 +74,7 @@ def refreshServices(services):
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=RECHECK_AFTER/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
 
 # Start the scheduler
 scheduler.start()
