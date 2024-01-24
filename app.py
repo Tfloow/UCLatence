@@ -9,12 +9,11 @@ try:
     from flask import Flask, render_template, request, make_response, send_from_directory
 
     import csv
-    from apscheduler.schedulers.background import BackgroundScheduler # To schedule the check
+    from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
     import datetime
     import logging
     
-        # Own modules
-    # import dataReport
+    # Own modules
     from models import *
     from fastapi_custom import ALL_HTTP_METHODS, hide_422, hide_default_responses, use_route_names_as_operation_ids
     from utilities import *
@@ -22,60 +21,58 @@ try:
     # For compatibility
     import dataReport
     import jsonUtility
-except ImportError:
-    print("[LOG] Error on startup: not all packages could be properly imported.")
+except ImportError as e:
+    print(f"[LOG] Error on startup: not all packages could be properly imported:\n{e}")
     raise exit(1)
 except ImportWarning as w:
     print(f"[LOG] Warning on startup: not all packages could be properly imported:\n{w}")
 
 
 # Load JSON files ######################################################################################################
-JSON_FILE_SERVICES = "services.json"
-services = Services.load_from_json_file(JSON_FILE_SERVICES)
-
 JSON_FILE_WEBHOOKS = "webhooks.json"
 webhooks = Webhooks.load_from_json_file(JSON_FILE_WEBHOOKS)
 
-def urlOfService(services, service):
-    if service in services.names():
-        return services.get_service(service).url
-    return "NaN"
+JSON_FILE_SERVICES = "services.json"
+services = Services.load_from_json_file(JSON_FILE_SERVICES, webhooks=webhooks)
 
-def updateStatusService(services, service, session=None):
-    url = urlOfService(services, service)
-    if url == "NaN":
+
+def updateStatusService(service: str, session=None):
+    url = services.get_service(service).url
+    if not url:
         print("[LOG]: You passed a service that is not tracked")
         return False
     
     print(f"[LOG]: HTTP request for {url}")
     
     services.get_service(service).status_changed(session)
-    
-    
+
     print("[LOG]: got status ")
     dataReport.reportStatus(services, service)
     
     return True
 
-def statusService(services, service):
-    url = urlOfService(services, service)
-    if url == "NaN":
+
+def statusService(service):
+    url = services.get_service(service).url
+    if not url:
         print("[LOG]: You passed a service that is not tracked")
         return False
     
     return services[service]["Last status"]
 
-def refreshServices(services):
+
+def refreshServices():
     print("[LOG]: Refreshing the services")
     session = requests.Session()
     
-    for service in services.names():
+    for service in services:
         print(service)
-        updateStatusService(services, service, session)
+        updateStatusService(service.name, session)
+
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+scheduler.add_job(refreshServices, "interval", minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
 
 # Start the scheduler
 scheduler.start()
@@ -88,23 +85,18 @@ app = Flask("UCLouvainDown")
 async def index():
     """Render homepage, with an overview of all services."""
     print(f"[LOG]: HTTP request for homepage")
-    return render_template("index.html", serviceList=all_service_details().root)
+    return render_template("index.html", serviceList=all_service_details().root.values())
 
-
-@app.route(f"/<any({[*services.names(), '']}):service>")
-async def service_details_app(service: str):
-    """Render a page with details of one service."""
-    print(f"[LOG]: HTTP request for {service}")
-    return render_template("itemWebsite.html", service=service_details(service))
 
 @app.route("/serviceList")
 def serviceList():
     dictService = []
     
     for service in services:
-        dictService.append(dict(service=service, url=services[service]["url"], reportedStatus=dataReport.getLastReport(service), Status=services[service]["Last status"]))
+        dictService.append(dict(service=service, reportedStatus=dataReport.getLastReport(service.name)))
         
-    return render_template("serviceList.html", serviceInfo=dictService)
+    return render_template("serviceList.html", servicesInfo=dictService)
+
 
 @app.route("/request")
 def requestServie():
@@ -119,9 +111,9 @@ def requestServie():
         # If someone wrote in the form
         dataReport.newRequest(serviceName, url, info)
         feedback = "Form submitted successfully!"
-    
-    
+
     return render_template("request.html", feedback=feedback)
+
 
 # To handle error reporting
 @app.route('/process', methods=['GET'])
@@ -149,11 +141,6 @@ def process():
         return 'The website is down for me too.'
     else:
         return 'Invalid choice or no choice provided'
-
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template("404.html")
 
 
 @app.route("/extract")
@@ -184,11 +171,26 @@ def extractLog():
         return response
     else:
         return render_template("404.html")
-    
+
+
 @app.route('/robots.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])   
+
+
+@app.route("/<service>")
+async def service_details_app(service: str):
+    """Render a page with details of one service."""
+    if service not in services:
+        return page_not_found()
+    print(f"[LOG]: HTTP request for {service}")
+    return render_template("itemWebsite.html", service=service_details(service))
+
+
+@app.errorhandler(404)
+def page_not_found(_=None):
+    return render_template("404.html")
 
 
 # Define the FastAPI app and its routes ################################################################################
@@ -257,7 +259,7 @@ def services_overview():
     application. This are the only names accepted in requests requiring a service name, such as for example
     [`service_details`](/api/docs#operation/service_details).
     """
-    return services.names()
+    return services.names
 
 
 @api.get(
@@ -311,7 +313,7 @@ def service_status(
 
     Service shall be a valid service, werkzeug already checks this for us with the enumeration of supported services.
     """
-    if service not in services.names():
+    if service not in services:
         return api_unkown_service_response
 
     services.status_changed(service)
@@ -367,7 +369,7 @@ def service_details(
 
     Service shall be a valid service, werkzeug already checks this for us with the enumeration of supported services.
     """
-    if service not in services.names():
+    if service not in services:
         return api_unkown_service_response
 
     services.status_changed(service)
@@ -412,10 +414,10 @@ def create_webhook(
     Create a webhook to receive updates if the status of one of the requested tracked sites changes.
     """
     for service in webhook.tracked_services:
-        if service not in services.names():
+        if service not in services:
             return webhook_400_response
     if not webhook.tracked_services:  # Empty list
-        webhook.tracked_services = services.names()
+        webhook.tracked_services = services.names
 
     return webhooks.add_webhook(webhook, password=password)
 
@@ -448,10 +450,10 @@ def update_webhook(
 
     if webhook_patches.tracked_services is not None:
         for service in webhook_patches.tracked_services:
-            if service not in services.names():
+            if service not in services:
                 return webhook_400_response
         if not webhook_patches.tracked_services:  # Empty list
-            webhook_patches.tracked_services = services.names()
+            webhook_patches.tracked_services = services.names
 
     return webhooks.update_webhook(hook_id, webhook_patches)
 

@@ -12,7 +12,7 @@ filepath = "data/"
 cols = "date,UP\n"
 JSON_FILE_SERVICES = "services.json"
 services = Services.load_from_json_file(JSON_FILE_SERVICES)
-serviceList = services.names()
+serviceList = services.names
 url = "https://uclouvaindown-ed3979a045e6.herokuapp.com/"
 
 def addService(name: str) -> bool:

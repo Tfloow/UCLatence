@@ -16,12 +16,12 @@
             <th> <h3>Reported Status by Users</h3> </th>
             <th> <h3>Status</h3> </th>
         </tr>
-        {% for serviceInfo in serviceInfo %}
+        {% for serviceInfo in servicesInfo %}
         <tr>
            
 
             <th> <h4>{{ serviceInfo["service"] }}</h4> </th>
-            <th> <h5><a href={{ serviceInfo["url"] }}>{{ serviceInfo["url"] }}</a></h5> </th>
+            <th> <h5><a href={{ serviceInfo["service"].url }}>{{ serviceInfo["service"].url }}</a></h5> </th>
             {% if serviceInfo["reportedStatus"]  %}
                 <th class="report-up"> <div class="thumb"> {{ serviceInfo["reportedStatus"] }} </div> </th>
             {% elif serviceInfo["reportedStatus"] == False %}
@@ -30,7 +30,7 @@
                 <th class="report-none"> <div class="thumb"> {{ serviceInfo["reportedStatus"] }} </div> </th>
             {% endif %}
             
-            {% if serviceInfo["Status"] %}
+            {% if serviceInfo["service"].is_up %}
                 <th id="up"> &nbsp;&nbsp;Up&nbsp;&nbsp; </th>
             {% else %}
                 <th id="down"> Down</th>

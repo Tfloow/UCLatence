@@ -1,6 +1,5 @@
 import json
 import datetime
-import pytz # For timezone
 import csv
 import os
 from models import *

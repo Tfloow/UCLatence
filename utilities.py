@@ -29,7 +29,7 @@ def verify_password(hashed_pwd: str, pwd: str) -> bool:
     try:
         ph.verify(hashed_pwd, pwd)
         return True
-    except VerifyMismatchError | InvalidHashError:
+    except (VerifyMismatchError, InvalidHashError):
         return False
 
 ########################################################################################################################

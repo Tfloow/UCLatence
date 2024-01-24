@@ -3,7 +3,7 @@ import datetime as dt
 from fastapi import Body
 from pydantic import BaseModel, Field, ValidationError, RootModel, HttpUrl
 import requests
-from typing import List, Dict, Annotated, Optional, Set
+from typing import List, Dict, Annotated, Set, Any, Iterable
 
 from utilities import hash_password
 
@@ -15,14 +15,6 @@ cols = "date,UP\n"
 RECHECK_AFTER = 300  # [s]
 # Follow ISO guidelines
 # DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
-
-
-# Response-only models #################################################################################################
-class HTTPError(BaseModel):
-    detail: Annotated[
-        str,
-        Field(description="Details on the type of error, the reasons why it was raised and/or how to solve it.")
-    ]
 
 
 webhook_tracked_services = Body(
@@ -43,12 +35,25 @@ class Webhook(BaseModel):
         HttpUrl,
         webhook_callback_url]
 
-    def callback(self, service):  # : Service):
+    def send_callback(self, service) -> bool:  # : Service):
+        """
+        Check that this webhook tracks `service` and if so send a callback to the callback_url.
+
+        :returns: `True if a callback was sent, `False` if not.
+        """
         if service.name in self.tracked_services:
             requests.post(self.callback_url, json=service.model_dump(mode="json", exclude=["last_checked"]))
             return True
 
         return False
+
+
+# Response-only models #################################################################################################
+class HTTPError(BaseModel):
+    detail: Annotated[
+        str,
+        Field(description="Details on the type of error, the reasons why it was raised and/or how to solve it.")
+    ]
 
 
 class WebhookPatches(Webhook):
@@ -72,6 +77,7 @@ class WebhookComplete(WebhookResponse):
 
 # TODO check if needs to inherit from Service ?
 class ServiceStatusChange(BaseModel):
+    # Model for API callbacks
     name: Annotated[str, Field(
         description="The name by which the service is referenced.",
         examples=["Inginious", "ADE-Scheduler"])]
@@ -86,6 +92,7 @@ class ServiceStatusChange(BaseModel):
 
 # Models used for backend ##############################################################################################
 
+
 class Webhooks(RootModel):
     root: List[WebhookComplete]
 
@@ -97,10 +104,10 @@ class Webhooks(RootModel):
     def load_from_json_file(cls, filename: str):
         try:
             with open(filename, "r") as f:
-                return cls.model_validate_json(f.read()).__add_private_vars(filename)
-        except OSError | IOError:
+                return cls.model_validate_json(f.read()).__post_init(filename)
+        except (OSError, IOError):
             raise Exception("[LOG]: Error when opening/reading webhooks.json")
-        except ValueError | ValidationError:
+        except (ValueError, ValidationError):
             raise Exception("[LOG]: Error when parsing webhooks.json")
 
     def dump_json(self, filename: str = None):
@@ -110,7 +117,7 @@ class Webhooks(RootModel):
         try:
             with open(filename, "w") as f:
                 f.write(self.model_dump_json(indent=2))
-        except OSError | IOError:
+        except (OSError, IOError):
             raise Exception("[LOG]: Error when writing webhooks.json")
 
     def hook_id_exists(self, hook_id: int) -> bool:
@@ -131,7 +138,7 @@ class Webhooks(RootModel):
         elif password_hash:
             hook = WebhookComplete(**webhook_response.model_dump(), password_hash=password_hash)
         else:
-            raise Exception("Either password or password_hash must be given.")
+            raise AttributeError("Either password or password_hash must be given.")
 
         self.root.append(hook)
         self.__webhook_dict[hook.hook_id] = hook
@@ -150,7 +157,7 @@ class Webhooks(RootModel):
             return self.add_webhook(
                 Webhook(callback_url=old_webhook.callback_url, tracked_services=updates.tracked_services),
                 password_hash=old_webhook.password_hash, hook_id=hook_id)
-
+        # TODO modify also for service objects...
         self.dump_json()
         return WebhookResponse(**self.__webhook_dict[hook_id].model_dump(exclude={"password_hash"}))
 
@@ -158,10 +165,10 @@ class Webhooks(RootModel):
         """Supposes hook_id exists"""
         webhook = self.__webhook_dict.pop(hook_id)
         self.root.remove(webhook)
-
+        # TODO delete also from service objects...
         self.dump_json()
 
-    def __add_private_vars(self, filename: str):
+    def __post_init(self, filename: str):
         for webhook in self.root:
             self.__webhook_dict[webhook.hook_id] = webhook
             if webhook.hook_id > self.__max_id:
@@ -170,18 +177,8 @@ class Webhooks(RootModel):
         self.__filename = filename
         return self
 
-    def callback(self, service) -> int:  # : Service):
-        """
-        Execute callbacks to webhooks that requested the tracking of `service`.
-        This method must be called only if the status of the service juste changed!
-
-        :param service: the service of which the status changed
-        :return: the number of successful callbacks made
-        """
-        counter = 0
-        for webhook in self.root:
-            counter += webhook.callback(service)
-        return counter
+    def __iter__(self) -> Iterable[WebhookComplete]:
+        return iter(self.root)
 
 
 class Service(BaseModel):
@@ -198,107 +195,149 @@ class Service(BaseModel):
         description="The date and time (UTC) at which the status of the service was last checked, in ISO formatting "
                     "(`yyyy-MM-dd'T'HH:mm:ss.SSSXXX`).", examples=["2024-01-22T17:46:55.480345"])]
 
-    __webhooks: List[Webhook] = None
+    __webhooks: Dict[int, Webhook] = {}
 
-    def status_changed(self, session=None) -> bool:
+    def status_changed(self, session=None):
         """
-        Refresh the status for this service if not updated recently. Makes an HTTP request to do so.
-        Returns True if refresh was necessary and yielded a different result, False if not.
-
-        If a webhooks list is provided, and if the state of the service changed, send out POST requests to each
-        webhook in
+        Refresh the status for this service if not updated recently. Makes an HTTP request to do so. This method
+        can trigger a callback to all associated webhooks if the status did change.
         
-        We can also provide a session to speed up checks
+        :param session: a https session to speed up checks (bacuase it can use batch requests)
         """
         now = dt.datetime.utcnow()
-        headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36"}
+        headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) "
+                                 "Chrome/81.0.4044.141 Safari/537.36"}
 
         if (now - self.last_checked).total_seconds() > RECHECK_AFTER:
-            was_up = self.is_up
             if session is None:
                 self.is_up = requests.head(self.url, headers=headers).status_code < 400
             else:
-                self.is_up = session.head(self.url, headers=headers).status_code < 400  # Using a session to speed up refresh in a batch
+                self.is_up = session.head(self.url, headers=headers).status_code < 400
             self.last_checked = now
-            if self.is_up != was_up:
-                for webhook in self.__webhooks:
-                    webhook.send_callback(self)
-                return True
 
         return False
 
     @property
-    def get_is_up(self):
+    def is_up(self) -> bool:
+        """
+        Updates the value of `is_up` if necessary then returns it.
+
+        :return: `true` if the service is up, `false if not` (this value isn't 100% accurate: status checks don't
+          happen every second).
+        """
         self.status_changed()
         return self.is_up
 
+    @is_up.setter
+    def is_up(self, value: bool):
+        """
+        Set `is_up` to `value`. If value changes `is_up`, calls all webhooks associated with the service to
+        notify them of the status change.
+        """
+        if not isinstance(value, bool):
+            raise TypeError()
+
+        if self.is_up != value:
+            for webhook in self.__webhooks.values():
+                webhook.send_callback(self)
+            self.is_up = value
+
+    def modify_webhooks(self, webhooks: Webhooks):
+        """
+        Add the webhooks given in `webhooks` if those requested the tracking of this service, or delete them if they
+        were tracking this service before but now not anymore.
+        """
+        for webhook in webhooks:
+            # Check if the webhook should be deleted
+            if webhook.hook_id in self.__webhooks and self.name not in webhook.tracked_services:
+                self.__webhooks.pop(webhook.hook_id, None)
+            # Or add the webhook
+            elif self.name in webhook.tracked_services:
+                self.__webhooks[webhook.hook_id] = webhook
+
 
 class Services(RootModel):
-    root: List[Service]
+    root: Dict[str, Service]
 
-    __services_dict: Dict[str, Service] = None
+    __tracked_services: Set[str] = None  # Keyset from the root dict (going from KeyView to Set is O(n))
     __filename: str = None
-    __webhooks: Webhooks = None
-
-    def status_changed(self, service: str | Service = None):
-        """Refresh the status for all monitored services (if not updated recently).
-        If there are differences, update the json file."""
-        if not service:
-            [self.status_changed(service) for service in self.root]
-        else:
-            if isinstance(service, str):
-                service = self.__services_dict[service]
-            if service.status_changed():
-                self.__webhooks.callback(service)
-
-        self.dump_json()
-
-    def names(self) -> List[str]:
-        """Get a list of names of all monitored services."""
-        return [*self.__services_dict.keys()]
-
-    def get_service(self, service: str) -> Service | None:
-        """Get a service from the list, or None if it isn't monitored."""
-        return self.__services_dict.get(service, None)
 
     @classmethod
     def load_from_json_file(cls, filename: str, webhooks: Webhooks = None):
+        """
+        Load a `Services` object from a json file. The file should have the following structure::
+
+            {
+                str: {
+                    "name": str,
+                    "url": str,
+                    "is_up": bool,
+                    "last_checked": str,  # Should be a datetime in ISO format
+                }
+            }
+
+        :param filename: the name of the file from which to load the object. By default, the object will save any
+          changes to itself again to that file.
+        :param webhooks: the webhooks to associate with the object
+        :return: a `Services` object containing all information from the json file
+        """
         try:
             with open(filename, "r") as f:
-                return cls.model_validate_json(f.read()).__add_private_vars(filename, webhooks)
-        except OSError | IOError:
+                return cls.model_validate_json(f.read()).__post_init(filename, webhooks)
+        except (OSError, IOError):
             raise Exception("[LOG]: Error when opening/reading services.json")
-        except ValueError | ValidationError:
+        except (ValueError, ValidationError):
             raise Exception("[LOG]: Error when parsing services.json")
 
     def dump_json(self, filename: str = None):
+        """
+        Write the object again to a json file.
+
+        :param filename: the file to which the object should be written. If not specified, the file from which the
+          object was read is overwritten.
+        """
         if not filename:
             filename = self.__filename
 
         try:
             with open(filename, "w") as f:
                 f.write(self.model_dump_json(indent=2))
-        except OSError | IOError:
+        except (OSError, IOError):
             raise Exception("[LOG]: Error when writing services.json")
 
-    def __add_private_vars(self, filename: str, webhooks: Webhooks):
-        self.__services_dict = {service.name: service for service in self.root}
-        self.__filename = filename
-        self.__webhooks = webhooks
-        return self
-    
-    def add_service(self, name: str, url: str) -> bool:
-        newService = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow())
-        self.root.append(newService)
-        self.__services_dict[name] = newService        
+    def status_changed(self, service: str | Service = None):
+        """Refresh the status for all monitored services (if not updated recently).
+        If there are differences, update the json file."""
+        if not service:
+            [self.status_changed(service) for service in self.root.values()]
+        else:
+            if isinstance(service, str):
+                service = self.root[service]
+            service.status_changed()
+
+        self.dump_json()
+
+    def get_service(self, service_name: str) -> Service | None:
+        """Get a service from the list, or None if it isn't monitored."""
+        return self.root.get(service_name, None)
+
+    def add_service(self, name: str, url: str):
+        """
+        Add a new service to the list of services (it will be added to the json file from which the object was loaded).
+
+        :param name: a name for the service (should contain only characters that can be used in urls)
+        :param url: a url for the service
+        """
+        new_service = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow())
+        self.root[name] = new_service
+        self.__tracked_services.add(name)
         
         # For the Data and Logs
         try:
-            os.mkdir(filepath + name)        
-            
+            os.mkdir(filepath + name)
         except FileExistsError:
             pass 
-        except:
+        except Exception as _:
             raise ValueError(f"[LOG]: Something went wrong with creating the folder {name}")
         
         with open(filepath + name + "/log.csv", "w") as log:
@@ -308,4 +347,36 @@ class Services(RootModel):
             out.write(cols)
         
         self.dump_json()
-        return True
+
+    @property
+    def names(self) -> Set[str]:
+        """Get a set of names of all monitored services."""
+        return self.__tracked_services
+
+    def __post_init(self, filename: str, webhooks: Webhooks | None):
+        """
+        As the pydantic `model_validate_json` only reads what is in the json file, this is a 'post initialisation'
+        function to complete the object creation.
+
+        :param filename: the file from which the object was charged. By default, the object will save any changes to
+          itself again to that file.
+        :param webhooks: the webhooks to associate with the object
+        """
+        self.__tracked_services = set(self.root.keys())
+        self.__filename = filename
+        if webhooks:
+            for service in self.root.values():
+                service.modify_webhooks(webhooks)
+
+        return self
+
+    def __contains__(self, item: Any) -> bool:
+        if not isinstance(item, str):
+            return False
+        return item in self.__tracked_services
+
+    def __iter__(self) -> Iterable[Service]:
+        """Return an iterator over the the tracked services objects"""
+        return self.root.values().__iter__()
+
+
