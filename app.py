@@ -9,11 +9,12 @@ import atexit
 # My modules
 import jsonUtility
 import dataReport
+from logger_config import *
 
 # Load JSON services
 with open("services.json") as f:
     if f is None:
-        raise ValueError("[LOG]: Error when opening the services.json")
+        raise logger.error("[LOG]: Error when opening the services.json")
     services = json.load(f)
 
 def urlOfService(services, service):
@@ -24,10 +25,10 @@ def urlOfService(services, service):
 def updateStatusService(services, service, session=None):
     url = urlOfService(services, service)
     if url == "NaN":
-        print("[LOG]: You passed a service that is not tracked")
+        logger.warning("[LOG]: You passed a service that is not tracked")
         return False
     
-    print(f"[LOG]: HTTP request for {services[service]["url"]}")
+    logger.info(f"[LOG]: HTTP request for {services[service]["url"]}")
     
     headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.141 Safari/537.36"}
     if session is not None:
@@ -38,7 +39,7 @@ def updateStatusService(services, service, session=None):
         response = requests.head(url, headers=headers).status_code < 400 # Starting 400 codes are error for HTTP GET
     
     
-    print("[LOG]: got status ")
+    logger.info("[LOG]: got status ")
     jsonUtility.updateStatus(services, service, response)
     dataReport.reportStatus(services, service)
     
@@ -47,13 +48,13 @@ def updateStatusService(services, service, session=None):
 def statusService(services, service):
     url = urlOfService(services, service)
     if url == "NaN":
-        print("[LOG]: You passed a service that is not tracked")
+        logger.warning("[LOG]: You passed a service that is not tracked")
         return False
     
     return services[service]["Last status"]
 
 def refreshServices(services):
-    print("[LOG]: Refreshing the services")
+    logger.info("[LOG]: Refreshing the services")
     session = requests.Session()
     
     for service in services.keys():
@@ -63,11 +64,12 @@ def refreshServices(services):
     
     # To archive the current report daily to spare some memory
     dataReport.archiveStatus()
+    logger.info("[LOG]: Finished Refreshing the services")
 
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1), max_instances=1)
 
 # Start the scheduler
 scheduler.start()
@@ -127,19 +129,19 @@ def process():
     
 
     if user_choice == 'yes':
-        print('Great! The website is working for you.')
+        logger.info('Great! The website is working for you.')
         
         if service is None:
-            print("[LOG]: Something went wrong with the service reporting, please investigate")
+            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
         else:
             dataReport.addReport(service, True)
         
         return 'Great! The website is working for you.'
     elif user_choice == 'no':
-        print('The website is down for me too.')
+        logger.info('The website is down for me too.')
         
         if service is None:
-            print("[LOG]: Something went wrong with the service reporting, please investigate")
+            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
         else:
             dataReport.addReport(service, False)
             
@@ -154,10 +156,19 @@ def page_not_found(error):
 @app.route("/extract")
 def extractLog():
     get_what_to_extract = request.args.get("get")
-    print(get_what_to_extract.split("_"))
     
-    if get_what_to_extract.split("_")[0] in services.keys() or get_what_to_extract == "request":
-        print("in keys")
+    if get_what_to_extract.split("_")[0] in services.keys() or get_what_to_extract == "request" or get_what_to_extract == "log":
+        if get_what_to_extract == "log":
+            with open("my_log.log", "r") as file:
+                log_content = file.read()
+
+            response = make_response(log_content)
+
+            response.headers["Content-Type"] = "text/plain"  # Set the content type for log files
+            response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.log"
+
+            return response
+        
         if len(get_what_to_extract.split("_")) > 1:
             # when we want to extract the past outages not the user outages
             path = "data/" + get_what_to_extract.split("_")[0] + "/outageReport.csv"

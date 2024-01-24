@@ -4,6 +4,8 @@ import pytz # For timezone
 import csv
 import os
 
+from logger_config import *
+
 datetimeFormat = "%Y-%m-%dT%H:%M:%S"
 timeCheck = 600 # Check every 300 seconds (in production)
 
@@ -42,11 +44,11 @@ def deltaTime():
 
     for k in j.keys():
         pastDate = datetime.datetime.strptime(j[k]["Last access time"], datetimeFormat)
-        print((currentDate - pastDate).total_seconds())
+        logger.info((currentDate - pastDate).total_seconds())
         
 def deltaTimeService(services, service):
     if service not in services:
-        print("[LOG]: requested service is not tracked")
+        logger.info("[LOG]: requested service is not tracked")
         return 0
     
     currentDate = datetime.datetime.now(pytz.utc)
