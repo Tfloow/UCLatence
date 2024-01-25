@@ -57,8 +57,30 @@ def addBlankCSV():
     for service in serviceList:
         with open(filepath + service + "/log.csv", "w") as log:
                 log.write(cols)
-                
+        with open(filepath + service + "/outageReport.csv", "w") as log:
+                log.write(cols)
+        with open(filepath + service + "/outageReportArchive.csv", "w") as log:
+                log.write(cols)
 
+def dummyData():
+    data = "date,UP\n2024-01-25T02:21:35,True\n2024-01-25T02:21:35,True\n2024-01-25T02:31:35,True\n"
+    for service in serviceList:
+        try:
+            os.mkdir(filepath + service)        
+            
+        except FileExistsError:
+            pass 
+        except:
+            raise ValueError(f"[LOG]: Something went wrong with creating the folder {service}")
+
+    for service in serviceList:
+        with open(filepath + service + "/log.csv", "w") as log:
+                log.write(data)
+        with open(filepath + service + "/outageReport.csv", "w") as log:
+                log.write(data)
+        with open(filepath + service + "/outageReportArchive.csv", "w") as log:
+                log.write(data)
+                
 def plot(service, onlyOutageReport=False):
     if not onlyOutageReport:
         logger.info("[LOG]: only plotting for user Report")
@@ -234,7 +256,7 @@ def reportStatus(services, service):
     with open(path, "a") as out:
         out.write(date.strftime(jsonUtility.datetimeFormat) + "," + str(UP) + "\n")
     
-    logger.info("[LOG]: Finished Report")
+    logger.info(f"[LOG]: Finished Report at {path}")
     logger.info("[LOG]: starting plot for outage")
 
     
@@ -279,4 +301,5 @@ def archiveStatus():
     
 
 if __name__ == "__main__":
-    dataExtraction()
+    dummyData()
+    # dataExtraction()

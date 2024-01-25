@@ -22,10 +22,10 @@ try:
     # For compatibility
     import dataReport
 except ImportError as e:
-    print(f"[LOG] Error on startup: not all packages could be properly imported:\n{e}.")
+    logger.warning(f"[LOG] Error on startup: not all packages could be properly imported:\n{e}.")
     raise exit(1)
 except ImportWarning as w:
-    print(f"[LOG] Warning on startup: not all packages could be properly imported:\n{w}")
+    logger.warning(f"[LOG] Warning on startup: not all packages could be properly imported:\n{w}")
 
 
 # Load JSON files ######################################################################################################
@@ -66,7 +66,7 @@ def refreshServices():
     session = requests.Session()
     
     for service in services:
-        print(service)
+        logger.info(service)
         updateStatusService(service.name, session)
 
     session.close()
@@ -103,7 +103,6 @@ def serviceList():
     
     for service in services:
         dictService.append(dict(service=service, reportedStatus=dataReport.getLastReport(service.name)))
-        
     return render_template("serviceList.html", servicesInfo=dictService)
 
 
