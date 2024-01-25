@@ -30,10 +30,10 @@
                 <th class="report-none"> <div class="thumb"> {{ serviceInfo["reportedStatus"] }} </div> </th>
             {% endif %}
             
-            {% if serviceInfo["service"].is_up %}
-                <th id="up"> &nbsp;&nbsp;Up&nbsp;&nbsp; </th>
+            {% if serviceInfo["Status"] %}
+                <th > <a href="/{{ serviceInfo["service"] }}"  id="up"> &nbsp;  Up &nbsp;  </a> </th>
             {% else %}
-                <th id="down"> Down</th>
+                <th > <a href="/{{ serviceInfo["service"] }}"  id="down"> Down </a> </th>
             {% endif %}
         </tr>
         {% endfor %}

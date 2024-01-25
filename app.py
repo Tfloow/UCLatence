@@ -17,6 +17,7 @@ try:
     from models import *
     from fastapi_custom import ALL_HTTP_METHODS, hide_422, hide_default_responses, use_route_names_as_operation_ids
     from utilities import *
+    from logger_config import *
     
     # For compatibility
     import dataReport
@@ -38,14 +39,14 @@ services = Services.load_from_json_file(JSON_FILE_SERVICES, webhooks=webhooks)
 def updateStatusService(service: str, session=None):
     url = services.get_service(service).url
     if not url:
-        print("[LOG]: You passed a service that is not tracked")
+        logger.info("[LOG]: You passed a service that is not tracked")
         return False
     
-    print(f"[LOG]: HTTP request for {url}")
+    logger.info(f"[LOG]: HTTP request for {url}")
     
     services.get_service(service).status_changed(session)
 
-    print("[LOG]: got status ")
+    logger.info("[LOG]: got status ")
     dataReport.reportStatus(services, service)
     
     return True
@@ -54,14 +55,14 @@ def updateStatusService(service: str, session=None):
 def statusService(service):
     url = services.get_service(service).url
     if not url:
-        print("[LOG]: You passed a service that is not tracked")
+        logger.info("[LOG]: You passed a service that is not tracked")
         return False
     
     return services[service]["Last status"]
 
 
 def refreshServices():
-    print("[LOG]: Refreshing the services")
+    logger.info("[LOG]: Refreshing the services")
     session = requests.Session()
     
     for service in services:
@@ -72,10 +73,12 @@ def refreshServices():
 
     # To archive the current report daily to spare some memory
     dataReport.archiveStatus()
+    logger.info("[LOG]: Finished Refreshing the services")
+
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
 
 # Start the scheduler
 scheduler.start()
@@ -128,20 +131,26 @@ def process():
     service = request.args.get('service', None)
 
     if user_choice == 'yes':
-        print('Great! The website is working for you.')
-
+        logger.info('Great! The website is working for you.')
+        
         if service is None:
-            print("[LOG]: Something went wrong with the service reporting, please investigate")
+            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
         else:
+            # next_run_time_with_refresh = refreshJob.next_run_time
+            # scheduler.add_job(dataReport.addReport, "date", args=[service, True], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
+            # Extra 10 seconds to make sure it is done after the main task
             dataReport.addReport(service, True)
 
         return 'Great! The website is working for you.'
     elif user_choice == 'no':
-        print('The website is down for me too.')
-
+        logger.info('The website is down for me too.')
+        
         if service is None:
-            print("[LOG]: Something went wrong with the service reporting, please investigate")
+            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
         else:
+            # next_run_time_with_refresh = refreshJob.next_run_time
+            # scheduler.add_job(dataReport.addReport, "date", args=[service, False], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
+            # Extra 10 seconds to make sure it is done after the main task
             dataReport.addReport(service, False)
 
         return 'The website is down for me too.'
@@ -152,15 +161,26 @@ def process():
 @app.route("/extract")
 def extractLog():
     get_what_to_extract = request.args.get("get")
-    log = False
-    if len(get_what_to_extract.split("_")) > 1 and services.get_service(get_what_to_extract) is not None:
-        # it means we want the outage log not the user's log
-        log = True
     
-    if services.get_service(get_what_to_extract) is not None or get_what_to_extract == "request" or log:
-        if len(get_what_to_extract.split("_")) > 1:
+    if services.get_service(get_what_to_extract.split("_")[0]) is not None or get_what_to_extract == "request" or get_what_to_extract == "log":
+        if get_what_to_extract == "log":
+            with open("my_log.log", "r") as file:
+                log_content = file.read()
+
+            response = make_response(log_content)
+
+            response.headers["Content-Type"] = "text/plain"  # Set the content type for log files
+            response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.log"
+
+            return response
+        
+        logger.info(get_what_to_extract.split("_"))
+        
+        if len(get_what_to_extract.split("_")) == 2:
             # when we want to extract the past outages not the user outages
             path = "data/" + get_what_to_extract.split("_")[0] + "/outageReport.csv"
+        elif  len(get_what_to_extract.split("_")) == 3:
+            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReportArchive.csv"
         else:
             path = "data/" + get_what_to_extract + "/log.csv"
             

@@ -1,9 +1,17 @@
+from matplotlib.dates import date2num
 import jsonUtility
 import os
-from datetime import datetime
+from datetime import datetime, time
 import pytz # For timezone
+import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
 import numpy as np
+
+from logger_config import *
+
+matplotlib.use('Agg')
+
 
 from models import *
 
@@ -53,12 +61,12 @@ def addBlankCSV():
 
 def plot(service, onlyOutageReport=False):
     if not onlyOutageReport:
-        print("[LOG]: also plotting for user Report")
+        logger.info("[LOG]: only plotting for user Report")
         toPlot = dict(userReport = filepath + service + "/log.csv")
     else:
+        logger.info("[LOG]: only plotting for Report")
         toPlot = dict(outageReport = filepath + service + "/outageReport.csv")
     
-    print(toPlot)
     
     for report in toPlot:
         path = toPlot[report]
@@ -88,17 +96,35 @@ def plot(service, onlyOutageReport=False):
             timeArray = data["date"]
             UPArray = data["UP"]
             
+            timeArray = date2num(timeArray)
+            
             timeNow = np.datetime64("now")
             
-            ax.plot(timeArray, UPArray, marker = "o")
+            points = np.array([timeArray, UPArray]).T.reshape(-1, 1, 2)
+            segments = np.concatenate([points[:-1], points[1:]], axis=1)
+            
+            norm = plt.Normalize(0,1)
+            lc = LineCollection(segments, cmap='RdYlGn', norm=norm)
+            
+            lc.set_array(UPArray)
+            lc.set_linewidth(2)
+            
+            ax.add_collection(lc)
+            #fig.colorbar(line, ax=axs[0])
+
+            ax.set_ylim(-0.1,1.1)
+            
+            #ax.plot(timeArray, UPArray)
             ax.axvline(x=timeNow, linestyle="--", color="gray", alpha=0.5)
+            ax.set_ylim(-0.1,1.1)
             
             now_kwargs = dict(color="red",ha='left', va='bottom')
             
             # To protect against unwanted behavior
             if timeArray.size > 2: 
-                ax.set_xlim(timeArray[0] - np.timedelta64(3, "m"), timeNow + np.timedelta64(3, "m"))
-                ax.text(timeNow - np.timedelta64((timeNow - timeArray[0]))*0.34 , 0.5, f"Last Report\n{timeNow}", **now_kwargs)
+                logger.info("[LOG]: temp fix")
+                #ax.set_xlim(timeArray[0] - np.timedelta64(3, "m"), timeNow + np.timedelta64(3, "m"))
+                #ax.text(timeNow - np.timedelta64((timeNow - timeArray[0]))*0.34 , 0.5, f"Last Report\n{timeNow}", **now_kwargs)
             else:
                 ax.text(timeNow, 0.5, f"Last Report\n{timeNow}", **now_kwargs)
             
@@ -108,6 +134,8 @@ def plot(service, onlyOutageReport=False):
                 ax.set_title(f"Past status for {service}")
             ax.set_ylabel("Up or Down")
             ax.set_xlabel("Date and Time")
+            
+        logger.info(f"[LOG]: PLOT --> service:{service} and report:{report}")
         if not onlyOutageReport:
             fig.savefig("static/img/log/" + service + ".png")
         else:
@@ -115,6 +143,8 @@ def plot(service, onlyOutageReport=False):
         
         # Important to avoid an ever increasing ram usage
         plt.close(fig) 
+        
+        logger.info("[LOG]: Finished plotting")
 
 def addReport(service, user_choice):
     """Function to add a new line to the logs of each service
@@ -127,7 +157,7 @@ def addReport(service, user_choice):
         _type_: _description_
     """
     if service not in serviceList:
-        print("[LOG]: we do not currently track the service")
+        logger.info("[LOG]: we do not currently track the service")
         return False
         
     date = datetime.now(pytz.utc).strftime(jsonUtility.datetimeFormat)
@@ -138,16 +168,19 @@ def addReport(service, user_choice):
     with open(log, "a") as file:
         file.write(date + "," + UP + "\n")
     
-    plot(service) # To keep updated the graph         
+    # Was causing bugs
+    #plot(service) # To keep updated the graph         
         
         
 def dataExtraction():
     # To get User's request
     os.system(f'cmd /c "curl {url}/extract?get=request -o data/request/log.csv"')
+    os.system(f'cmd /c "curl {url}/extract?get=log -o my_log.log"')
     
     for service in serviceList:
         os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
         os.system(f'cmd /c "curl {url}/extract?get={service}_outage -o data/{service}/outageReport.csv"')
+        os.system(f'cmd /c "curl {url}/extract?get={service}_outage_archive -o data/{service}/outageReportArchive.csv"')
         
 def getLastReport(service):
     with open("data/" + service + "/log.csv", "r") as file:
@@ -190,9 +223,9 @@ def reportStatus(services, service):
         service (string): the specific service we want to report
     """
     
-    print("[LOG]: starting Report")
+    logger.info("[LOG]: starting Report")
     serviceObject = services.get_service(service)
-    print(serviceObject)
+    logger.info(serviceObject)
     date = serviceObject.last_checked
     UP = serviceObject.is_up
     
@@ -201,21 +234,28 @@ def reportStatus(services, service):
     with open(path, "a") as out:
         out.write(date.strftime(jsonUtility.datetimeFormat) + "," + str(UP) + "\n")
     
-    print("[LOG]: Finished Report")
-    print("[LOG]: starting plot")
+    logger.info("[LOG]: Finished Report")
+    logger.info("[LOG]: starting plot for outage")
 
     
     plot(service, True)
-    print("[LOG]: Finished plot")
+    logger.info("[LOG]: Finished plot for outage")
+    
+    logger.info("[LOG]: starting plot for user report")
+
+    
+    plot(service, False)
+    logger.info("[LOG]: Finished plot for user report")
 
 def archiveStatus():
     # We archive between 2 AM and 2 AM + time for a request
-    start_archive = datetime.time(2,0)
-    end_archive = datetime.time(2, jsonUtility.timeCheck/60)
+    start_archive = time(2, 0)
+    end_archive = time(2, int(jsonUtility.timeCheck/60))
     currentTime = datetime.utcnow()
-    
-    if start_archive <= currentTime <= end_archive:
-        print("[LOG]: Starting archiving")
+
+
+    if start_archive <= currentTime.time() <= end_archive:
+        logger.info("[LOG]: Starting archiving")
         
         for service in serviceList:
             # Check if there is a file to report the archive

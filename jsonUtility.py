@@ -2,6 +2,8 @@ import json
 import datetime
 import csv
 import os
+
+from logger_config import *
 from models import *
 
 datetimeFormat = "%Y-%m-%dT%H:%M:%S"
@@ -28,7 +30,7 @@ def statusUpdate():
         service.refresh_status()
         
 def deltaTime():
-    print("[LOG]: Deprecated")
+    logger.info("[LOG]: Deprecated")
     
     currentDate = datetime.datetime.utcnow()
     for k in listServices():
@@ -37,7 +39,7 @@ def deltaTime():
         
 def deltaTimeService(services, service):
     if service not in services:
-        print("[LOG]: requested service is not tracked")
+        logger.info("[LOG]: requested service is not tracked")
         return 0
     
     currentDate = datetime.datetime.utcnow()
