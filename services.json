@@ -102,5 +102,13 @@
     "last_checked": "2024-01-25T14:56:47.616127",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
+  },
+  "IDP-Logging": {
+    "name": "IDP-Logging",
+    "url": "https://idp.uclouvain.be",
+    "is_up": true,
+    "last_checked": "2024-01-25T15:27:38.889172",
+    "is_up_user": true,
+    "last_user_report": "2024-01-25T15:27:38.889172"
   }
 }

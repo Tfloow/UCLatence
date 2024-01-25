@@ -353,6 +353,9 @@ class Services(RootModel):
             
         with open(filepath + name + "/outageReport.csv", "w") as out:
             out.write(cols)
+            
+        with open(filepath + name + "/outageReportArchive.csv", "w") as out:
+            out.write(cols)
         
         self.dump_json()
 
@@ -389,4 +392,11 @@ class Services(RootModel):
         """Return an iterator over the the tracked services objects"""
         return self.root.values().__iter__()
 
+if __name__ == "__main__":
+    JSON_FILE_WEBHOOKS = "webhooks.json"
+    webhooks = Webhooks.load_from_json_file(JSON_FILE_WEBHOOKS)
 
+    JSON_FILE_SERVICES = "services.json"
+    services = Services.load_from_json_file(JSON_FILE_SERVICES, webhooks=webhooks)
+    
+    # services.add_service("IDP-Logging", "https://idp.uclouvain.be")
