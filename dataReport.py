@@ -3,11 +3,14 @@ import jsonUtility
 import os
 from datetime import datetime, time
 import pytz # For timezone
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 import numpy as np
 
 from logger_config import *
+
+matplotlib.use('Agg')
 
 
 # Basic constant
@@ -157,6 +160,7 @@ def dataExtraction():
     for service in serviceList:
         os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
         os.system(f'cmd /c "curl {url}/extract?get={service}_outage -o data/{service}/outageReport.csv"')
+        os.system(f'cmd /c "curl {url}/extract?get={service}_outage_archive -o data/{service}/outageReportArchive.csv"')
         
 def getLastReport(service):
     with open("data/" + service + "/log.csv", "r") as file:

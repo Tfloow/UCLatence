@@ -69,7 +69,7 @@ def refreshServices(services):
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1), max_instances=1)
+refreshJob = scheduler.add_job(refreshServices, "interval" ,args=[services], minutes=jsonUtility.timeCheck/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1), max_instances=1)
 
 # Start the scheduler
 scheduler.start()
@@ -134,6 +134,9 @@ def process():
         if service is None:
             logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
         else:
+            # next_run_time_with_refresh = refreshJob.next_run_time
+            # scheduler.add_job(dataReport.addReport, "date", args=[service, True], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
+            # Extra 10 seconds to make sure it is done after the main task
             dataReport.addReport(service, True)
         
         return 'Great! The website is working for you.'
@@ -143,6 +146,9 @@ def process():
         if service is None:
             logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
         else:
+            # next_run_time_with_refresh = refreshJob.next_run_time
+            # scheduler.add_job(dataReport.addReport, "date", args=[service, False], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
+            # Extra 10 seconds to make sure it is done after the main task
             dataReport.addReport(service, False)
             
         return 'The website is down for me too.'
@@ -169,9 +175,11 @@ def extractLog():
 
             return response
         
-        if len(get_what_to_extract.split("_")) > 1:
+        if len(get_what_to_extract.split("_")) == 2:
             # when we want to extract the past outages not the user outages
             path = "data/" + get_what_to_extract.split("_")[0] + "/outageReport.csv"
+        elif  len(get_what_to_extract.split("_")) == 3:
+            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReportArchive.csv"
         else:
             path = "data/" + get_what_to_extract + "/log.csv"
             
