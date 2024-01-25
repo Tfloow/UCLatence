@@ -301,5 +301,4 @@ def archiveStatus():
     
 
 if __name__ == "__main__":
-    dummyData()
-    # dataExtraction()
+  dataExtraction()

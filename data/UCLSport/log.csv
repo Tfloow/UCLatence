@@ -1,4 +1,56 @@
-date,UP
-2024-01-25T02:21:35,True
-2024-01-25T02:21:35,True
-2024-01-25T02:31:35,True
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="aGMTsvUStNIejr6z4Ew8Mdme0SpSLKKjPE9uNbrKQzE" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UCLouvain Down Detector - Real-time outage reports for UCLouvain services">
+    <meta name="keywords" content="UCLouvain, monitoring, outage, status, university services, downtime, downdetector, students">
+    <meta name="author" content="EPL Students">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="og:title" content="UCLouvain Down Detector">
+    <meta name="og:description" content="Real-time outage reports for UCLouvain services">
+    <meta name="og:type" content="website">
+    <meta name="og:url" content="https://uclouvaindown-ed3979a045e6.herokuapp.com">
+    <meta name="og:image" content="/static/ico/icoDOWN.png">
+
+
+    
+    <title>404</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
+
+
+    <link rel="stylesheet" href="/static/main.css">
+</head>
+<body>
+    <div id="header">
+        <a href="/"><span class="header-button"> <b>Home</b> </span></a>
+        <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
+        <a href="/serviceList"><span class="header-button"> <b>ServiceList</b> </span></a>
+        <a href="/request"><span class="header-button"> <b>Request Service</b> </span></a>
+    </div>
+    
+    
+
+    <h1>404 - Not Found</h1>
+    <h2>The page you are looking for is certainly not here</h2>
+
+
+
+    <footer>
+        <p> 
+            <a href="https://github.com/Tfloow/UCLouvainDown" class="github-footer">Github</a> -
+            <a href="https://github.com/Tfloow/UCLouvainDown/issues" class="github-footer">Issue or Request ?</a> -
+            <a href="https://github.com/Tfloow/UCLouvainDown#introduction" class="github-footer">What is this ?</a>
+        </p>
+    </footer>
+
+    
+
+    
+</body>
+</html>
