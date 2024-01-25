@@ -2,7 +2,6 @@ from matplotlib.dates import date2num
 import jsonUtility
 import os
 from datetime import datetime, time
-import pytz # For timezone
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
@@ -182,7 +181,7 @@ def addReport(service, user_choice):
         logger.info("[LOG]: we do not currently track the service")
         return False
         
-    date = datetime.now(pytz.utc).strftime(jsonUtility.datetimeFormat)
+    date = datetime.utcnow().strftime(jsonUtility.datetimeFormat)
     UP = str(user_choice)
         
     log = filepath + service + "/log.csv"
@@ -217,7 +216,7 @@ def getLastReport(service):
         return None
 
 def newRequest(serviceName, url, info):
-    date = datetime.now(pytz.utc).strftime(jsonUtility.datetimeFormat)
+    date = datetime.utcnow().strftime(jsonUtility.datetimeFormat)
     log = "data/request/log.csv"
     
     with open(log, "a") as file:

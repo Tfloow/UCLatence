@@ -189,11 +189,19 @@ class Service(BaseModel):
         description="The link to the service.",
         examples=["https://inginious.info.ucl.ac.be/", "https://ade-scheduler.info.ucl.ac.be/calendar"])]
     status: Annotated[bool, Field(
-        description="The current state of the service: `true` if it is up and running, `false` if it is down.",
+        description="The current status of the service: `true` if it is up and running, `false` if it is down.",
         examples=[True, False], alias="is_up", alias_priority=1)]
     last_checked: Annotated[dt.datetime, Field(
         description="The date and time (UTC) at which the status of the service was last checked, in ISO formatting "
                     "(`yyyy-MM-dd'T'HH:mm:ss.SSSXXX`).", examples=["2024-01-22T17:46:55.480345"])]
+    is_up_user: Annotated[bool, Field(
+        description="The current status of the service according to the latest user report. Check `last_user_status`"
+                    "for the date and time at which this status was reported.", examples=[True, False]
+    )]
+    last_user_report: Annotated[dt.datetime, Field(
+        description="The date and time (UTC) at which the last user reported the status of this service, in ISO"
+                    "formatting (`yyyy-MM-dd'T'HH:mm:ss.SSSXXX`).", examples=["2024-01-22T17:46:55.480345"]
+    )]
 
     __webhooks: Dict[int, Webhook] = {}
     __parent: None  # Services instance
@@ -326,7 +334,8 @@ class Services(RootModel):
         :param name: a name for the service (should contain only characters that can be used in urls)
         :param url: a url for the service
         """
-        new_service = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow())
+        new_service = Service(name=name, url=url, is_up=True, last_checked=dt.datetime.utcnow(),
+                              is_up_user=True, last_user_report=dt.datetime.utcnow())
         new_service._set_parent(self)
         self.root[name] = new_service
         self.__tracked_services.add(name)
