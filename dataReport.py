@@ -111,6 +111,7 @@ def plot(service, onlyOutageReport=False):
             converters = {"date": date_converter}
 
             # Load the CSV file into a NumPy array
+            logger.info(f"[LOG]: trying to open data from {path}")
             data = np.genfromtxt(path, delimiter=",", names=True, dtype=dtypes, converters=converters)
 
             # Print the loaded data
