@@ -102,7 +102,7 @@ def serviceList():
     dictService = []
     
     for service in services:
-        dictService.append(dict(service=service, reportedStatus=dataReport.getLastReport(service.name)))
+        dictService.append(dict(service=service, reportedStatus=service.is_up_user))
     return render_template("serviceList.html", servicesInfo=dictService)
 
 
