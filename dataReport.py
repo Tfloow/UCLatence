@@ -155,7 +155,7 @@ def plot(service, onlyOutageReport=False):
             else:
                 ax.set_title(f"Past status for {service}")
             ax.set_ylabel("Up or Down")
-            ax.set_xlabel("Date and Time")
+            ax.set_xlabel("Date and Time (in UTC)")
             
         logger.info(f"[LOG]: PLOT --> service:{service} and report:{report}")
         if not onlyOutageReport:

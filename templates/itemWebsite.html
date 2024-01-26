@@ -29,10 +29,8 @@
     <p id="down-user">
         <h3>Is this website currently working for you ?</h3>
         <br>
-        <b>Disabled ATM</b>
-        <br>
-        <button class="yes"  >Yes ! </button>     <!-- onclick="sendChoice('yes', '{{ serviceName }}')"-->
-        <button class="no" >No ! </button>        <!-- onclick="sendChoice('no', '{{ service.name }}')"-->
+        <button class="yes" onclick="sendChoice('yes', '{{ service.name }}')"  >Yes ! </button>     <!-- onclick="sendChoice('yes', '{{ service.name }}')"-->
+        <button class="no"  onclick="sendChoice('no', '{{ service.name }}')"  >No ! </button>        <!-- onclick="sendChoice('no', '{{ service.name }}')"-->
     </p>
 
     <div id="result"></div>

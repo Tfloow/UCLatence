@@ -78,7 +78,7 @@ def refreshServices():
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
-refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60, next_run_time=datetime.datetime.now() + datetime.timedelta(seconds=1))
+refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60)
 
 # Start the scheduler
 scheduler.start()
@@ -137,7 +137,7 @@ def process():
         else:
             # next_run_time_with_refresh = refreshJob.next_run_time
             # scheduler.add_job(dataReport.addReport, "date", args=[service, True], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
-            # Extra 10 seconds to make sure it is done after the main task
+            # Extra 10 seconds to make sure it is done after the main task 
             dataReport.addReport(service, True)
 
         return 'Great! The website is working for you.'
