@@ -1,56 +1,263 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="aGMTsvUStNIejr6z4Ew8Mdme0SpSLKKjPE9uNbrKQzE" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="UCLouvain Down Detector - Real-time outage reports for UCLouvain services">
-    <meta name="keywords" content="UCLouvain, monitoring, outage, status, university services, downtime, downdetector, students">
-    <meta name="author" content="EPL Students">
-    <meta name="robots" content="index, follow">
-    <meta name="googlebot" content="index, follow">
-    <meta name="og:title" content="UCLouvain Down Detector">
-    <meta name="og:description" content="Real-time outage reports for UCLouvain services">
-    <meta name="og:type" content="website">
-    <meta name="og:url" content="https://uclouvaindown-ed3979a045e6.herokuapp.com">
-    <meta name="og:image" content="/static/ico/icoDOWN.png">
-
-
-    
-    <title>404</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
-
-
-    <link rel="stylesheet" href="/static/main.css">
-</head>
-<body>
-    <div id="header">
-        <a href="/"><span class="header-button"> <b>Home</b> </span></a>
-        <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
-        <a href="/serviceList"><span class="header-button"> <b>ServiceList</b> </span></a>
-        <a href="/request"><span class="header-button"> <b>Request Service</b> </span></a>
-    </div>
-    
-    
-
-    <h1>404 - Not Found</h1>
-    <h2>The page you are looking for is certainly not here</h2>
-
-
-
-    <footer>
-        <p> 
-            <a href="https://github.com/Tfloow/UCLouvainDown" class="github-footer">Github</a> -
-            <a href="https://github.com/Tfloow/UCLouvainDown/issues" class="github-footer">Issue or Request ?</a> -
-            <a href="https://github.com/Tfloow/UCLouvainDown#introduction" class="github-footer">What is this ?</a>
-        </p>
-    </footer>
-
-    
-
-    
-</body>
-</html>
+date,UP
+2024-01-25T02:21:35,True
+2024-01-25T02:21:35,True
+2024-01-25T02:31:35,True
+2024-01-25T02:21:35,True
+2024-01-25T02:21:35,True
+2024-01-25T02:31:35,True
+2024-01-25T15:28:55,True
+2024-01-25T15:28:56,True
+2024-01-25T15:28:56,True
+2024-01-25T15:28:55,True
+2024-01-25T15:37:44,True
+2024-01-25T15:38:55,True
+2024-01-25T15:43:55,True
+2024-01-25T15:43:56,True
+2024-01-25T15:48:56,True
+2024-01-25T15:48:56,True
+2024-01-25T15:48:56,True
+2024-01-25T15:48:56,True
+2024-01-25T15:58:56,True
+2024-01-25T15:58:56,True
+2024-01-25T15:58:56,True
+2024-01-25T16:03:57,True
+2024-01-25T16:03:57,True
+2024-01-25T16:08:57,True
+2024-01-25T16:08:57,True
+2024-01-25T16:13:55,True
+2024-01-25T16:18:55,True
+2024-01-25T16:18:55,True
+2024-01-25T16:18:55,True
+2024-01-25T16:23:56,True
+2024-01-25T16:23:56,True
+2024-01-25T16:28:57,True
+2024-01-25T16:28:57,True
+2024-01-25T16:33:55,True
+2024-01-25T16:38:56,True
+2024-01-25T16:38:56,True
+2024-01-25T16:38:56,True
+2024-01-25T16:43:58,True
+2024-01-25T16:43:58,True
+2024-01-25T16:48:56,True
+2024-01-25T16:48:56,True
+2024-01-25T16:53:56,True
+2024-01-25T16:53:56,True
+2024-01-25T16:58:56,True
+2024-01-25T16:58:56,True
+2024-01-25T17:03:56,True
+2024-01-25T17:03:56,True
+2024-01-25T17:08:56,True
+2024-01-25T17:08:56,True
+2024-01-25T17:13:56,True
+2024-01-25T17:18:56,True
+2024-01-25T17:18:57,True
+2024-01-25T17:18:57,True
+2024-01-25T17:23:56,True
+2024-01-25T17:23:56,True
+2024-01-25T17:28:57,True
+2024-01-25T17:28:57,True
+2024-01-25T17:33:56,True
+2024-01-25T17:33:56,True
+2024-01-25T17:38:57,True
+2024-01-25T17:38:57,True
+2024-01-25T17:43:57,True
+2024-01-25T17:43:57,True
+2024-01-25T17:48:55,True
+2024-01-25T17:53:56,True
+2024-01-25T17:53:57,True
+2024-01-25T17:53:57,True
+2024-01-25T17:58:57,True
+2024-01-25T17:58:57,True
+2024-01-25T18:03:54,True
+2024-01-25T18:08:57,True
+2024-01-25T18:08:57,True
+2024-01-25T18:08:57,True
+2024-01-25T18:08:57,True
+2024-01-25T18:18:57,True
+2024-01-25T18:18:57,True
+2024-01-25T18:18:57,True
+2024-01-25T18:23:59,True
+2024-01-25T18:23:59,True
+2024-01-25T18:28:58,True
+2024-01-25T18:28:58,True
+2024-01-25T18:33:58,True
+2024-01-25T18:33:58,True
+2024-01-25T18:38:58,True
+2024-01-25T18:38:58,True
+2024-01-25T18:43:57,True
+2024-01-25T18:48:57,True
+2024-01-25T18:48:59,True
+2024-01-25T18:48:59,True
+2024-01-25T18:48:57,True
+2024-01-25T18:58:56,True
+2024-01-25T18:58:56,True
+2024-01-25T18:58:56,True
+2024-01-25T19:03:58,True
+2024-01-25T19:03:58,True
+2024-01-25T19:08:58,True
+2024-01-25T19:08:58,True
+2024-01-25T19:13:57,True
+2024-01-25T19:13:57,True
+2024-01-25T19:18:58,True
+2024-01-25T19:18:58,True
+2024-01-25T19:23:57,True
+2024-01-25T19:23:57,True
+2024-01-25T19:28:57,True
+2024-01-25T19:28:57,True
+2024-01-25T19:33:56,True
+2024-01-25T19:38:55,True
+2024-01-25T19:38:56,True
+2024-01-25T19:43:57,True
+2024-01-25T19:43:57,True
+2024-01-25T19:43:57,True
+2024-01-25T19:43:57,True
+2024-01-25T19:53:57,True
+2024-01-25T19:53:57,True
+2024-01-25T19:58:58,True
+2024-01-25T19:58:58,True
+2024-01-25T19:58:58,True
+2024-01-25T19:58:58,True
+2024-01-25T20:08:56,True
+2024-01-25T20:08:57,True
+2024-01-25T20:13:57,True
+2024-01-25T20:13:57,True
+2024-01-25T20:13:57,True
+2024-01-25T20:13:57,True
+2024-01-25T20:23:56,True
+2024-01-25T20:23:56,True
+2024-01-25T20:23:56,True
+2024-01-25T20:28:57,True
+2024-01-25T20:28:57,True
+2024-01-25T20:33:57,True
+2024-01-25T20:38:57,True
+2024-01-25T20:38:57,True
+2024-01-25T20:38:57,True
+2024-01-25T20:38:57,True
+2024-01-25T20:48:56,True
+2024-01-25T20:48:56,True
+2024-01-25T20:53:57,True
+2024-01-25T20:53:57,True
+2024-01-25T20:53:57,True
+2024-01-25T20:53:57,True
+2024-01-25T21:03:56,True
+2024-01-25T21:03:56,True
+2024-01-25T21:03:56,True
+2024-01-25T21:08:56,True
+2024-01-25T21:08:56,True
+2024-01-25T21:13:54,True
+2024-01-25T21:18:57,True
+2024-01-25T21:18:57,True
+2024-01-25T21:18:57,True
+2024-01-25T21:23:57,True
+2024-01-25T21:23:57,True
+2024-01-25T21:28:57,True
+2024-01-25T21:28:57,True
+2024-01-25T21:33:57,True
+2024-01-25T21:33:57,True
+2024-01-25T21:38:56,True
+2024-01-25T21:38:56,True
+2024-01-25T21:43:56,True
+2024-01-25T21:43:56,True
+2024-01-25T21:48:56,True
+2024-01-25T21:48:56,True
+2024-01-25T21:53:56,True
+2024-01-25T21:53:56,True
+2024-01-25T21:58:56,True
+2024-01-25T22:03:55,True
+2024-01-25T22:03:56,True
+2024-01-25T22:03:56,True
+2024-01-25T22:03:55,True
+2024-01-25T22:13:53,True
+2024-01-25T22:13:56,True
+2024-01-25T22:13:56,True
+2024-01-25T22:18:56,True
+2024-01-25T22:18:56,True
+2024-01-25T22:23:57,True
+2024-01-25T22:23:57,True
+2024-01-25T22:28:55,True
+2024-01-25T22:28:55,True
+2024-01-25T22:33:56,True
+2024-01-25T22:33:56,True
+2024-01-25T22:38:56,True
+2024-01-25T22:38:56,True
+2024-01-25T22:43:56,True
+2024-01-25T22:43:56,True
+2024-01-25T22:48:55,True
+2024-01-25T22:48:55,True
+2024-01-25T22:53:55,True
+2024-01-25T22:58:56,True
+2024-01-25T22:58:56,True
+2024-01-25T22:58:56,True
+2024-01-25T22:58:56,True
+2024-01-25T23:08:56,True
+2024-01-25T23:08:56,True
+2024-01-25T23:08:56,True
+2024-01-25T23:13:56,True
+2024-01-25T23:13:56,True
+2024-01-25T23:18:56,True
+2024-01-25T23:23:56,True
+2024-01-25T23:23:57,True
+2024-01-25T23:23:57,True
+2024-01-25T23:23:56,True
+2024-01-25T23:33:55,True
+2024-01-25T23:33:55,True
+2024-01-25T23:33:55,True
+2024-01-25T23:38:56,True
+2024-01-25T23:38:56,True
+2024-01-25T23:43:56,True
+2024-01-25T23:43:56,True
+2024-01-25T23:48:55,True
+2024-01-25T23:53:56,True
+2024-01-25T23:53:56,True
+2024-01-25T23:53:56,True
+2024-01-25T23:53:56,True
+2024-01-26T00:03:56,True
+2024-01-26T00:03:56,True
+2024-01-26T00:03:56,True
+2024-01-26T00:03:56,True
+2024-01-26T00:13:56,True
+2024-01-26T00:13:57,True
+2024-01-26T00:13:56,True
+2024-01-26T00:13:57,True
+2024-01-26T00:23:56,True
+2024-01-26T00:23:56,True
+2024-01-26T00:23:56,True
+2024-01-26T00:23:56,True
+2024-01-26T00:33:55,True
+2024-01-26T00:33:56,True
+2024-01-26T00:33:56,True
+2024-01-26T00:33:55,True
+2024-01-26T00:43:56,True
+2024-01-26T00:43:56,True
+2024-01-26T00:43:56,True
+2024-01-26T00:48:57,True
+2024-01-26T00:48:57,True
+2024-01-26T00:53:55,True
+2024-01-26T00:53:55,True
+2024-01-26T00:58:55,True
+2024-01-26T00:58:55,True
+2024-01-26T01:03:56,True
+2024-01-26T01:03:56,True
+2024-01-26T01:08:56,True
+2024-01-26T01:08:56,True
+2024-01-26T01:13:55,True
+2024-01-26T01:18:55,True
+2024-01-26T01:18:55,True
+2024-01-26T01:18:55,True
+2024-01-26T01:23:56,True
+2024-01-26T01:23:56,True
+2024-01-26T01:28:56,True
+2024-01-26T01:28:56,True
+2024-01-26T01:33:55,True
+2024-01-26T01:38:55,True
+2024-01-26T01:38:56,True
+2024-01-26T01:38:56,True
+2024-01-26T01:43:56,True
+2024-01-26T01:43:56,True
+2024-01-26T01:48:55,True
+2024-01-26T01:53:56,True
+2024-01-26T01:53:56,True
+2024-01-26T01:53:56,True
+2024-01-26T01:53:56,True
+2024-01-26T02:03:55,True
+2024-01-26T02:03:56,True

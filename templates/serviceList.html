@@ -22,12 +22,12 @@
 
             <th> <h4>{{ serviceInfo["service"].name }}</h4> </th>
             <th> <h5><a href={{ serviceInfo["service"].url }}>{{ serviceInfo["service"].url }}</a></h5> </th>
-            {% if serviceInfo["service"].last_user_status  %}
-                <th class="report-up"> <div class="thumb"> {{ serviceInfo["service"].last_user_status }} </div> </th>
+            {% if serviceInfo["service"].is_up_user  %}
+                <th class="report-up"> <div class="thumb"> {{ serviceInfo["service"].is_up_user }} </div> </th>
             {% elif serviceInfo["reportedStatus"] == False %}
-                <th class="report-down"> <div class="thumb"> {{ serviceInfo["service"].last_user_status }} </div> </th>
+                <th class="report-down"> <div class="thumb"> {{ serviceInfo["service"].is_up_user }} </div> </th>
             {% else %}
-                <th class="report-none"> <div class="thumb"> {{ serviceInfo["service"].last_user_status }} </div> </th>
+                <th class="report-none"> <div class="thumb"> {{ serviceInfo["service"].is_up_user }} </div> </th>
             {% endif %}
             
             {% if serviceInfo["service"].status %}

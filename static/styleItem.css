@@ -9,6 +9,10 @@
     color: rgb(47, 47, 228); /* Set the color for visited links */
 }
 
+a{
+    text-decoration: none;
+}
+
 h2{
     transition-duration: 200ms;
 }

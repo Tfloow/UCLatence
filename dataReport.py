@@ -111,6 +111,7 @@ def plot(service, onlyOutageReport=False):
             converters = {"date": date_converter}
 
             # Load the CSV file into a NumPy array
+            logger.info(f"[LOG]: trying to open data from {path}")
             data = np.genfromtxt(path, delimiter=",", names=True, dtype=dtypes, converters=converters)
 
             # Print the loaded data
@@ -154,7 +155,7 @@ def plot(service, onlyOutageReport=False):
             else:
                 ax.set_title(f"Past status for {service}")
             ax.set_ylabel("Up or Down")
-            ax.set_xlabel("Date and Time")
+            ax.set_xlabel("Date and Time (in UTC)")
             
         logger.info(f"[LOG]: PLOT --> service:{service} and report:{report}")
         if not onlyOutageReport:
