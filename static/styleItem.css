@@ -73,7 +73,7 @@ h2{
 
 #up {
     display: inline-block; /* Ensure the link behaves like a block-level element */
-    padding: 10px 150px 10px 150px; /* Optional: Add padding for better visual appearance */
+    padding: 10px 170px 10px 170px; /* Optional: Add padding for better visual appearance */
     background-color: rgb(114, 187, 120); /* Optional: Add background color */
     color: white; /* Optional: Set text color */
     text-decoration: none; /* Optional: Remove underline */
@@ -123,11 +123,11 @@ h2{
 /*For mobile*/
 @media (max-width: 600px) {
     #down {
-        padding: 10px 100px 10px 100px;
+        padding: 10px 40px 10px 40px;
     }
 
     #up {
-        padding: 10px 115px 10px 115px;
+        padding: 10px 55px 10px 55px;
     }
 }
 

@@ -31,7 +31,7 @@
             {% endif %}
             
             {% if serviceInfo["service"].status %}
-                <th > <a href="/{{ serviceInfo["service"].name }}"  id="up"> &nbsp;  Up &nbsp;  </a> </th>
+                <th > <a href="/{{ serviceInfo["service"].name }}"  id="up"> Up </a> </th>
             {% else %}
                 <th > <a href="/{{ serviceInfo["service"].name }}"  id="down"> Down </a> </th>
             {% endif %}

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Is it down ?</h1>
+    <h1>UCLouvain Down - Is it down ?</h1>
     <div class="homepanel">
         {% for site in serviceList %} 
             <iframe src="/{{ site.name }}" id="flex-container" class="scrolled" scrolling="no" onload="adjustScrollPosition()">  </iframe>
