@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: uvicorn app:api --host 0.0.0.0 --port 80
