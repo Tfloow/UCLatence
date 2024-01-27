@@ -74,6 +74,9 @@ class WebhookComplete(WebhookResponse):
     """\f this class shall never be used as a return type on an api call!!!"""
     password_hash: str
 
+    def __eq__(self, other):
+        return isinstance(other, WebhookComplete) and self.hook_id == other.hook_id
+
 
 # TODO check if needs to inherit from Service ?
 class ServiceStatusChange(BaseModel):
@@ -99,6 +102,7 @@ class Webhooks(RootModel):
     __webhook_dict: Dict[int, WebhookComplete] = {}
     __filename: str = None
     __max_id: int = 0
+    __services = None
 
     @classmethod
     def load_from_json_file(cls, filename: str):
@@ -143,21 +147,25 @@ class Webhooks(RootModel):
         self.root.append(hook)
         self.__webhook_dict[hook.hook_id] = hook
 
+        if services:
+            for service in services:
+                service.modify_webhooks([hook])
+
         self.dump_json()
         return webhook_response
 
     def update_webhook(self, hook_id: int, updates: WebhookPatches):
         """Supposes hook_id exists"""
-        if updates.callback_url:
-            self.__webhook_dict[hook_id].callback_url = updates.callback_url
+        self.__webhook_dict[hook_id].callback_url = updates.callback_url or self.__webhook_dict[hook_id].callback_url
 
-        if updates.tracked_services:
+        if updates.tracked_services:  # is not None
+            # Not the most efficient but works
             old_webhook = self.__webhook_dict[hook_id]
             self.delete_webhook(hook_id)
             return self.add_webhook(
-                Webhook(callback_url=old_webhook.callback_url, tracked_services=updates.tracked_services),
-                password_hash=old_webhook.password_hash, hook_id=hook_id)
-        # TODO modify also for service objects...
+                WebhookComplete(callback_url=old_webhook.callback_url, tracked_services=updates.tracked_services,
+                password_hash=old_webhook.password_hash, hook_id=hook_id))
+
         self.dump_json()
         return WebhookResponse(**self.__webhook_dict[hook_id].model_dump(exclude={"password_hash"}))
 
@@ -165,8 +173,14 @@ class Webhooks(RootModel):
         """Supposes hook_id exists"""
         webhook = self.__webhook_dict.pop(hook_id)
         self.root.remove(webhook)
-        # TODO delete also from service objects...
+        webhook.tracked_services = set()
+        if services:
+            for service in services:
+                service.modify_webhooks([webhook])
         self.dump_json()
+
+    def _set_services(self, services): # Services
+        self.__services = services
 
     def __post_init(self, filename: str):
         for webhook in self.root:
@@ -245,7 +259,7 @@ class Service(BaseModel):
         self.status_changed()
         return self.status
 
-    def modify_webhooks(self, webhooks: Webhooks):
+    def modify_webhooks(self, webhooks: List[WebhookComplete]):
         """
         Add the webhooks given in `webhooks` if those requested the tracking of this service, or delete them if they
         were tracking this service before but now not anymore.
@@ -379,7 +393,7 @@ class Services(RootModel):
             service._set_parent(self)
         if webhooks:
             for service in self.root.values():
-                service.modify_webhooks(webhooks)
+                service.modify_webhooks(webhooks.root)
 
         return self
 
@@ -391,6 +405,7 @@ class Services(RootModel):
     def __iter__(self) -> Iterable[Service]:
         """Return an iterator over the the tracked services objects"""
         return self.root.values().__iter__()
+
 
 if __name__ == "__main__":
     JSON_FILE_WEBHOOKS = "webhooks.json"
