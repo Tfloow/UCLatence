@@ -3,14 +3,27 @@
 {% block head %}
     <title>UCLouvain Down</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 {% endblock %}
 
 {% block content %}
     <h1>UCLouvain Down - Is it down ?</h1>
     <div class="homepanel">
-        {% for site in serviceList %} 
-            <iframe src="/{{ site.name }}" id="flex-container" class="scrolled" scrolling="no" onload="adjustScrollPosition()">  </iframe>
+        {% for service in serviceList %} 
+        <div class="iframe-replacement">
+            <h3>Status for {{ service.name }} @ <a href={{ service.url }} id="urlTO"> {{ service.url }} </a> </h3>
+
+            {% if service.is_up %}
+            <div class="container">
+                <a href="/{{ service.name }}" target="_blank" id="up"> Up </a>
+            </div>
+            {% else %}
+            <div class="container">
+                <a href="/{{ service.name }}"  target="_blank" id="down"> Down </a>
+            </div>
+            {% endif %}
+        </div>
         {% endfor %}
     </div>
 

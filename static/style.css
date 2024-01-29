@@ -25,16 +25,36 @@ iframe{
     background-color: rgb(247, 247, 247);
 
     flex: 1; /* Allow the div to grow and shrink based on available space */
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
 
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    display: inline-block;
+}
+
+.iframe-replacement{
+    overflow: hidden; /* So I don't have any scroll */
+
+    width: 30%;
+    padding-bottom: 20px;
+
+    margin: 10px;
+    border: 10;
+    border-radius: 25px;
+    border-style: dotted;
+    border-color: rgb(78, 65, 37);
+
+    background-color: rgb(247, 247, 247);
+
+    flex: 1; /* Allow the div to grow and shrink based on available space */
+    display: inline-block;
 }
 
 /*For mobile*/
 @media (max-width: 600px) {
     iframe {
+        width: 320px;
+        height: 160px;
+    }
+
+    .iframe-replacement {
         width: 320px;
         height: 160px;
     }

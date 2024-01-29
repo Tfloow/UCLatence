@@ -196,10 +196,22 @@ def addReport(service, user_choice):
         
 def dataExtraction():
     # To get User's request
+    try:
+        os.remove("data/request/log.csv")
+    except:
+        logger.warning("[LOG]: When deleting log something went wrong")
+    
     os.system(f'cmd /c "curl {url}/extract?get=request -o data/request/log.csv"')
     os.system(f'cmd /c "curl {url}/extract?get=log -o my_log.log"')
     
     for service in serviceList:
+        try:
+            os.remove(f"data/{service}/log.csv")
+            os.remove(f"data/{service}/outageReport.csv")
+            os.remove(f"data/{service}/outageReportArchive.csv")
+        except:
+            logger.warning(f"[LOG]: When deleting log files associated to service: {service}, something went wrong")
+        
         os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
         os.system(f'cmd /c "curl {url}/extract?get={service}_outage -o data/{service}/outageReport.csv"')
         os.system(f'cmd /c "curl {url}/extract?get={service}_outage_archive -o data/{service}/outageReportArchive.csv"')
@@ -268,11 +280,12 @@ def reportStatus(services, service):
     
     plot(service, False)
     logger.info("[LOG]: Finished plot for user report")
+    
 
 def archiveStatus():
     # We archive between 2 AM and 2 AM + time for a request
     start_archive = time(2, 0)
-    end_archive = time(2, int(jsonUtility.timeCheck/60))
+    end_archive = time(2, 5)
     currentTime = datetime.utcnow()
 
 
@@ -291,6 +304,7 @@ def archiveStatus():
                     
             # Append it to the archive
             with open(filepath + service + "/outageReportArchive.csv", "a") as archive:
+                archive.write("TEST,REPORT\n") # A test line that is not meant to stay !
                 archive.writelines(content)
             
             # Start with a fresh blank file

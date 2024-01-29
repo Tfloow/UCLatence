@@ -82,7 +82,7 @@ h2{
     margin-left: auto;
     margin-right: auto;
 
-    font-size: 25px;
+    font-size: 20px;
     transition-duration: 500ms;
 }
 
@@ -94,7 +94,7 @@ h2{
     text-decoration: none; /* Optional: Remove underline */
     border-radius: 25px; /* Optional: Add border radius for rounded corners */
 
-    font-size: 25px;
+    font-size: 20px;
     transition-duration: 500ms;
 }
 

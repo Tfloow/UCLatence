@@ -10,7 +10,7 @@ try:
 
     import csv
     from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
-    import datetime
+    #import datetime
     import atexit
     
     # Own modules
@@ -48,6 +48,7 @@ def updateStatusService(service: str, session=None):
     services.get_service(service).status_changed(session)
 
     logger.info("[LOG]: got status ")
+    # REALLY IMPORTANT TO KEEP USING dataReport Library
     dataReport.reportStatus(services, service)
     
     return True

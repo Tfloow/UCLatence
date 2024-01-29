@@ -225,7 +225,7 @@ class Service(BaseModel):
         Refresh the status for this service if not updated recently. Makes an HTTP request to do so. This method
         can trigger a callback to all associated webhooks if the status did change.
         
-        :param session: a https session to speed up checks (bacuase it can use batch requests)
+        :param session: a https session to speed up checks (because it can use batch requests)
         """
         now = dt.datetime.utcnow()
         headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -256,7 +256,7 @@ class Service(BaseModel):
         :return: `true` if the service is up, `false if not` (this value isn't 100% accurate: status checks don't
           happen every second).
         """
-        self.status_changed()
+        # self.status_changed() Because the update of the status should only be done periodically
         return self.status
 
     def modify_webhooks(self, webhooks: List[WebhookComplete]):
