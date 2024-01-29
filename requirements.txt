@@ -8,5 +8,4 @@ fastapi>=0.100.0
 pydantic~=2.5.3
 argon2-cffi>=21.3.0
 APScheduler~=3.10.4
-uvicorn~=0.27.0.post1 
 logging~=0.4.9.6
