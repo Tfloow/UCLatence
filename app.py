@@ -205,6 +205,10 @@ def extractLog():
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])   
 
+@app.route("/info")
+def info_website():
+    return render_template("info.html")
+
 
 @app.route("/<service>")
 async def service_details_app(service: str):

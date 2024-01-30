@@ -1,0 +1,19 @@
+#info{
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    display: flex;
+
+    text-align: left;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 40%;
+
+    text-indent: 20px;
+}
+
+.indent{
+    text-indent: 20px;
+    margin-left: 20px;
+}

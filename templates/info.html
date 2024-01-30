@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleInfo.css') }}">
+{% endblock %}
+
+{% block content %}
+    <h1>UCLouvain Down - Is it down ?</h1>
+    <div id="info">
+        <p>
+            We are <b>not associated with UCLouvain</b>. UCLouvain Down is a little student project initiated by Thomas Debelle and Wouter Vermeulen from the EPL.
+            You can find all contributors of this project <a href="https://github.com/Tfloow/UCLouvainDown/graphs/contributors">here</a>.
+            <br>
+            <span class="indent">If you have any issue with the website feel free to send an email at <a href="mailto:88899420+Tfloow@users.noreply.github.com?subject=Inquiry about UCLouvain Down">88899420+Tfloow@users.noreply.github.com</a> (yes it's my Github mail)</span>
+        </p>
+    </div>
+
+{% endblock %}
