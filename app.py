@@ -6,7 +6,7 @@ try:
     from fastapi.responses import JSONResponse
     from fastapi.middleware.wsgi import WSGIMiddleware
 
-    from flask import Flask, render_template, request, make_response, send_from_directory
+    from flask import Flask, render_template, request, make_response, send_from_directory, session
     from flask_babel import Babel, _
     # _ to evaluate the text and translate it
     from flask_babel import lazy_gettext as _l
@@ -96,9 +96,12 @@ atexit.register(lambda: scheduler.shutdown())
 app = Flask("UCLouvainDown")
 
 LANGUAGES=["en", "fr"]
+wanted_language = None
 
 def get_locale():
-  return request.accept_languages.best_match(LANGUAGES)
+    if wanted_language is None:
+        return request.accept_languages.best_match(LANGUAGES)
+    return wanted_language
 
 babel = Babel(app, locale_selector=get_locale)
 
@@ -106,9 +109,22 @@ babel = Babel(app, locale_selector=get_locale)
 @app.route("/")
 async def index():
     """Render homepage, with an overview of all services."""
-    print(f"[LOG]: HTTP request for homepage")
-    return render_template("index.html", serviceList=all_service_details().root.values())
+    logger.info(f"[LOG]: HTTP request for homepage")
+    return render_template("index.html", serviceList=all_service_details().root.values(), get_locale=get_locale())
 
+@app.route("/language")
+def languageChange():
+    global wanted_language
+    user_language = request.args.get("choice")
+    
+    logger.info(f"[LOG]: User requested {user_language} language")
+    
+    if user_language in LANGUAGES:
+        wanted_language = user_language
+        return "200"
+    
+    logger.warning(f"[LOG]: User passed a non supported language")
+    return "400"
 
 @app.route("/serviceList")
 def serviceList():
@@ -153,7 +169,7 @@ def process():
             # Extra 10 seconds to make sure it is done after the main task 
             dataReport.addReport(service, True)
 
-        return 'Great! The website is working for you.'
+        return _('Great! The website is working for you.')
     elif user_choice == 'no':
         logger.info('The website is down for me too.')
         
@@ -165,9 +181,9 @@ def process():
             # Extra 10 seconds to make sure it is done after the main task
             dataReport.addReport(service, False)
 
-        return 'The website is down for me too.'
+        return _('The website is down for me too.')
     else:
-        return 'Invalid choice or no choice provided'
+        return _('Invalid choice or no choice provided')
 
 
 @app.route("/extract")

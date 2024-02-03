@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-02-03 20:01+0100\n"
-"PO-Revision-Date: 2024-02-03 20:26+0100\n"
+"POT-Creation-Date: 2024-02-03 23:13+0100\n"
+"PO-Revision-Date: 2024-02-03 23:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -19,21 +19,33 @@ msgstr ""
 "Generated-By: Babel 2.13.1\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: ../../templates/404.html:10
+#: ../app.py:172
+msgid "Great! The website is working for you."
+msgstr "Parfait ! Le site fonctionne pour vous."
+
+#: ../app.py:184
+msgid "The website is down for me too."
+msgstr "Le site est aussi en panne pour moi."
+
+#: ../app.py:186
+msgid "Invalid choice or no choice provided"
+msgstr "Choix invalide ou aucun choix fourni"
+
+#: ../templates/404.html:10
 msgid "404 - Not Found"
 msgstr "Erreur 404 - Page introuvable"
 
-#: ../../templates/404.html:11
+#: ../templates/404.html:11
 msgid "The page you are looking for is certainly not here"
 msgstr "La page que vous recherchez n'est certainement pas là"
 
-#: ../../templates/base.html:27
+#: ../templates/base.html:27
 msgid "UCLouvain Down Detector - Real-time outage reports for UCLouvain services"
 msgstr ""
 "UCLouvain Down Detector - Rapports de panne en temps réel pour les services de "
 "l'UCLouvain"
 
-#: ../../templates/base.html:28
+#: ../templates/base.html:28
 msgid ""
 "UCLouvain, monitoring, outage, status, university services, downtime, "
 "downdetector, students"
@@ -41,67 +53,67 @@ msgstr ""
 "UCLouvain, surveillance de statut, panne, statut, service universitaire, "
 "interruption, downdetector, étudiants"
 
-#: ../../templates/base.html:29
+#: ../templates/base.html:29
 msgid "EPL Students"
 msgstr "Étudiants de l'EPL"
 
-#: ../../templates/base.html:32
+#: ../templates/base.html:32
 msgid "UCLouvain Down Detector"
 msgstr "UCLouvain Down Detector"
 
-#: ../../templates/base.html:33
+#: ../templates/base.html:33
 msgid "Real-time outage reports for UCLouvain services"
 msgstr "Rapports de panne en temps réel pour les services de l'UCLouvain"
 
-#: ../../templates/base.html:55
+#: ../templates/base.html:55
 msgid "Home"
 msgstr "Accueil"
 
-#: ../../templates/base.html:56
+#: ../templates/base.html:56
 msgid "ServiceList"
 msgstr "Liste de services"
 
-#: ../../templates/base.html:57
+#: ../templates/base.html:57
 msgid "Request Service"
 msgstr "Demande de service"
 
-#: ../../templates/base.html:77
+#: ../templates/base.html:78
 msgid "Issue or Request ?"
 msgstr "Un Problème ou Une Requête ?"
 
-#: ../../templates/base.html:78
+#: ../templates/base.html:79
 msgid "What is this ?"
 msgstr "Qu'est-ce ?"
 
-#: ../../templates/index.html:15 ../../templates/itemWebsite.html:14
+#: ../templates/index.html:15 ../templates/itemWebsite.html:14
 #, python-format
 msgid "Status for %(servicename)s "
 msgstr "Statut pour %(servicename)s "
 
-#: ../../templates/index.html:15 ../../templates/itemWebsite.html:14
+#: ../templates/index.html:15 ../templates/itemWebsite.html:14
 #, python-format
 msgid "%(url)s"
 msgstr "%(url)s"
 
-#: ../../templates/index.html:19 ../../templates/itemWebsite.html:18
-#: ../../templates/serviceList.html:34
+#: ../templates/index.html:19 ../templates/itemWebsite.html:18
+#: ../templates/serviceList.html:34
 msgid "Up"
 msgstr "Fonctionne"
 
-#: ../../templates/index.html:23 ../../templates/itemWebsite.html:22
-#: ../../templates/serviceList.html:36
+#: ../templates/index.html:23 ../templates/itemWebsite.html:22
+#: ../templates/serviceList.html:36
 msgid "Down"
 msgstr "En Panne"
 
-#: ../../templates/info.html:14
+#: ../templates/info.html:14
 msgid "We are"
 msgstr "Nous ne sommes"
 
-#: ../../templates/info.html:14
+#: ../templates/info.html:14
 msgid "not associated with UCLouvain"
 msgstr "pas affiliés à l'UCLouvain"
 
-#: ../../templates/info.html:14
+#: ../templates/info.html:14
 msgid ""
 "UCLouvain Down is a little student project initiated by Thomas Debelle and "
 "Wouter Vermeulen from the EPL.\n"
@@ -111,78 +123,78 @@ msgstr ""
 "Wouter Vermeulen de l'EPL\n"
 "          Vous pouvez retrouver tous les contributeurs du projet "
 
-#: ../../templates/info.html:15
+#: ../templates/info.html:15
 msgid "here"
 msgstr "ici"
 
-#: ../../templates/info.html:17
+#: ../templates/info.html:17
 msgid "If you have any issue with the website feel free to send an email at "
 msgstr ""
 "Si vous avez un quelconque soucis avec le site, n'hésitez pas à m'envoyer un "
 "mail à "
 
-#: ../../templates/info.html:17
+#: ../templates/info.html:17
 msgid "(yes it's my Github mail)"
 msgstr "(oui c'est mon adresse mail GitHub)"
 
-#: ../../templates/itemWebsite.html:30
+#: ../templates/itemWebsite.html:30
 msgid "Is this website currently working for you ?"
 msgstr "Est-ce que le site web fonctionne-t-il actuellement pour vous ?"
 
-#: ../../templates/itemWebsite.html:32
+#: ../templates/itemWebsite.html:32
 msgid "Yes !"
 msgstr "Oui !"
 
-#: ../../templates/itemWebsite.html:33
+#: ../templates/itemWebsite.html:33
 msgid "No !"
 msgstr "Non !"
 
-#: ../../templates/itemWebsite.html:40
+#: ../templates/itemWebsite.html:40
 #, python-format
 msgid "Graph for status reported by user for %(name)s "
 msgstr "Graphe du statut rapporté par les utilisateurs pour %(name)s "
 
-#: ../../templates/itemWebsite.html:42 ../../templates/itemWebsite.html:48
+#: ../templates/itemWebsite.html:42 ../templates/itemWebsite.html:48
 msgid "Download Log"
 msgstr "Télécharger le rapport"
 
-#: ../../templates/itemWebsite.html:43 ../../templates/itemWebsite.html:49
+#: ../templates/itemWebsite.html:43 ../templates/itemWebsite.html:49
 msgid "Download Graph"
 msgstr "Télécharger le graphe"
 
-#: ../../templates/itemWebsite.html:46
+#: ../templates/itemWebsite.html:46
 #, python-format
 msgid "Graph of previous status for %(name)s "
 msgstr "Graphe du statut rapporté pour %(name)s "
 
-#: ../../templates/request.html:11
+#: ../templates/request.html:11
 msgid "Service Name:"
 msgstr "Nom du Service:"
 
-#: ../../templates/request.html:14
+#: ../templates/request.html:14
 msgid "Service's URL:"
 msgstr "URL du service:"
 
-#: ../../templates/request.html:17
+#: ../templates/request.html:17
 msgid "Extra Info:"
 msgstr "Informations supplémentaires:"
 
-#: ../../templates/request.html:20
+#: ../templates/request.html:20
 msgid "Submit"
 msgstr "Envoyer"
 
-#: ../../templates/serviceList.html:14
+#: ../templates/serviceList.html:14
 msgid "Service"
 msgstr "Service"
 
-#: ../../templates/serviceList.html:15
+#: ../templates/serviceList.html:15
 msgid "URL"
 msgstr "URL"
 
-#: ../../templates/serviceList.html:16
+#: ../templates/serviceList.html:16
 msgid "Reported Status by Users"
 msgstr "Statut rapporté par les Utilisateurs"
 
-#: ../../templates/serviceList.html:17
+#: ../templates/serviceList.html:17
 msgid "Status"
 msgstr "Statut"
