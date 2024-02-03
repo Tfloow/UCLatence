@@ -7,7 +7,11 @@ try:
     from fastapi.middleware.wsgi import WSGIMiddleware
 
     from flask import Flask, render_template, request, make_response, send_from_directory
-
+    from flask_babel import Babel, _
+    # _ to evaluate the text and translate it
+    from flask_babel import lazy_gettext as _l
+    # lazy_gettext is like the _ but handle the later evaluation of the text
+    
     import csv
     from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
     #import datetime
@@ -90,6 +94,13 @@ atexit.register(lambda: scheduler.shutdown())
 
 # ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")
+
+LANGUAGES=["en", "fr"]
+
+def get_locale():
+    return request.accept_languages.best_match(LANGUAGES)
+
+babel = Babel(app, locale_selector=get_locale)
 
 
 @app.route("/")

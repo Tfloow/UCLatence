@@ -8,3 +8,4 @@ fastapi>=0.100.0
 pydantic~=2.5.3
 argon2-cffi>=21.3.0
 APScheduler~=3.10.4
+flask-babel~=4.0.0

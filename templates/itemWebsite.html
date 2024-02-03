@@ -11,15 +11,15 @@
 
 
 {% block content %}
-    <h2>Status for {{ service.name }} @ <a href={{ service.url }} id="urlTO"> {{ service.url }} </a> </h2>
+    <h2>{{ _("Status for %(servicename)s ", servicename=service.name) }} @ <a href={{ service.url }} id="urlTO"> {{ _("%(url)s", url=service.url ) }} </a> </h2>
 
     {% if service.is_up %}
     <div class="container">
-        <a href="/{{ service.name }}" target="_blank" id="up"> Up </a>
+        <a href="/{{ service.name }}" target="_blank" id="up"> {{ _("Up") }} </a>
     </div>
     {% else %}
     <div class="container">
-        <a href="/{{ service.name }}"  target="_blank" id="down"> Down </a>
+        <a href="/{{ service.name }}"  target="_blank" id="down"> {{ _("Down") }} </a>
     </div>
     {% endif %}
 
@@ -27,26 +27,26 @@
     <br>
 
     <p id="down-user">
-        <h3>Is this website currently working for you ?</h3>
+        <h3> {{ _("Is this website currently working for you ?") }}</h3>
         <br>
-        <button class="yes" onclick="sendChoice('yes', '{{ service.name }}')"  >Yes ! </button>     <!-- onclick="sendChoice('yes', '{{ service.name }}')"-->
-        <button class="no"  onclick="sendChoice('no', '{{ service.name }}')"  >No ! </button>        <!-- onclick="sendChoice('no', '{{ service.name }}')"-->
+        <button class="yes" onclick="sendChoice('yes', '{{ service.name }}')"  >{{ _("Yes !") }} </button>     <!-- onclick="sendChoice('yes', '{{ service.name }}')"-->
+        <button class="no"  onclick="sendChoice('no', '{{ service.name }}')"  >{{ _("No !") }} </button>        <!-- onclick="sendChoice('no', '{{ service.name }}')"-->
     </p>
 
     <div id="result"></div>
 
     <div class="container-plot">
         <div id="log-plot" class="graph-container">
-            <img src="../static/img/log/{{ service.name }}.png" alt="Graph for status reported by user for {{ service.name }}" class="graph">
+            <img src="../static/img/log/{{ service.name }}.png" alt={{ _("Graph for status reported by user for %(name)s ", name=service.name) }} class="graph">
             <br>
-            <a href="/extract?get={{ service.name }}" id="urlTO">Download Log</a> &nbsp; - &nbsp;
-            <a href="{{ url_for("static", filename='img/log/' + service.name + '.png') }}" download="{{ service.name }}-log.png" id="urlTO">Download Graph</a>
+            <a href="/extract?get={{ service.name }}" id="urlTO">{{ _("Download Log") }}</a> &nbsp; - &nbsp;
+            <a href="{{ url_for("static", filename='img/log/' + service.name + '.png') }}" download="{{ service.name }}-log.png" id="urlTO">{{ _("Download Graph") }}</a>
         </div>
         <div id="down-plot" class="graph-container">
-            <img src="../static/img/log/outageReport{{ service.name }}.png" alt="Graph of previous status for {{ service.name }}" class="graph">
+            <img src="../static/img/log/outageReport{{ service.name }}.png" alt={{ _("Graph of previous status for %(name)s ", name=service.name) }} class="graph">
             <br>
-            <a href="/extract?get={{ service.name }}_outage" id="urlTO">Download Log</a> &nbsp; - &nbsp;
-            <a href="{{ url_for("static", filename='img/log/outageReport' + service.name + '.png') }}" download="outageReport{{ service.name }}-log.png" id="urlTO">Download Graph</a>
+            <a href="/extract?get={{ service.name }}_outage" id="urlTO">{{ _("Download Log") }}</a> &nbsp; - &nbsp;
+            <a href="{{ url_for("static", filename='img/log/outageReport' + service.name + '.png') }}" download="outageReport{{ service.name }}-log.png" id="urlTO">{{ _("Download Graph") }}</a>
         </div>
     </div>
 

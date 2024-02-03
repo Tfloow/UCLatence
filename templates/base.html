@@ -24,13 +24,13 @@
     <meta name="google-site-verification" content="aGMTsvUStNIejr6z4Ew8Mdme0SpSLKKjPE9uNbrKQzE" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="UCLouvain Down Detector - Real-time outage reports for UCLouvain services">
-    <meta name="keywords" content="UCLouvain, monitoring, outage, status, university services, downtime, downdetector, students">
-    <meta name="author" content="EPL Students">
+    <meta name="description" content={{ _("UCLouvain Down Detector - Real-time outage reports for UCLouvain services") }}>
+    <meta name="keywords" content={{ _("UCLouvain, monitoring, outage, status, university services, downtime, downdetector, students") }}>
+    <meta name="author" content={{ _("EPL Students") }}>
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
-    <meta name="og:title" content="UCLouvain Down Detector">
-    <meta name="og:description" content="Real-time outage reports for UCLouvain services">
+    <meta name="og:title" content={{ _("UCLouvain Down Detector") }}>
+    <meta name="og:description" content={{ _("Real-time outage reports for UCLouvain services") }}>
     <meta name="og:type" content="website">
     <meta name="og:url" content="https://uclouvaindown-ed3979a045e6.herokuapp.com">
     <meta name="og:image" content="{{ url_for('static', filename='ico/icoDOWN.png') }}">
@@ -52,13 +52,19 @@
 
     <div id="header">
         <div class="header-buttons">
-            <a href="/"><span class="header-button"> <b>Home</b> </span></a>
-            <a href="/serviceList"><span class="header-button"> <b>ServiceList</b> </span></a>
-            <a href="/request"><span class="header-button"> <b>Request Service</b> </span></a>
+            <a href="/"><span class="header-button"> <b> {{ _("Home") }}</b> </span></a>
+            <a href="/serviceList"><span class="header-button"> <b> {{ _("ServiceList") }}</b> </span></a>
+            <a href="/request"><span class="header-button"> <b>{{ _("Request Service") }}</b> </span></a>
             <a href="/api/docs"><span class="header-button"> <b>API</b> </span></a>
         </div>
-        <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
 
+        <div class="right-buttons">
+            <select name="Language" id="language-select">
+                <option value="En">En</option>
+                <option value="Fr">Fr</option>
+            </select>
+            <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
+        </div>
     </div>
     
     {% block content %}
@@ -68,9 +74,9 @@
     <footer>
         <p> 
             <a href="https://github.com/Tfloow/UCLouvainDown" class="github-footer">Github</a> -
-            <a href="https://github.com/Tfloow/UCLouvainDown/issues" class="github-footer">Issue or Request ?</a> -
-            <a href="https://github.com/Tfloow/UCLouvainDown#introduction" class="github-footer">What is this ?</a> - 
-            <a href="/info" class="github-footer">info</a>
+            <a href="https://github.com/Tfloow/UCLouvainDown/issues" class="github-footer">{{ _("Issue or Request ?") }}</a> -
+            <a href="https://github.com/Tfloow/UCLouvainDown#introduction" class="github-footer">{{ _("What is this ?") }}</a> - 
+            <a href="/info" class="github-footer">Info</a>
         </p>
     </footer>
 

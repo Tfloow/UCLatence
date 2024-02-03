@@ -12,32 +12,19 @@
     <div class="homepanel">
         {% for service in serviceList %} 
         <div class="iframe-replacement">
-            <h3>Status for {{ service.name }} @ <a href={{ service.url }} id="urlTO"> {{ service.url }} </a> </h3>
+            <h3> {{ _("Status for %(servicename)s ", servicename=service.name) }} @ <a href={{ service.url }} id="urlTO"> {{ _("%(url)s", url=service.url ) }} </a> </h3>
 
             {% if service.is_up %}
             <div class="container">
-                <a href="/{{ service.name }}" target="_blank" id="up"> Up </a>
+                <a href="/{{ service.name }}" target="_blank" id="up"> {{ _("Up") }} </a>
             </div>
             {% else %}
             <div class="container">
-                <a href="/{{ service.name }}"  target="_blank" id="down"> Down </a>
+                <a href="/{{ service.name }}"  target="_blank" id="down"> {{ _("Down") }} </a>
             </div>
             {% endif %}
         </div>
         {% endfor %}
     </div>
 
-{% endblock %}
-
-{% block script %}
-    <script>
-        function adjustScrollPosition() {
-            var iframes = document.querySelectorAll('.scrolled');
-            if (iframes) {
-                iframes.forEach(function (iframe) {
-                    iframe.contentWindow.scrollTo({ top: 62, behavior: 'smooth' }); // Adjust the scroll position here
-                });
-            }
-        }
-    </script>
 {% endblock %}
