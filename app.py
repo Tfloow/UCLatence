@@ -98,7 +98,7 @@ app = Flask("UCLouvainDown")
 LANGUAGES=["en", "fr"]
 
 def get_locale():
-    return request.accept_languages.best_match(LANGUAGES)
+  return request.accept_languages.best_match(LANGUAGES)
 
 babel = Babel(app, locale_selector=get_locale)
 
