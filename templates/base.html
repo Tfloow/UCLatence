@@ -50,18 +50,28 @@
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/"><span class="header-button"> <b> {{ _("Home") }}</b> </span></a>
+        <a href="/serviceList"><span class="header-button"> <b> {{ _("ServiceList") }}</b> </span></a>
+        <a href="/request"><span class="header-button"> <b>{{ _("Request Service") }}</b> </span></a>
+        <a href="/api/docs"><span class="header-button"> <b>API</b> </span></a>
+    </div>
+
     <div id="header">
-        <div class="header-buttons">
+        <div class="header-buttons" id="hb">
             <a href="/"><span class="header-button"> <b> {{ _("Home") }}</b> </span></a>
             <a href="/serviceList"><span class="header-button"> <b> {{ _("ServiceList") }}</b> </span></a>
             <a href="/request"><span class="header-button"> <b>{{ _("Request Service") }}</b> </span></a>
             <a href="/api/docs"><span class="header-button"> <b>API</b> </span></a>
         </div>
 
+        <span onclick="openNav()" id="menu">&#9776;</span>
+
         <div class="right-buttons">
             <select name="Language" id="language-select">
-                {% for lang in language["list"] %}
-                    <option value="{{ lang }}" {% if lang == language["user"] %}selected{% endif %}>{{ lang }}</option>
+                {% for lang in ["en", "fr"] %}
+                    <option value="{{ lang }}" {% if lang == get_locale %}selected{% endif %}>{{ lang }}</option>
                 {% endfor %}
             </select>
             <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
@@ -82,6 +92,7 @@
     </footer>
 
     <script src="{{ url_for("static", filename='script/languageSelection.js')}}"></script>
+    <script src="{{ url_for("static", filename='script/sideBar.js')}}"></script>
 
     {% block script %}
 

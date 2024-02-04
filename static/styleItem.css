@@ -129,6 +129,11 @@ h2{
     #up {
         padding: 10px 55px 10px 55px;
     }
+
+    .container-plot {
+        display: block;
+    }
+    
 }
 
 /* Define the CSS class */
