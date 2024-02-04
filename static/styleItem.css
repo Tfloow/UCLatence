@@ -73,7 +73,7 @@ h2{
 
 #up {
     display: inline-block; /* Ensure the link behaves like a block-level element */
-    padding: 10px 30% 10px 30%; /* Optional: Add padding for better visual appearance */
+    padding: 10px min(150px, 30%) 10px min(150px, 30%); /* Optional: Add padding for better visual appearance */
     background-color: rgb(114, 187, 120); /* Optional: Add background color */
     color: white; /* Optional: Set text color */
     text-decoration: none; /* Optional: Remove underline */
@@ -89,7 +89,7 @@ h2{
 #down{
     background-color: rgb(187, 125, 114);
     display: inline-block; /* Ensure the link behaves like a block-level element */
-    padding: 10px 30% 10px 30%; /* Optional: Add padding for better visual appearance */
+    padding: 10px min(150px, 30%) 10px  min(150px, 30%); /* Optional: Add padding for better visual appearance */
     color: white; /* Optional: Set text color */
     text-decoration: none; /* Optional: Remove underline */
     border-radius: 25px; /* Optional: Add border radius for rounded corners */

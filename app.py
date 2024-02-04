@@ -110,7 +110,11 @@ babel = Babel(app, locale_selector=get_locale)
 async def index():
     """Render homepage, with an overview of all services."""
     logger.info(f"[LOG]: HTTP request for homepage")
-    return render_template("index.html", serviceList=all_service_details().root.values(), get_locale=get_locale())
+    language = {}
+    language["list"] = LANGUAGES
+    language["user"] = get_locale()
+    
+    return render_template("index.html", serviceList=all_service_details().root.values(), language=language)
 
 @app.route("/language")
 def languageChange():

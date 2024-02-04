@@ -8,6 +8,7 @@
   - [Roadmap](#roadmap)
     - [API](#api)
   - [Documentation](#documentation)
+  - [Translation](#translation)
   - [License](#license)
 
 Test the app [here](https://uclouvaindown-ed3979a045e6.herokuapp.com/)
@@ -20,7 +21,7 @@ You can find the list of all currently track services in this [json](services.js
 
 ## How does it work ?
 
-![Homepage](doc/img/image.png)![Alt text](image.png)
+![Homepage](doc/img/image.png)
 
 Here is the control panel where every website is displayed.
 
@@ -32,23 +33,23 @@ I am tracking and storing the last status in the JSON and only doing request eve
 
 ## How to run it ?
 
-First, make sure to get the latest version of python (I am using 3.12). then follow these steps:
+First, you need to use **python 3.11** version (we suggest you to use a virtual environnement).
 
 1. `git clone git@github.com:Tfloow/UCLouvainDown.git` (*or fork it*)
 2. `pip install -r requirements.txt`
-3. `flask run --host=0.0.0.0`
+3. `python app.py`
 
 ### Explanation of the steps
 
 1. Clone the repo so you can get the code
 2. In the main directory, install all needed dependencies and the correct version without hassle in one command
-3. Run the app. It will host locally on your pc and you can access it through other devices connected on the same network as your pc
+3. Run the app. It will host locally on your pc.c
 
 ## Roadmap
 
 - [x] Working pages
 - [x] Home Page with links to other sub-pages
-- [ ] A nice and clear home page with all current status
+- [x] A nice and clear home page with all current status
 - [x] Deployed locally
 - [x] Deployed globally 
 - [x] Tracking downtime 
@@ -58,13 +59,19 @@ First, make sure to get the latest version of python (I am using 3.12). then fol
   
 ### API
 
-- [ ] Integrate a Fast API
-- [ ] Support for webhook
+- [x] Integrate a Fast API
+- [x] Support for webhook
 - [ ] RSS
 
 ## Documentation
 
 You can find the documentation and have a better understanding of what is going under the hood by reading [this](doc/doc.md). (*Please, open an issue with the tag "doc" to add any comments or when you need more information about a specific point of the doc*).
+
+## Translation
+
+This website is currently translated in English and French. We welcome any new translations !
+
+Check [this document](/translations/contribue.md) to see how you can contribute to the project.
 
 ## License
 

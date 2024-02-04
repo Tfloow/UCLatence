@@ -24,7 +24,7 @@
     <meta name="google-site-verification" content="aGMTsvUStNIejr6z4Ew8Mdme0SpSLKKjPE9uNbrKQzE" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content={{ _("UCLouvain Down Detector - Real-time outage reports for UCLouvain services") }}>
+    <meta name="description" content={{ _("UCLouvain Down Detector - Real-time outage reports for UCLouvain services. Check if moodle, intranet, your mail are down. Report the status of a website easily and see past outages") }}>
     <meta name="keywords" content={{ _("UCLouvain, monitoring, outage, status, university services, downtime, downdetector, students") }}>
     <meta name="author" content={{ _("EPL Students") }}>
     <meta name="robots" content="index, follow">
@@ -60,8 +60,8 @@
 
         <div class="right-buttons">
             <select name="Language" id="language-select">
-                {% for lang in ["en", "fr"] %}
-                    <option value="{{ lang }}" {% if lang == get_locale %}selected{% endif %}>{{ lang }}</option>
+                {% for lang in language["list"] %}
+                    <option value="{{ lang }}" {% if lang == language["user"] %}selected{% endif %}>{{ lang }}</option>
                 {% endfor %}
             </select>
             <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>

@@ -273,3 +273,9 @@ pyrightconfig.json
 
 tmp.py
 *.log
+
+# VENV
+venv
+Scripts
+Include
+pyvenv.cfg
