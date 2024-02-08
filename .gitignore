@@ -279,3 +279,9 @@ venv
 Scripts
 Include
 pyvenv.cfg
+
+# SSL
+
+domain.key
+
+*.crt
