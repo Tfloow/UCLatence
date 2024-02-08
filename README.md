@@ -11,7 +11,7 @@
   - [Translation](#translation)
   - [License](#license)
 
-Test the app [here](https://uclouvaindown-ed3979a045e6.herokuapp.com/)
+Test the app [here](https://www.uclouvain-down.be)
 
 ## Introduction
 

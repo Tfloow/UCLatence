@@ -45,12 +45,12 @@ There is various folder:
 
 This part is where we store a sort "database" with all of the report of the user.
 
-All of the folder's name correspond to a tracked service by UCLouvain down **besides** the `request/` which is a little bit different. This is where the result of the [request form](https://uclouvaindown-ed3979a045e6.herokuapp.com/request) is.
+All of the folder's name correspond to a tracked service by UCLouvain down **besides** the `request/` which is a little bit different. This is where the result of the [request form](https://www.uclouvain-down.be/request) is.
 
 You can extract all of the logs to build something with by clicking the link under each graph. Or you can do curl command looking like :
 
 ```
-curl https://uclouvaindown-ed3979a045e6.herokuapp.com/extract?get=<folder-name> -o log.csv
+curl https://www.uclouvain-down.be/extract?get=<folder-name> -o log.csv
 ```
 
 ### Summary
