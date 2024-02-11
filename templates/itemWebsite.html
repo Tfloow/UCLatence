@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
-    <title>Item</title>
+    <title>{{ service.name }} - UCLouvain Down</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
     {% if service.is_up %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoUP.png">

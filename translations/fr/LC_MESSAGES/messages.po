@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-02-04 09:57+0100\n"
-"PO-Revision-Date: 2024-02-04 09:59+0100\n"
+"POT-Creation-Date: 2024-02-11 12:24+0100\n"
+"PO-Revision-Date: 2024-02-11 12:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -48,7 +48,7 @@ msgstr ""
 "UCLouvain Down Detector - Rapport en temps réel du statut des services et "
 "site de L'UCLouvain. Vois si Moodle, l'intranet ou tes mails sont en "
 "panne. Rapporte le statut d'un site facilement et voit les anciennes "
-"pannes et problèmes."
+"pannes et problèmes"
 
 #: ../templates/base.html:28
 msgid ""
@@ -70,23 +70,23 @@ msgstr "UCLouvain Down Detector"
 msgid "Real-time outage reports for UCLouvain services"
 msgstr "Rapports de panne en temps réel pour les services de l'UCLouvain"
 
-#: ../templates/base.html:55
+#: ../templates/base.html:55 ../templates/base.html:64
 msgid "Home"
 msgstr "Accueil"
 
-#: ../templates/base.html:56
+#: ../templates/base.html:56 ../templates/base.html:65
 msgid "ServiceList"
 msgstr "Liste de services"
 
-#: ../templates/base.html:57
+#: ../templates/base.html:57 ../templates/base.html:66
 msgid "Request Service"
 msgstr "Demande de service"
 
-#: ../templates/base.html:78
+#: ../templates/base.html:90
 msgid "Issue or Request ?"
 msgstr "Un Problème ou Une Requête ?"
 
-#: ../templates/base.html:79
+#: ../templates/base.html:91
 msgid "What is this ?"
 msgstr "Qu'est-ce ?"
 
@@ -128,7 +128,7 @@ msgstr ""
 "Wouter Vermeulen de l'EPL\n"
 "          Vous pouvez retrouver tous les contributeurs du projet "
 
-#: ../templates/info.html:15
+#: ../templates/info.html:15 ../templates/info.html:33
 msgid "here"
 msgstr "ici"
 
@@ -138,9 +138,66 @@ msgstr ""
 "Si vous avez un quelconque soucis avec le site, n'hésitez pas à m'envoyer "
 "un mail à "
 
-#: ../templates/info.html:17
-msgid "(yes it's my Github mail)"
-msgstr "(oui c'est mon adresse mail GitHub)"
+#: ../templates/info.html:20
+msgid "What is UCLouvain Down ?"
+msgstr "Qu'est-ce que UCLouvain Down Detector ?"
+
+#: ../templates/info.html:23
+msgid ""
+"UCLouvain Down is a website that allows you to check the status of the "
+"UCLouvain services. It is a simple and easy way to know if the services "
+"are up or down."
+msgstr ""
+"UCLouvain Down est un site qui vous permet de vérifier le status des "
+"services de l'UCLouvain. Il est facile et simple de vérifier le statut "
+"d'un site."
+
+#: ../templates/info.html:25
+msgid ""
+"The status of every websites or services are updated every 5 minutes. We "
+"do not display the status of the previous days and the reset is done at 3 "
+"AM each day. You can still access past status of a service with requesting "
+"a url looking like: "
+msgstr ""
+"Le statut de tous les sites et services sont mises à jour toutes les 5 "
+"minutes. Nous n'affichons pas les statuts des jours précédents et on reset "
+"tous les jours à 3 heures du matin. Vous pouvez toujours accéder aux "
+"status précédent en utilisant un url de la sorte: "
+
+#: ../templates/info.html:30
+msgid "Add a new service"
+msgstr "Ajouter un nouveau service"
+
+#: ../templates/info.html:33
+msgid ""
+"If you want to add a new service to the list, you just need to fill in "
+"this forms "
+msgstr ""
+"Si vous voulez ajouter un nouveau service à la liste, remplissez "
+"simplement ce formulaire "
+
+#: ../templates/info.html:33
+msgid ""
+"We will review your request and add the service if it is relevant. Please "
+"provide some extra info as it helps us with the validation process"
+msgstr ""
+"Nous regardons les demandes périodiquement et ajoutons les services qui "
+"sont en lien avec l'UCLouvain. Merci d'ajouter des informations "
+"supplémentaires, c'est fort utile"
+
+#: ../templates/info.html:37
+msgid "Bug report"
+msgstr "Bug"
+
+#: ../templates/info.html:40
+msgid ""
+"If you find a bug or an issue with the website, feel free to open an issue "
+"at "
+msgstr "Si vous rencontrez un bug, ouvrez une issue à "
+
+#: ../templates/info.html:40
+msgid "this link"
+msgstr "ce lien"
 
 #: ../templates/itemWebsite.html:30
 msgid "Is this website currently working for you ?"
@@ -210,3 +267,6 @@ msgstr "Statut"
 #~ msgstr ""
 #~ "UCLouvain Down Detector - Rapports de panne en temps réel pour les "
 #~ "services de l'UCLouvain"
+
+#~ msgid "(yes it's my Github mail)"
+#~ msgstr "(oui c'est mon adresse mail GitHub)"
