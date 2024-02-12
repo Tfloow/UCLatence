@@ -6,6 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 import numpy as np
+import matplotlib.dates as mdates
 
 from logger_config import *
 
@@ -154,8 +155,12 @@ def plot(service, onlyOutageReport=False):
                 ax.set_title(f"Status reported by users for {service}")
             else:
                 ax.set_title(f"Past status for {service}")
-            ax.set_ylabel("Up or Down")
+            
+            ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
             ax.set_xlabel("Date and Time (in UTC)")
+            ax.set_yticks([0, 1])
+            ax.set_yticklabels(["Down", "Up"])
             
         logger.info(f"[LOG]: PLOT --> service:{service} and report:{report}")
         if not onlyOutageReport:
@@ -275,10 +280,9 @@ def archiveStatus():
     # We archive between 2 AM and 2 AM + time for a request
     start_archive = time(2, 0)
     end_archive = time(2, 5)
-    currentTime = datetime.utcnow()
+    currentTime = datetime.utcnow().time()
 
-
-    if start_archive <= currentTime.time() <= end_archive:
+    if start_archive <= currentTime <= end_archive:
         logger.info("[LOG]: Starting archiving")
         
         for service in serviceList:
@@ -294,6 +298,9 @@ def archiveStatus():
             # Append it to the archive
             with open(filepath + service + "/outageReportArchive.csv", "a") as archive:
                 archive.writelines(content)
+                
+            # Extra Precaution
+            open(filepath + service + "/outageReport.csv", "w").close()
             
             # Start with a fresh blank file
             with open(filepath + service + "/outageReport.csv", "w") as blankCurrent:

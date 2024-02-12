@@ -16,11 +16,11 @@
 
             {% if service.is_up %}
             <div class="container">
-                <a href="/{{ service.name }}" target="_blank" id="up"> {{ _("Up") }} </a>
+                <a href="/{{ service.name }}" id="up"> {{ _("Up") }} </a>
             </div>
             {% else %}
             <div class="container">
-                <a href="/{{ service.name }}"  target="_blank" id="down"> {{ _("Down") }} </a>
+                <a href="/{{ service.name }}"  id="down"> {{ _("Down") }} </a>
             </div>
             {% endif %}
         </div>
