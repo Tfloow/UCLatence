@@ -1,4 +1,12 @@
 import logging
+import os
+
+def initialize_logger(log_file):
+    # Delete the log file if it exists
+    if os.path.exists(log_file):
+        os.remove(log_file)
+
+initialize_logger('my_log.log')
 
 LOG_FORMAT = '%(asctime)s - [%(levelname)s]\t- %(funcName)s:%(lineno)d - %(threadName)s - %(message)s'
 logging.root.setLevel(logging.DEBUG)

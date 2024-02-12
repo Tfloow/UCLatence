@@ -1,6 +1,5 @@
 try:
     import uvicorn as uvicorn
-    import datetime 
 
     from fastapi import APIRouter, FastAPI, Path, Request
     from fastapi.exceptions import RequestValidationError
@@ -82,10 +81,20 @@ def refreshServices():
     dataReport.archiveStatus()
     logger.info("[LOG]: Finished Refreshing the services")
 
+def plotServices():
+    for service in services:
+        logger.info("[LOG]: starting plot for outage")
+        dataReport.plot(service.name, True)
+        logger.info("[LOG]: Finished plot for outage")
+        logger.info("[LOG]: starting plot for user report")
+        dataReport.plot(service.name, False)
+        logger.info("[LOG]: Finished plot for user report")
+    
 
 # Setup Scheduler to periodically check the status of the website
 scheduler = BackgroundScheduler()
 refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60)
+plotJob = scheduler.add_job(plotServices, "interval", minutes=RECHECK_AFTER/60)
 
 # Start the scheduler
 scheduler.start()

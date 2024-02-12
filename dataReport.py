@@ -1,7 +1,7 @@
 from matplotlib.dates import date2num
 import jsonUtility
 import os
-from datetime import datetime, time
+from datetime import datetime, time,timezone
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
@@ -243,7 +243,7 @@ def blankStatus():
         with open(filepath + service + "/outageReport.csv", "w") as log:
             log.write(cols)
         
-def reportStatus(services, service):
+def reportStatus(services, service, PLOT=False):
     """Add the log of the current status of the site so we can track it throughout time
 
     Args:
@@ -263,24 +263,21 @@ def reportStatus(services, service):
         out.write(date.strftime(jsonUtility.datetimeFormat) + "," + str(UP) + "\n")
     
     logger.info(f"[LOG]: Finished Report at {path}")
-    logger.info("[LOG]: starting plot for outage")
-
     
-    plot(service, True)
-    logger.info("[LOG]: Finished plot for outage")
-    
-    logger.info("[LOG]: starting plot for user report")
-
-    
-    plot(service, False)
-    logger.info("[LOG]: Finished plot for user report")
+    if(PLOT):
+        logger.info("[LOG]: starting plot for outage")
+        plot(service, True)
+        logger.info("[LOG]: Finished plot for outage")
+        logger.info("[LOG]: starting plot for user report")
+        plot(service, False)
+        logger.info("[LOG]: Finished plot for user report")
     
 
 def archiveStatus():
     # We archive between 2 AM and 2 AM + time for a request
     start_archive = time(2, 0)
     end_archive = time(2, 5)
-    currentTime = datetime.utcnow().time()
+    currentTime = datetime.now(timezone.utc).time()
 
     if start_archive <= currentTime <= end_archive:
         logger.info("[LOG]: Starting archiving")
