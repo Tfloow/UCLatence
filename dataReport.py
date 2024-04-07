@@ -338,7 +338,7 @@ def dataForChart(service):
     timeArray = data["date"]
     UPArray = data["UP"]
     
-    timeArray = date2num(timeArray)
+    #timeArray = date2num(timeArray)
     
     UPArray = np.where(UPArray == True, 1, 0)
     
@@ -366,13 +366,40 @@ def dataForChart(service):
     timeArray_user = data["date"]
     UPArray_user = data["UP"]
     
-    timeArray_user = date2num(timeArray_user)
+    #timeArray_user = date2num(timeArray_user)
     
     UPArray_user = np.where(UPArray_user == True, 1, 0)
     
     return (timeArray, UPArray), (timeArray_user, UPArray_user)
+
+def overallUpTime(service):
+    # Open the outageReportArchive and do a summary
+    path = filepath + service + "/outageReportArchive.csv"
     
+    size = os.path.getsize(path)
     
+    if size == len(cols):
+        return None
+    
+    # Define a custom converter for the date column
+    date_converter = lambda x: np.datetime64(x.decode("utf-8"))
+    
+    # Specify the data types and converters for each column
+    dtypes = np.dtype([("date", "datetime64[s]"), ("UP", "bool")])
+    converters = {"date": date_converter}
+
+    # Load the CSV file into a NumPy array
+    logger.info(f"[LOG]: trying to open data from {path}")
+    data = np.genfromtxt(path, delimiter=",", names=True, dtype=dtypes, converters=converters)
+    
+    UPArray = data["UP"]
+    UPArray = np.where(UPArray == True, 1, 0)
+    
+    count_up = np.count_nonzero(UPArray)
+    count_down = len(UPArray) - count_up
+    
+    return count_up/len(UPArray), count_down/len(UPArray)
+
 
 if __name__ == "__main__":
   dummyData()

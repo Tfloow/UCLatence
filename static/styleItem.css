@@ -83,7 +83,7 @@ h2{
 .graph-container {
     flex: 1;
     margin: 10px;
-    max-width: 50%; /* Each canvas should take half of the container width */
+    max-width: 100%; /* Each canvas should take half of the container width */
     width: 100%; /* Ensures canvas fills its container */
 }
 

@@ -260,7 +260,10 @@ async def service_details_app(service: str):
     Report, user_report = dataReport.dataForChart(service)
     timeArray, UPArray = Report 
     userTimeArray, userUPArray = user_report
-    return render_template("itemWebsite.html", service=service_details(service), data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray})
+    
+    percent_up, percent_down = dataReport.overallUpTime(service)
+        
+    return render_template("itemWebsite.html", service=service_details(service), data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray}, percent={"up": percent_up, "down": percent_down})
 
 
 @app.errorhandler(404)

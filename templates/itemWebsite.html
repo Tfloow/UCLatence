@@ -47,6 +47,11 @@
                 <canvas id="myChart_user"></canvas>
             </div>
         </div>
+        <div class="graph-container">
+            <div class="canvas-container">
+                <canvas id="stat"></canvas>
+            </div>
+        </div>
     </div>
     
 
@@ -104,15 +109,10 @@
             },
             options: {
                 scales: {
-                    yAxes: [{
-                        display: true,
-                        ticks: {
-                            suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-                            max:1,
-                            // OR //
-                            beginAtZero: true   // minimum value will be 0.
-                        }
-                    }]
+                    y: {
+                        min: 0,
+                        max: 1.1
+                    }
                 },
                 plugins: {
                     title: {
@@ -148,20 +148,44 @@
             },
             options: {
                 scales: {
-                    yAxes: [{
-                        display: true,
-                        ticks: {
-                            suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-                            max:1,
-                            // OR //
-                            beginAtZero: true   // minimum value will be 0.
-                        }
-                    }]
+                    y: {
+                        min: 0,
+                        max: 1.1
+                    }
                 },
                 plugins: {
                     title: {
                         display: true,
                         text: "{{ _('Reported UPTime from User') }}"
+                    }
+                }
+            }
+        });
+
+        var ctx_stat = document.getElementById('stat');
+        var myChart_stat = new Chart(ctx_stat, {
+            type: 'doughnut',
+            data: {
+                labels: ['{{ _("UP") }}', '{{ _("DOWN") }}'],
+                datasets: [{
+                    label: "{{ _('Status') }}",
+                    data: [{{ percent.up }}, {{ percent.down }}],
+                    backgroundColor: [
+                        'green',
+                        'red'
+                    ],
+                    borderColor: [
+                        'green',
+                        'red'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "{{ _('Global Status ') }} {{ percent.up * 100}}  %"
                     }
                 }
             }
