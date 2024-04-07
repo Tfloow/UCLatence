@@ -292,10 +292,10 @@ def page_not_found(_=None):
 @asynccontextmanager
 async def lifespan(api: FastAPI):
     # Start the scheduler
-    scheduler.start()
+    # scheduler.start()
     yield
     # Stop the scheduler
-    scheduler.shutdown()
+    # scheduler.shutdown()
 
 # Define the FastAPI app and its routes ################################################################################
 # !!! DO NOT move the `api.mount(...)` statement before the `@api....` functions !!! ###################################
