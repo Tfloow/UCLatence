@@ -18,9 +18,9 @@ try:
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
     from apscheduler.jobstores.memory import MemoryJobStore
     from contextlib import asynccontextmanager
+    from lock import *
     #from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
     #import datetime
-    import atexit
     
     # Own modules
     from models import *
@@ -45,6 +45,7 @@ JSON_FILE_SERVICES = "services.json"
 services = Services.load_from_json_file(JSON_FILE_SERVICES, webhooks=webhooks)
 webhooks._set_services(webhooks)
 
+# APSCHEDULER ##########################################################################################################
 
 def updateStatusService(service: str, session=None):
     url = services.get_service(service).url
@@ -92,33 +93,8 @@ def plotServices():
         logger.info("[LOG]: starting plot for user report")
         dataReport.plot(service.name, False)
         logger.info("[LOG]: Finished plot for user report")
-    
+       
 
-# Setup Scheduler to periodically check the status of the website
-#scheduler = BackgroundScheduler()
-#refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60)
-#plotJob = scheduler.add_job(plotServices, "interval", minutes=RECHECK_AFTER/60)
-
-# Start the scheduler
-#scheduler.start()
-
-# When the scheduler need to be stopped
-
-jobStores = {
-    "default": MemoryJobStore()
-}
-
-scheduler = AsyncIOScheduler(jobstores=jobStores, timezone="UTC")
-
-# Execute the refreshServices function every RECHECK_AFTER minutes
-@scheduler.scheduled_job("interval", seconds=RECHECK_AFTER)
-def scheduledRefresh():
-    refreshServices()
-    
-# Archive status at 3 AM UTC
-@scheduler.scheduled_job("cron", hour=3, minute=0, second=0)
-def scheduledArchive():
-    dataReport.archiveStatus()
 
 
 # ------------------ Start the Flask app ------------------
@@ -289,13 +265,43 @@ async def service_details_app(service: str):
 def page_not_found(_=None):
     return render_template("404.html")
 
-@asynccontextmanager
-async def lifespan(api: FastAPI):
-    # Start the scheduler
-    scheduler.start()
-    yield
-    # Stop the scheduler
-    scheduler.shutdown()
+# Setup Scheduler to periodically check the status of the website
+# When the scheduler need to be stopped
+
+fd = acquire("myfile.lock")
+
+if fd is None:
+    logger.error("[LOG]: Could not acquire lock, exiting.")
+    @asynccontextmanager
+    async def lifespan(api: FastAPI):
+        #Dummy
+        yield
+else:
+    jobStores = {
+        "default": MemoryJobStore()
+    }
+
+    scheduler = AsyncIOScheduler(jobstores=jobStores, timezone="UTC")
+
+    # Execute the refreshServices function every RECHECK_AFTER minutes
+    @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER)
+    def scheduledRefresh():
+        refreshServices()
+        
+    # Archive status at 3 AM UTC
+    @scheduler.scheduled_job("cron", hour=3, minute=0, second=0)
+    def scheduledArchive():
+        dataReport.archiveStatus()   
+    
+    @asynccontextmanager
+    async def lifespan(api: FastAPI):
+        # Start the scheduler
+        scheduler.start()
+        yield
+        # Stop the scheduler
+        scheduler.shutdown()
+
+
 
 # Define the FastAPI app and its routes ################################################################################
 # !!! DO NOT move the `api.mount(...)` statement before the `@api....` functions !!! ###################################
