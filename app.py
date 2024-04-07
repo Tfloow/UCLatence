@@ -13,7 +13,12 @@ try:
     # lazy_gettext is like the _ but handle the later evaluation of the text
     
     import csv
-    from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
+    
+    # To handle apscheduler
+    from apscheduler.schedulers.asyncio import AsyncIOScheduler
+    from apscheduler.jobstores.memory import MemoryJobStore
+    from contextlib import asynccontextmanager
+    #from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
     #import datetime
     import atexit
     
@@ -77,8 +82,6 @@ def refreshServices():
 
     session.close()
 
-    # To archive the current report daily to spare some memory
-    dataReport.archiveStatus()
     logger.info("[LOG]: Finished Refreshing the services")
 
 def plotServices():
@@ -92,15 +95,31 @@ def plotServices():
     
 
 # Setup Scheduler to periodically check the status of the website
-scheduler = BackgroundScheduler()
-refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60)
-plotJob = scheduler.add_job(plotServices, "interval", minutes=RECHECK_AFTER/60)
+#scheduler = BackgroundScheduler()
+#refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60)
+#plotJob = scheduler.add_job(plotServices, "interval", minutes=RECHECK_AFTER/60)
 
 # Start the scheduler
-scheduler.start()
+#scheduler.start()
 
 # When the scheduler need to be stopped
-atexit.register(lambda: scheduler.shutdown())
+
+jobStores = {
+    "default": MemoryJobStore()
+}
+
+scheduler = AsyncIOScheduler(jobstores=jobStores, timezone="UTC")
+
+# Execute the refreshServices function every RECHECK_AFTER minutes
+@scheduler.scheduled_job("interval", seconds=RECHECK_AFTER)
+def scheduledRefresh():
+    refreshServices()
+    
+# Archive status at 3 AM UTC
+@scheduler.scheduled_job("cron", hour=3, minute=0, second=0)
+def scheduledArchive():
+    dataReport.archiveStatus()
+
 
 # ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")
@@ -270,6 +289,13 @@ async def service_details_app(service: str):
 def page_not_found(_=None):
     return render_template("404.html")
 
+@asynccontextmanager
+async def lifespan(api: FastAPI):
+    # Start the scheduler
+    scheduler.start()
+    yield
+    # Stop the scheduler
+    scheduler.shutdown()
 
 # Define the FastAPI app and its routes ################################################################################
 # !!! DO NOT move the `api.mount(...)` statement before the `@api....` functions !!! ###################################
@@ -297,6 +323,7 @@ api = FastAPI(
         "name": "Wouter Vermeulen",
         "email": "wouter.vermeulen@student.uclouvain.be",
     },
+    lifespan=lifespan,
     # license_info={}, TODO
 )
 
