@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
     <title>{{ service.name }} - UCLouvain Down</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js to visualize data -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
     {% if service.is_up %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoUP.png">
@@ -36,19 +37,18 @@
     <div id="result"></div>
 
     <div class="container-plot">
-        <div id="log-plot" class="graph-container">
-            <img src="../static/img/log/{{ service.name }}.png" alt={{ _("Graph for status reported by user for %(name)s ", name=service.name) }} class="graph">
-            <br>
-            <a href="/extract?get={{ service.name }}" id="urlTO">{{ _("Download Log") }}</a> &nbsp; - &nbsp;
-            <a href="{{ url_for("static", filename='img/log/' + service.name + '.png') }}" download="{{ service.name }}-log.png" id="urlTO">{{ _("Download Graph") }}</a>
+        <div class="graph-container">
+            <div class="canvas-container">
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
-        <div id="down-plot" class="graph-container">
-            <img src="../static/img/log/outageReport{{ service.name }}.png" alt={{ _("Graph of previous status for %(name)s ", name=service.name) }} class="graph">
-            <br>
-            <a href="/extract?get={{ service.name }}_outage" id="urlTO">{{ _("Download Log") }}</a> &nbsp; - &nbsp;
-            <a href="{{ url_for("static", filename='img/log/outageReport' + service.name + '.png') }}" download="outageReport{{ service.name }}-log.png" id="urlTO">{{ _("Download Graph") }}</a>
+        <div class="graph-container">
+            <div class="canvas-container">
+                <canvas id="myChart_user"></canvas>
+            </div>
         </div>
     </div>
+    
 
 
 
@@ -57,4 +57,115 @@
 
 {% block script %}
     <script src="../static/script/itemWebsite.js"></script>
+
+    <script>
+        var pointBackgroundColors = [];
+
+        {% for up in data.status %}
+            if ({{ up }} == 1) {
+                pointBackgroundColors.push('green');
+            } else {
+                pointBackgroundColors.push('red');
+            }
+        {% endfor %}
+
+        var pointBackgroundColors_user = [];
+
+        {% for up in data_user.status %}
+            if ({{ up }} == 1) {
+                pointBackgroundColors_user.push('green');
+            } else {
+                pointBackgroundColors_user.push('red');
+            }
+        {% endfor %}
+
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for t in data.time %}
+                        '{{ t }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: "{{ _("Status") }}",
+                    data: [
+                        {% for up in data.status %}
+                            {{ up }},
+                        {% endfor %}
+                    ],
+                    fill: false,
+                    backgroundColor: pointBackgroundColors,
+                    borderColor: pointBackgroundColors,
+                    borderWidth: 1,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                            max:1,
+                            // OR //
+                            beginAtZero: true   // minimum value will be 0.
+                        }
+                    }]
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "{{ _('UPTime of the website') }}"
+                    }
+                }
+            }
+        });
+    
+        var ctx_user = document.getElementById('myChart_user');
+        var myChart_user = new Chart(ctx_user, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for t in data_user.time %}
+                        '{{ t }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: "{{ _('Status from User') }}",
+                    data: [
+                        {% for up in data_user.status %}
+                            {{ up }},
+                        {% endfor %}
+                    ],
+                    fill: false,
+                    backgroundColor: pointBackgroundColors_user,
+                    borderColor: pointBackgroundColors_user,
+                    borderWidth: 1,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                            max:1,
+                            // OR //
+                            beginAtZero: true   // minimum value will be 0.
+                        }
+                    }]
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "{{ _('Reported UPTime from User') }}"
+                    }
+                }
+            }
+        });
+    
+    </script>
 {% endblock %}

@@ -82,6 +82,8 @@ def dummyData():
                 log.write(data)
                 
 def plot(service, onlyOutageReport=False):
+    return
+    
     if not onlyOutageReport:
         logger.info("[LOG]: only plotting for user Report")
         toPlot = dict(userReport = filepath + service + "/log.csv")
@@ -201,14 +203,25 @@ def addReport(service, user_choice):
         
 def dataExtraction():
     # To get User's request
-    
-    os.system(f'cmd /c "curl {url}/extract?get=request -o data/request/log.csv"')
-    os.system(f'cmd /c "curl {url}/extract?get=log -o my_log.log"')
-    
-    for service in serviceList:
-        os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
-        os.system(f'cmd /c "curl {url}/extract?get={service}_outage -o data/{service}/outageReport.csv"')
-        os.system(f'cmd /c "curl {url}/extract?get={service}_outage_archive -o data/{service}/outageReportArchive.csv"')
+    # check if it is windows or linux
+    print(os.name)
+    if os.name == "nt":
+        
+        os.system(f'cmd /c "curl {url}/extract?get=request -o data/request/log.csv"')
+        os.system(f'cmd /c "curl {url}/extract?get=log -o my_log.log"')
+        
+        for service in serviceList:
+            os.system(f'cmd /c "curl {url}/extract?get={service} -o data/{service}/log.csv"')
+            os.system(f'cmd /c "curl {url}/extract?get={service}_outage -o data/{service}/outageReport.csv"')
+            os.system(f'cmd /c "curl {url}/extract?get={service}_outage_archive -o data/{service}/outageReportArchive.csv"')
+    else:
+        os.system(f"curl {url}/extract?get=request -o data/request/log.csv")
+        os.system(f"curl {url}/extract?get=log -o my_log.log")
+        
+        for service in serviceList:
+            os.system(f"curl {url}/extract?get={service} -o data/{service}/log.csv")
+            os.system(f"curl {url}/extract?get={service}_outage -o data/{service}/outageReport.csv")
+            os.system(f"curl {url}/extract?get={service}_outage_archive -o data/{service}/outageReportArchive.csv") 
         
 def getLastReport(service):
     with open("data/" + service + "/log.csv", "r") as file:
@@ -272,7 +285,6 @@ def reportStatus(services, service, PLOT=False):
         plot(service, False)
         logger.info("[LOG]: Finished plot for user report")
     
-
 def archiveStatus():
     # We archive between 2 AM and 2 AM + time for a request
     start_archive = time(2, 0)
@@ -302,9 +314,65 @@ def archiveStatus():
             # Start with a fresh blank file
             with open(filepath + service + "/outageReport.csv", "w") as blankCurrent:
                 blankCurrent.write(cols)
-                
+
+def dataForChart(service):
+    path = filepath + service + "/outageReport.csv"
+    
+    size = os.path.getsize(path)
+    
+    if size == len(cols):
+        return None
+    
+    # Define a custom converter for the date column
+    date_converter = lambda x: np.datetime64(x.decode("utf-8"))
+    
+    # Specify the data types and converters for each column
+    dtypes = np.dtype([("date", "datetime64[s]"), ("UP", "bool")])
+    converters = {"date": date_converter}
+
+    # Load the CSV file into a NumPy array
+    logger.info(f"[LOG]: trying to open data from {path}")
+    data = np.genfromtxt(path, delimiter=",", names=True, dtype=dtypes, converters=converters)
+
+    # Print the loaded data
+    timeArray = data["date"]
+    UPArray = data["UP"]
+    
+    timeArray = date2num(timeArray)
+    
+    UPArray = np.where(UPArray == True, 1, 0)
+    
+    # Doing the same but for log.csv
+    path = filepath + service + "/log.csv"
+    
+    size = os.path.getsize(path)
+    
+        
+    if size == len(cols):
+        return None
+    
+    # Define a custom converter for the date column
+    date_converter = lambda x: np.datetime64(x.decode("utf-8"))
+    
+    # Specify the data types and converters for each column
+    dtypes = np.dtype([("date", "datetime64[s]"), ("UP", "bool")])
+    converters = {"date": date_converter}
+
+    # Load the CSV file into a NumPy array
+    logger.info(f"[LOG]: trying to open data from {path}")
+    data = np.genfromtxt(path, delimiter=",", names=True, dtype=dtypes, converters=converters)
+
+    # Print the loaded data
+    timeArray_user = data["date"]
+    UPArray_user = data["UP"]
+    
+    timeArray_user = date2num(timeArray_user)
+    
+    UPArray_user = np.where(UPArray_user == True, 1, 0)
+    
+    return (timeArray, UPArray), (timeArray_user, UPArray_user)
     
     
 
 if __name__ == "__main__":
-  dataExtraction()
+  dummyData()

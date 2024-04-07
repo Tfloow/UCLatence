@@ -253,7 +253,14 @@ async def service_details_app(service: str):
     if service not in services:
         return page_not_found()
     print(f"[LOG]: HTTP request for {service}")
-    return render_template("itemWebsite.html", service=service_details(service))
+    """
+    data: looks like this: {"time": ["2021-10-10 10:10:10"], "status": [1]}
+    """
+    # Read from the CSV file
+    Report, user_report = dataReport.dataForChart(service)
+    timeArray, UPArray = Report 
+    userTimeArray, userUPArray = user_report
+    return render_template("itemWebsite.html", service=service_details(service), data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray})
 
 
 @app.errorhandler(404)
