@@ -4,6 +4,7 @@ from fastapi import Body
 from pydantic import BaseModel, Field, ValidationError, RootModel, HttpUrl, computed_field
 import requests
 from typing import List, Dict, Annotated, Set, Any, Iterable
+from logger_config import *
 
 from utilities import hash_password
 
@@ -237,7 +238,7 @@ class Service(BaseModel):
         if self.status is None or True: #(now - self.last_checked).total_seconds() > RECHECK_AFTER: maybe this was the cause of the duplication bug
             try:
                 if session is None:
-                    new_is_up = requests.head(self.url, headers=headers).status_code < 400
+                    new_is_up = requests.head(self.url, headers=headers, timeout=60, allow_redirects=True).status_code < 400
                 else:
                     new_is_up = session.head(self.url, headers=headers).status_code < 400
                 self.last_checked = now
@@ -248,8 +249,11 @@ class Service(BaseModel):
                     for webhook in self.__webhooks.values():
                         webhook.send_callback(self)
                     self.status = new_is_up
-            except:
-                return False
+            except Exception as error:
+                logger.warning(f"[LOG]: Error {error}")
+                logger.info(f"[LOG]: Error when checking the status of {self.name}")
+                new_is_up = False
+                self.last_checked = now
 
         self.__parent.dump_json()
 
