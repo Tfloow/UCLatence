@@ -241,19 +241,19 @@ class Service(BaseModel):
                     new_is_up = requests.head(self.url, headers=headers, timeout=60, allow_redirects=True).status_code < 400
                 else:
                     new_is_up = session.head(self.url, headers=headers).status_code < 400
-                self.last_checked = now
-
-                if self.status is None:
-                    self.status = new_is_up
-                elif self.status != new_is_up:
-                    for webhook in self.__webhooks.values():
-                        webhook.send_callback(self)
-                    self.status = new_is_up
             except Exception as error:
                 logger.warning(f"[LOG]: Error {error}")
                 logger.info(f"[LOG]: Error when checking the status of {self.name}")
                 new_is_up = False
-                self.last_checked = now
+            
+            self.last_checked = now
+            if self.status is None:
+                self.status = new_is_up
+            elif self.status != new_is_up:
+                for webhook in self.__webhooks.values():
+                    webhook.send_callback(self)
+                self.status = new_is_up
+
 
         self.__parent.dump_json()
 
