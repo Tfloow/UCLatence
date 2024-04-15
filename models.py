@@ -229,21 +229,27 @@ class Service(BaseModel):
         """
         now = dt.datetime.utcnow()
         headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) "
-                                 "Chrome/81.0.4044.141 Safari/537.36"}
+                                 "Chrome/81.0.4044.141 Safari/537.36",
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                    "Pragma": "no-cache",
+                    "Expires": "0"}
 
         if self.status is None or True: #(now - self.last_checked).total_seconds() > RECHECK_AFTER: maybe this was the cause of the duplication bug
-            if session is None:
-                new_is_up = requests.head(self.url, headers=headers).status_code < 400
-            else:
-                new_is_up = session.head(self.url, headers=headers).status_code < 400
-            self.last_checked = now
+            try:
+                if session is None:
+                    new_is_up = requests.head(self.url, headers=headers).status_code < 400
+                else:
+                    new_is_up = session.head(self.url, headers=headers).status_code < 400
+                self.last_checked = now
 
-            if self.status is None:
-                self.status = new_is_up
-            elif self.status != new_is_up:
-                for webhook in self.__webhooks.values():
-                    webhook.send_callback(self)
-                self.status = new_is_up
+                if self.status is None:
+                    self.status = new_is_up
+                elif self.status != new_is_up:
+                    for webhook in self.__webhooks.values():
+                        webhook.send_callback(self)
+                    self.status = new_is_up
+            except:
+                return False
 
         self.__parent.dump_json()
 
