@@ -235,24 +235,27 @@ class Service(BaseModel):
                     "Pragma": "no-cache",
                     "Expires": "0"}
 
-        if self.status is None or True: #(now - self.last_checked).total_seconds() > RECHECK_AFTER: maybe this was the cause of the duplication bug
-            try:
-                if session is None:
-                    new_is_up = requests.head(self.url, headers=headers, timeout=60, allow_redirects=True).status_code < 400
-                else:
-                    new_is_up = session.head(self.url, headers=headers).status_code < 400
-            except Exception as error:
-                logger.warning(f"[LOG]: Error {error}")
-                logger.info(f"[LOG]: Error when checking the status of {self.name}")
-                new_is_up = False
-            
-            self.last_checked = now
-            if self.status is None:
-                self.status = new_is_up
-            elif self.status != new_is_up:
-                for webhook in self.__webhooks.values():
-                    webhook.send_callback(self)
-                self.status = new_is_up
+        #if self.status is None or True: #(now - self.last_checked).total_seconds() > RECHECK_AFTER: maybe this was the cause of the duplication bug
+        try:
+            if session is None:
+                new_is_up = requests.head(self.url, headers=headers, timeout=60, allow_redirects=True).status_code < 400
+            else:
+                new_is_up = session.head(self.url, headers=headers).status_code < 400
+        except Exception as error:
+            logger.warning(f"[LOG]: Error {error}")
+            logger.info(f"[LOG]: Error when checking the status of {self.name}")
+            new_is_up = False
+        
+        print(f"[LOG]: {self.name} is up: {new_is_up}")
+        
+        self.last_checked = now
+        self.status = new_is_up
+        if self.status is None:
+            self.status = new_is_up
+        elif self.status != new_is_up:
+            for webhook in self.__webhooks.values():
+                webhook.send_callback(self)
+            self.status = new_is_up
 
 
         self.__parent.dump_json()
