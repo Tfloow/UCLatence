@@ -1,4 +1,108 @@
-date,UP
-2024-01-25T02:21:35,True
-2024-01-25T02:21:35,True
-2024-01-25T02:31:35,True
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8NE1H2V6SH"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-8NE1H2V6SH');
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-WN9S28RW');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="aGMTsvUStNIejr6z4Ew8Mdme0SpSLKKjPE9uNbrKQzE" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content=UCLouvain Down Detector - Real-time outage reports for UCLouvain services. Check if moodle, intranet, your mail are down. Report the status of a website easily and see past outages>
+    <meta name="keywords" content=UCLouvain, monitoring, outage, status, university services, downtime, downdetector, students>
+    <meta name="author" content=EPL Students>
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="og:title" content=UCLouvain Down Detector>
+    <meta name="og:description" content=Real-time outage reports for UCLouvain services>
+    <meta name="og:type" content="website">
+    <meta name="og:url" content="https://www.uclouvain-down.be">
+    <meta name="og:image" content="/static/ico/icoDOWN.png">
+
+
+    
+    <title>404</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
+
+
+    <link rel="stylesheet" href="/static/main.css">
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WN9S28RW"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/"><span class="header-button"> <b> Home</b> </span></a>
+        <a href="/serviceList"><span class="header-button"> <b> ServiceList</b> </span></a>
+        <a href="/request"><span class="header-button"> <b>Request Service</b> </span></a>
+        <a href="/info"><span class="header-button"> <b>Info</b> </span></a>
+        <a href="/api/docs"><span class="header-button"> <b>API</b> </span></a>
+    </div>
+
+    <div id="header">
+        <div class="header-buttons" id="hb">
+            <a href="/"><span class="header-button"> <b> Home</b> </span></a>
+            <a href="/serviceList"><span class="header-button"> <b> ServiceList</b> </span></a>
+            <a href="/request"><span class="header-button"> <b>Request Service</b> </span></a>
+            <a href="/info"><span class="header-button"> <b>Info</b> </span></a>
+            <a href="/api/docs"><span class="header-button"> <b>API</b> </span></a>
+        </div>
+
+        <span onclick="openNav()" id="menu">&#9776;</span>
+
+        <div class="right-buttons">
+            <select name="Language" id="language-select">
+                
+                    <option value="en" >en</option>
+                
+                    <option value="fr" >fr</option>
+                
+            </select>
+            <a href="https://github.com/Tfloow/UCLouvainDown"><span class="header-button"> <b>Github</b> </span></a>
+        </div>
+    </div>
+    
+    
+
+    <h1>404 - Not Found</h1>
+    <h2>The page you are looking for is certainly not here</h2>
+
+
+
+    <footer>
+        <p> 
+            <a href="https://github.com/Tfloow/UCLouvainDown" class="github-footer">Github</a> -
+            <a href="https://github.com/Tfloow/UCLouvainDown/issues" class="github-footer">Issue or Request ?</a> -
+            <a href="https://github.com/Tfloow/UCLouvainDown#introduction" class="github-footer">What is this ?</a> - 
+            <a href="/info" class="github-footer">Info</a>
+        </p>
+    </footer>
+
+    <script src="/static/script/languageSelection.js"></script>
+    <script src="/static/script/sideBar.js"></script>
+
+    
+
+    
+</body>
+</html>

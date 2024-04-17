@@ -284,7 +284,7 @@ else:
     scheduler = AsyncIOScheduler(jobstores=jobStores, timezone="UTC")
 
     # Execute the refreshServices function every RECHECK_AFTER minutes and immediately run at the first time
-    @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER, next_run_time=datetime.datetime.utcnow())
+    @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER)
     def scheduledRefresh():
         refreshServices()
         
