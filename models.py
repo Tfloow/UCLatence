@@ -233,10 +233,15 @@ class Service(BaseModel):
                                  "Chrome/81.0.4044.141 Safari/537.36"}
 
         logger.info(f"[LOG]: Checking status of {self.name}")
-        if session is None:
-            new_is_up = requests.head(self.url, headers=headers, timeout=10).status_code < 400
-        else:
-            new_is_up = session.head(self.url, headers=headers, timeout=10).status_code < 400
+        try:
+            if session is None:
+                new_is_up = requests.head(self.url, headers=headers, timeout=10).status_code < 400
+            else:
+                new_is_up = session.head(self.url, headers=headers, timeout=10).status_code < 400
+        except: 
+            logger.warning(f"[LOG]: {self.name} is down")
+            new_is_up = False
+            
         self.last_checked = now
 
         if self.status is None:
