@@ -12,9 +12,7 @@ try:
     from flask_babel import lazy_gettext as _l
     import sqlite3
     # lazy_gettext is like the _ but handle the later evaluation of the text
-    
-    import csv
-    
+        
     # To handle apscheduler
     from apscheduler.schedulers.asyncio import AsyncIOScheduler
     from apscheduler.jobstores.memory import MemoryJobStore
@@ -30,9 +28,6 @@ try:
     from logger_config import *
     
     import sql
-    
-    # For compatibility
-    import dataReport
 except ImportError as e:
     logger.warning(f"[LOG] Error on startup: not all packages could be properly imported:\n{e}.")
     raise exit(1)
@@ -147,7 +142,6 @@ def requestServie():
     if len(serviceName) > 0:
         # If someone wrote in the form
         # IF I REMOVE THIS LINE NO MORE NEED FOR THAT DEPRECATED FILE
-        dataReport.newRequest(serviceName, url, info)
         feedback = "Form submitted successfully!"
 
     return render_template("request.html", feedback=feedback)
@@ -240,13 +234,7 @@ else:
     # Execute the refreshServices function every RECHECK_AFTER minutes
     @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER, next_run_time=dt.datetime.utcnow())
     def scheduledRefresh():
-        refreshServices()
-        
-    # Archive status at 3 AM UTC
-    @scheduler.scheduled_job("cron", hour=3, minute=0, second=0)
-    def scheduledArchive():
-        logger.info("Deprecated Skipping Archive")
-        #dataReport.archiveStatus()   
+        refreshServices() 
     
     @asynccontextmanager
     async def lifespan(api: FastAPI):

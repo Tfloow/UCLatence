@@ -1,4 +1,17 @@
 {% extends "base.html" %}
+
+{% block card %}
+<meta name="og:title" content="{{ service.name }} - UCLouvain Down Detector">
+<meta name="og:description" content="{{ service.name }}: {{ service.is_up }} More information on the website">
+<meta name="og:type" content="website">
+<meta name="og:url" content="https://www.uclouvain-down.be">
+{% if service.is_up %}
+    <meta name="og:image" content="{{ url_for('static', filename='ico/icoUP.png') }}">
+{% else %}
+    <meta name="og:image" content="{{ url_for('static', filename='ico/icoDOWN.png') }}">
+{% endif %}
+{% endblock %}
+
 {% block head %}
     <title>{{ service.name }} - UCLouvain Down</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js to visualize data -->
@@ -27,12 +40,13 @@
     <br>
     <br>
 
+    <!-- Temporary disabled while I polish the backend
     <p id="down-user">
         <h3> {{ _("Is this website currently working for you ?") }}</h3>
         <br>
-        <button class="yes" onclick="sendChoice('yes', '{{ service.name }}')"  >{{ _("Yes !") }} </button>     <!-- onclick="sendChoice('yes', '{{ service.name }}')"-->
-        <button class="no"  onclick="sendChoice('no', '{{ service.name }}')"  >{{ _("No !") }} </button>        <!-- onclick="sendChoice('no', '{{ service.name }}')"-->
-    </p>
+        <button class="yes" onclick="sendChoice('yes', '{{ service.name }}')"  >{{ _("Yes !") }} </button>     
+        <button class="no"  onclick="sendChoice('no', '{{ service.name }}')"  >{{ _("No !") }} </button>      
+    </p>-->
 
     <div id="result"></div>
 

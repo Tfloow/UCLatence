@@ -29,11 +29,14 @@
     <meta name="author" content={{ _("EPL Students") }}>
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
+
+    {% block card %}
     <meta name="og:title" content={{ _("UCLouvain Down Detector") }}>
     <meta name="og:description" content={{ _("Real-time outage reports for UCLouvain services") }}>
     <meta name="og:type" content="website">
     <meta name="og:url" content="https://www.uclouvain-down.be">
     <meta name="og:image" content="{{ url_for('static', filename='ico/icoDOWN.png') }}">
+    {% endblock %}
 
 
     {% block head %}
