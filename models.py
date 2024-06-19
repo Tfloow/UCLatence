@@ -234,9 +234,9 @@ class Service(BaseModel):
 
         logger.info(f"[LOG]: Checking status of {self.name}")
         if session is None:
-            new_is_up = requests.head(self.url, headers=headers, timeout=5).status_code < 400
+            new_is_up = requests.head(self.url, headers=headers, timeout=10).status_code < 400
         else:
-            new_is_up = session.head(self.url, headers=headers, timeout=5).status_code < 400
+            new_is_up = session.head(self.url, headers=headers, timeout=10).status_code < 400
         self.last_checked = now
 
         if self.status is None:
