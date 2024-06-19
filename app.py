@@ -20,7 +20,7 @@ try:
     from contextlib import asynccontextmanager
     from lock import *
     #from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
-    import datetime
+    #import datetime
     
     # Own modules
     from models import *
@@ -283,7 +283,7 @@ else:
 
     scheduler = AsyncIOScheduler(jobstores=jobStores, timezone="UTC")
 
-    # Execute the refreshServices function every RECHECK_AFTER minutes and immediately run at the first time
+    # Execute the refreshServices function every RECHECK_AFTER minutes
     @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER)
     def scheduledRefresh():
         refreshServices()
