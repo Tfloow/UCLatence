@@ -3,7 +3,7 @@
     "name": "ADE",
     "url": "https://horaire.uclouvain.be:443",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:51.679351",
+    "last_checked": "2024-06-19T13:25:28.526227",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -11,7 +11,7 @@
     "name": "ADE-Scheduler",
     "url": "https://ade-scheduler.info.ucl.ac.be/calendar/",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:56.897257",
+    "last_checked": "2024-06-19T13:25:33.906068",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -19,7 +19,7 @@
     "name": "Comproved",
     "url": "https://app.comproved.com/universite-de-louvain",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:57.321289",
+    "last_checked": "2024-06-19T13:25:34.279674",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -27,7 +27,7 @@
     "name": "Gradescope",
     "url": "https://www.gradescope.com/",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:57.650008",
+    "last_checked": "2024-06-19T13:25:34.544794",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -35,7 +35,7 @@
     "name": "Intranet",
     "url": "https://intranet.uclouvain.be",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:58.486849",
+    "last_checked": "2024-06-19T13:25:35.264841",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -43,7 +43,7 @@
     "name": "Moodle",
     "url": "https://moodle.uclouvain.be/",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:58.643666",
+    "last_checked": "2024-06-19T13:25:35.390267",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -51,7 +51,7 @@
     "name": "UCLouvain",
     "url": "https://www.uclouvain.be/",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.160726",
+    "last_checked": "2024-06-19T13:25:35.910310",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -59,7 +59,7 @@
     "name": "Inginious",
     "url": "https://inginious.info.ucl.ac.be/",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.280212",
+    "last_checked": "2024-06-19T13:25:36.016732",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -67,7 +67,7 @@
     "name": "UDS",
     "url": "https://uds.siws.ucl.ac.be/",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.352475",
+    "last_checked": "2024-06-19T13:25:36.090782",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -75,7 +75,7 @@
     "name": "UCLSport",
     "url": "https://sites.uclouvain.be/uclsport/",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.429829",
+    "last_checked": "2024-06-19T13:25:36.168737",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -83,7 +83,7 @@
     "name": "LEPL1104",
     "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1104.php",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.545149",
+    "last_checked": "2024-06-19T13:25:36.292835",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -91,7 +91,7 @@
     "name": "LEPL1110",
     "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1110.php",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.677615",
+    "last_checked": "2024-06-19T13:25:36.418558",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -99,7 +99,7 @@
     "name": "LEPL1201",
     "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1201.php",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.729738",
+    "last_checked": "2024-06-19T13:25:36.460958",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -107,15 +107,15 @@
     "name": "IDP-Logging",
     "url": "https://idp.uclouvain.be",
     "is_up": true,
-    "last_checked": "2024-06-19T10:35:59.774951",
+    "last_checked": "2024-06-19T13:25:36.508643",
     "is_up_user": true,
     "last_user_report": "2024-01-25T15:27:38.889172"
   },
-  "404-Test": {
-    "name": "404-Test",
+  "Test-404": {
+    "name": "Test-404",
     "url": "https://www.google.com/404",
     "is_up": false,
-    "last_checked": "2024-06-19T10:35:59.853557",
+    "last_checked": "2024-06-19T13:25:36.586190",
     "is_up_user": true,
     "last_user_report": "2024-01-25T15:27:38.889172"
   }

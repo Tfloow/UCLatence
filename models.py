@@ -259,6 +259,12 @@ class Service(BaseModel):
         """
         # self.status_changed() Because the update of the status should only be done periodically
         return self.status
+    
+    def up_time(self) -> tuple[bool, dt.datetime]:
+        """
+        Returns the current status of the service and the time at which this status was last checked.
+        """
+        return (self.is_up, self.last_checked)
 
     def modify_webhooks(self, webhooks: List[WebhookComplete]):
         """

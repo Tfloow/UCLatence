@@ -10,6 +10,7 @@ try:
     from flask_babel import Babel, _
     # _ to evaluate the text and translate it
     from flask_babel import lazy_gettext as _l
+    import sqlite3
     # lazy_gettext is like the _ but handle the later evaluation of the text
     
     import csv
@@ -54,6 +55,34 @@ def refreshServices():
     services.update_status(session)
 
     session.close()
+    
+    services_name = services.names
+    
+    # Connect to the SQLite database
+    conn = sqlite3.connect('data/outage.sqlite3')
+    cursor = conn.cursor()
+    
+    for service in services_name:
+        up, time = services.get_service(service).up_time()
+        
+        table_name = service.replace('.', '_')  # Replace dots with underscores for table name
+        table_name = table_name.replace('-', '_')  # Replace dashes with underscores for table name
+
+        logger.info(f"[LOG]: Updating {service} status to {up} at {time}")
+        
+        # Insert the status update
+        cursor.execute(f'''
+            INSERT INTO {table_name} (timestamp, status, user)
+            VALUES (?, ?, ?)
+        ''', (time, up, 0))
+        
+        logger.info(f"[LOG]: {service} status updated successfully")
+    
+    # Commit the transaction
+    conn.commit()
+
+    # Close the connection
+    conn.close()
 
     logger.info("[LOG]: Finished Refreshing the services")
 
@@ -113,6 +142,7 @@ def requestServie():
             
     if len(serviceName) > 0:
         # If someone wrote in the form
+        # IF I REMOVE THIS LINE NO MORE NEED FOR THAT DEPRECATED FILE
         dataReport.newRequest(serviceName, url, info)
         feedback = "Form submitted successfully!"
 
@@ -128,25 +158,14 @@ def process():
     if user_choice == 'yes':
         logger.info('Great! The website is working for you.')
         
-        if service is None:
-            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
-        else:
-            # next_run_time_with_refresh = refreshJob.next_run_time
-            # scheduler.add_job(dataReport.addReport, "date", args=[service, True], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
-            # Extra 10 seconds to make sure it is done after the main task 
-            dataReport.addReport(service, True)
+        ### HERE GOES THE SQL FOR USER REPORT
 
         return _('Great! The website is working for you.')
     elif user_choice == 'no':
         logger.info('The website is down for me too.')
         
-        if service is None:
-            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
-        else:
-            # next_run_time_with_refresh = refreshJob.next_run_time
-            # scheduler.add_job(dataReport.addReport, "date", args=[service, False], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
-            # Extra 10 seconds to make sure it is done after the main task
-            dataReport.addReport(service, False)
+        ### HERE GOES THE SQL FOR USER REPORT
+
 
         return _('The website is down for me too.')
     else:
@@ -156,40 +175,11 @@ def process():
 @app.route("/extract")
 def extractLog():
     get_what_to_extract = request.args.get("get")
-    
-    if services.get_service(get_what_to_extract.split("_")[0]) is not None or get_what_to_extract == "request" or get_what_to_extract == "log":
-        if get_what_to_extract == "log":
-            with open("my_log.log", "r") as file:
-                log_content = file.read()
 
-            response = make_response(log_content)
-
-            response.headers["Content-Type"] = "text/plain"  # Set the content type for log files
-            response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.log"
-
-            return response
-        
-        logger.info(get_what_to_extract.split("_"))
-        
-        if len(get_what_to_extract.split("_")) == 2:
-            # when we want to extract the past outages not the user outages
-            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReport.csv"
-        elif  len(get_what_to_extract.split("_")) == 3:
-            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReportArchive.csv"
-        else:
-            path = "data/" + get_what_to_extract + "/log.csv"
-            
-        with open(path, "r") as file:
-            csv_data = list(csv.reader(file, delimiter=","))
-
-        response = make_response()
-        csv_write = csv.writer(response.stream)
-        csv_write.writerows(csv_data)
-
-        response.headers["Content-Type"] = "text/csv"
-        response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.csv"
-        
-        return response
+    if get_what_to_extract.lower() == "all" or get_what_to_extract.lower == "outage":
+        # send the data/outage.sqlite3 file
+        return send_from_directory("data", "outage.sqlite3")
+    # Make some smarter query using SQL
     else:
         return render_template("404.html")
 
@@ -240,7 +230,7 @@ else:
     scheduler = AsyncIOScheduler(jobstores=jobStores, timezone="UTC")
 
     # Execute the refreshServices function every RECHECK_AFTER minutes
-    @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER)
+    @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER, next_run_time=dt.datetime.utcnow())
     def scheduledRefresh():
         refreshServices()
         
