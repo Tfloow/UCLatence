@@ -232,19 +232,19 @@ class Service(BaseModel):
         headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) "
                                  "Chrome/81.0.4044.141 Safari/537.36"}
 
-        if self.status is None or True: #(now - self.last_checked).total_seconds() > RECHECK_AFTER: maybe this was the cause of the duplication bug
-            if session is None:
-                new_is_up = requests.head(self.url, headers=headers).status_code < 400
-            else:
-                new_is_up = session.head(self.url, headers=headers).status_code < 400
-            self.last_checked = now
+        logger.info(f"[LOG]: Checking status of {self.name}")
+        if session is None:
+            new_is_up = requests.head(self.url, headers=headers, timeout=5).status_code < 400
+        else:
+            new_is_up = session.head(self.url, headers=headers, timeout=5).status_code < 400
+        self.last_checked = now
 
-            if self.status is None:
-                self.status = new_is_up
-            elif self.status != new_is_up:
-                for webhook in self.__webhooks.values():
-                    webhook.send_callback(self)
-                self.status = new_is_up
+        if self.status is None:
+            self.status = new_is_up
+        elif self.status != new_is_up:
+            for webhook in self.__webhooks.values():
+                webhook.send_callback(self)
+            self.status = new_is_up
 
         self.__parent.dump_json()
 
@@ -337,6 +337,10 @@ class Services(RootModel):
             service.status_changed()
 
         self.dump_json()
+    
+    def update_status(self, session=None):
+        for service in self:
+            service.status_changed(session)
 
     def get_service(self, service_name: str) -> Service | None:
         """Get a service from the list, or None if it isn't monitored."""

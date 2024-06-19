@@ -47,53 +47,15 @@ webhooks._set_services(webhooks)
 
 # APSCHEDULER ##########################################################################################################
 
-def updateStatusService(service: str, session=None):
-    url = services.get_service(service).url
-    if not url:
-        logger.info("[LOG]: You passed a service that is not tracked")
-        return False
-    
-    logger.info(f"[LOG]: HTTP request for {url}")
-    
-    services.get_service(service).status_changed(session)
-
-    logger.info("[LOG]: got status ")
-    # REALLY IMPORTANT TO KEEP USING dataReport Library
-    dataReport.reportStatus(services, service)
-    
-    return True
-
-
-def statusService(service):
-    url = services.get_service(service).url
-    if not url:
-        logger.info("[LOG]: You passed a service that is not tracked")
-        return False
-    
-    return services[service]["Last status"]
-
-
 def refreshServices():
     logger.info("[LOG]: Refreshing the services")
     session = requests.Session()
     
-    for service in services:
-        logger.info(service)
-        updateStatusService(service.name, session)
+    services.update_status(session)
 
     session.close()
 
     logger.info("[LOG]: Finished Refreshing the services")
-
-def plotServices():
-    for service in services:
-        logger.info("[LOG]: starting plot for outage")
-        dataReport.plot(service.name, True)
-        logger.info("[LOG]: Finished plot for outage")
-        logger.info("[LOG]: starting plot for user report")
-        dataReport.plot(service.name, False)
-        logger.info("[LOG]: Finished plot for user report")
-       
 
 
 
@@ -251,14 +213,8 @@ async def service_details_app(service: str):
     """
     data: looks like this: {"time": ["2021-10-10 10:10:10"], "status": [1]}
     """
-    # Read from the CSV file
-    Report, user_report = dataReport.dataForChart(service)
-    timeArray, UPArray = Report 
-    userTimeArray, userUPArray = user_report
-    
-    percent_up, percent_down = dataReport.overallUpTime(service)
         
-    return render_template("itemWebsite.html", service=service_details(service), data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray}, percent={"up": percent_up, "down": percent_down})
+    return render_template("itemWebsite.html", service=service_details(service))#, data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray}, percent={"up": percent_up, "down": percent_down})
 
 
 @app.errorhandler(404)
@@ -291,7 +247,8 @@ else:
     # Archive status at 3 AM UTC
     @scheduler.scheduled_job("cron", hour=3, minute=0, second=0)
     def scheduledArchive():
-        dataReport.archiveStatus()   
+        logger.info("Deprecated Skipping Archive")
+        #dataReport.archiveStatus()   
     
     @asynccontextmanager
     async def lifespan(api: FastAPI):
