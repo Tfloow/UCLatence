@@ -235,9 +235,9 @@ class Service(BaseModel):
         logger.info(f"[LOG]: Checking status of {self.name}")
         try:
             if session is None:
-                new_is_up = requests.head(self.url, headers=headers, timeout=10).status_code < 400
+                new_is_up = requests.head(self.url, headers=headers).status_code < 400
             else:
-                new_is_up = session.head(self.url, headers=headers, timeout=10).status_code < 400
+                new_is_up = session.head(self.url, headers=headers).status_code < 400
         except: 
             logger.warning(f"[LOG]: {self.name} is down")
             new_is_up = False
@@ -249,7 +249,7 @@ class Service(BaseModel):
         elif self.status != new_is_up:
             for webhook in self.__webhooks.values():
                 webhook.send_callback(self)
-            self.status = new_is_up
+        self.status = new_is_up
 
         self.__parent.dump_json()
 
