@@ -29,6 +29,8 @@ try:
     from utilities import *
     from logger_config import *
     
+    import sql
+    
     # For compatibility
     import dataReport
 except ImportError as e:
@@ -64,6 +66,8 @@ def refreshServices():
     
     for service in services_name:
         up, time = services.get_service(service).up_time()
+        # convert time into unix timestamp
+        time = int(time.timestamp())
         
         table_name = service.replace('.', '_')  # Replace dots with underscores for table name
         table_name = table_name.replace('-', '_')  # Replace dashes with underscores for table name
@@ -203,8 +207,12 @@ async def service_details_app(service: str):
     """
     data: looks like this: {"time": ["2021-10-10 10:10:10"], "status": [1]}
     """
+    timeArray, UPArray = sql.get_latest_status(service)
+    userTimeArray, userUPArray = sql.get_latest_user_report(service)
+    percent_up = sql.get_percentage_uptime(service)
+    percent_down = 1 - percent_up
         
-    return render_template("itemWebsite.html", service=service_details(service))#, data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray}, percent={"up": percent_up, "down": percent_down})
+    return render_template("itemWebsite.html", service=service_details(service), data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray} , percent={"up": percent_up, "down": percent_down})
 
 
 @app.errorhandler(404)

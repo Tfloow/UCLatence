@@ -20,7 +20,7 @@ def create_table(website_name):
     print(f"Creating table {table_name}...")
     cursor.execute(f'''
         CREATE TABLE IF NOT EXISTS {table_name} (
-            timestamp TEXT,
+            timestamp INTEGER,
             status INTEGER,
             user INTEGER
         )

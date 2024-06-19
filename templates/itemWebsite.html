@@ -62,5 +62,134 @@
 
 {% block script %}
     <script src="../static/script/itemWebsite.js"></script>
+
+    <script>
+        var pointBackgroundColors = [];
+        
+        {% for up in data.status %}
+            if ({{ up }} == 1) {
+                pointBackgroundColors.push('green');
+            } else {
+                pointBackgroundColors.push('red');
+            }
+        {% endfor %}
+
+        var pointBackgroundColors_user = [];
+
+        {% for up in data_user.status %}
+            if ({{ up }} == 1) {
+                pointBackgroundColors_user.push('green');
+            } else {
+                pointBackgroundColors_user.push('red');
+            }
+        {% endfor %}
+
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for t in data.time %}
+                        '{{ t }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: "{{ _("Status") }}",
+                    data: [
+                        {% for up in data.status %}
+                            {{ up }},
+                        {% endfor %}
+                    ],
+                    fill: false,
+                    backgroundColor: pointBackgroundColors,
+                    borderColor: pointBackgroundColors,
+                    borderWidth: 1,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 1.1
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "{{ _('UPTime of the website') }}"
+                    }
+                }
+            }
+        });
+
+        var ctx_user = document.getElementById('myChart_user');
+        var myChart_user = new Chart(ctx_user, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for t in data_user.time %}
+                        '{{ t }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: "{{ _('Status from User') }}",
+                    data: [
+                        {% for up in data_user.status %}
+                            {{ up }},
+                        {% endfor %}
+                    ],
+                    fill: false,
+                    backgroundColor: pointBackgroundColors_user,
+                    borderColor: pointBackgroundColors_user,
+                    borderWidth: 1,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 1.1
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "{{ _('Reported UPTime from User') }}"
+                    }
+                }
+            }
+        });
+
+        var ctx_stat = document.getElementById('stat');
+        var myChart_stat = new Chart(ctx_stat, {
+            type: 'doughnut',
+            data: {
+                labels: ['{{ _("UP") }}', '{{ _("DOWN") }}'],
+                datasets: [{
+                    label: "{{ _('Status') }}",
+                    data: [{{ percent.up }}, {{ percent.down }}],
+                    backgroundColor: [
+                        'green',
+                        'red'
+                    ],
+                    borderColor: [
+                        'green',
+                        'red'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "{{ _('Global Status ') }} {{ percent.up * 100}}  %"
+                    }
+                }
+            }
+        });
+    </script>
 {% endblock %}
 
