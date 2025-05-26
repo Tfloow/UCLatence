@@ -4,6 +4,7 @@ from fastapi import Body
 from pydantic import BaseModel, Field, ValidationError, RootModel, HttpUrl, computed_field
 import requests
 from typing import List, Dict, Annotated, Set, Any, Iterable
+from logger_config import *
 
 from utilities import hash_password
 
@@ -231,19 +232,24 @@ class Service(BaseModel):
         headers = {"User-Agent": "Mozilla/5.0 (X11; CrOS x86_64 12871.102.0) AppleWebKit/537.36 (KHTML, like Gecko) "
                                  "Chrome/81.0.4044.141 Safari/537.36"}
 
-        if self.status is None or (now - self.last_checked).total_seconds() > RECHECK_AFTER:
+        logger.info(f"[LOG]: Checking status of {self.name}")
+        try:
             if session is None:
                 new_is_up = requests.head(self.url, headers=headers).status_code < 400
             else:
                 new_is_up = session.head(self.url, headers=headers).status_code < 400
-            self.last_checked = now
+        except: 
+            logger.warning(f"[LOG]: {self.name} is down")
+            new_is_up = False
+            
+        self.last_checked = now
 
-            if self.status is None:
-                self.status = new_is_up
-            elif self.status != new_is_up:
-                for webhook in self.__webhooks.values():
-                    webhook.send_callback(self)
-                self.status = new_is_up
+        if self.status is None:
+            self.status = new_is_up
+        elif self.status != new_is_up:
+            for webhook in self.__webhooks.values():
+                webhook.send_callback(self)
+        self.status = new_is_up
 
         self.__parent.dump_json()
 
@@ -258,6 +264,12 @@ class Service(BaseModel):
         """
         # self.status_changed() Because the update of the status should only be done periodically
         return self.status
+    
+    def up_time(self) -> tuple[bool, dt.datetime]:
+        """
+        Returns the current status of the service and the time at which this status was last checked.
+        """
+        return (self.is_up, self.last_checked)
 
     def modify_webhooks(self, webhooks: List[WebhookComplete]):
         """
@@ -336,6 +348,10 @@ class Services(RootModel):
             service.status_changed()
 
         self.dump_json()
+    
+    def update_status(self, session=None):
+        for service in self:
+            service.status_changed(session)
 
     def get_service(self, service_name: str) -> Service | None:
         """Get a service from the list, or None if it isn't monitored."""

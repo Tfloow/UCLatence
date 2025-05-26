@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
@@ -8,97 +8,97 @@
 
 
 <url>
-  <loc>https://uclouvain-down.be/</loc>
+  <loc>https://www.uclouvain-down.be/</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/serviceList</loc>
+  <loc>https://www.uclouvain-down.be/serviceList</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/request</loc>
+  <loc>https://www.uclouvain-down.be/request</loc>
+  <lastmod>2024-01-30T15:37:13+00:00</lastmod>
+  <priority>0.80</priority>   
+</url>
+<url>
+  <loc>https://www.uclouvain-down.be/api/docs</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/api/docs</loc>
+  <loc>https://www.uclouvain-down.be/info</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/info</loc>
+  <loc>https://www.uclouvain-down.be/404-Test</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/404-Test</loc>
+  <loc>https://www.uclouvain-down.be/ADE</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/ADE</loc>
+  <loc>https://www.uclouvain-down.be/ADE-Scheduler</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/ADE-Scheduler</loc>
+  <loc>https://www.uclouvain-down.be/Comproved</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/Comproved</loc>
+  <loc>https://www.uclouvain-down.be/Gradescope</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/Gradescope</loc>
+  <loc>https://www.uclouvain-down.be/Intranet</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/Intranet</loc>
+  <loc>https://www.uclouvain-down.be/Moodle</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/Moodle</loc>
+  <loc>https://www.uclouvain-down.be/UCLouvain</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/UCLouvain</loc>
+  <loc>https://www.uclouvain-down.be/Inginious</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/Inginious</loc>
+  <loc>https://www.uclouvain-down.be/UDS</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/UDS</loc>
+  <loc>https://www.uclouvain-down.be/UCLSport</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/UCLSport</loc>
+  <loc>https://www.uclouvain-down.be/LEPL1104</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/LEPL1104</loc>
+  <loc>https://www.uclouvain-down.be/LEPL1201</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://uclouvain-down.be/LEPL1201</loc>
-  <lastmod>2024-01-30T15:37:13+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://uclouvain-down.be/IDP-Logging</loc>
+  <loc>https://www.uclouvain-down.be/IDP-Logging</loc>
   <lastmod>2024-01-30T15:37:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>

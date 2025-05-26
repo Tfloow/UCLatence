@@ -47,20 +47,11 @@ First, you need to use **python 3.11** version (we suggest you to use a virtual 
 
 ## Roadmap
 
-- [x] Working pages
-- [x] Home Page with links to other sub-pages
-- [x] A nice and clear home page with all current status
-- [x] Deployed locally
-- [x] Deployed globally 
-- [x] Tracking downtime 
-- [x] User button to report if a website is down
-- [x] Database that collect persistent data about outage
 - [ ] Proper database
+- [ ] Deploy cleaner Graph with the help of a JS library or framework
   
 ### API
 
-- [x] Integrate a Fast API
-- [x] Support for webhook
 - [ ] RSS
 
 ## Documentation

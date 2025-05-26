@@ -53,23 +53,44 @@ h2{
 }
 
 .container-plot {
-    max-width: 100%; /* Set your desired maximum width */
-    min-width: 100px; /* Set your desired minimum width */
-    text-align: center; /* Center the content horizontally */
-
+    max-width: 1500px; /* Adjust the maximum width as needed */
+    margin: 0 auto; /* This will center the container horizontally */
+    text-align: center;
     color: white;
-
-    border: 20px;
     display: flex;
-
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
 }
 
-#graph-container{
-    flex:1;
-    margin-right: 10px;
+
+@media (max-width: 350px) {
+    .container-plot {
+        flex-direction: column; /* Display items vertically */
+
+        max-width: 1500px; /* Adjust the maximum width as needed */
+        margin: 0 auto; /* This will center the container horizontally */
+        text-align: center;
+        color: white;
+        display: flex;
+    }
+
+    .graph-container {
+        flex: 1;
+        margin: 10px;
+        width: 100%; /* Ensures canvas fills its container */
+    }
 }
+
+.graph-container {
+    flex: 1;
+    margin: 10px;
+    max-width: 100%; /* Each canvas should take half of the container width */
+    width: 100%; /* Ensures canvas fills its container */
+}
+
+.canvas-container {
+    width: 100%; /* Ensures canvas fills the container */
+}
+
 
 #up {
     display: inline-block; /* Ensure the link behaves like a block-level element */

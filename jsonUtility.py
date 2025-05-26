@@ -7,7 +7,7 @@ from logger_config import *
 from models import *
 
 datetimeFormat = "%Y-%m-%dT%H:%M:%S"
-timeCheck = 600 # Check every 300 seconds (in production)
+timeCheck = 300 # Check every 300 seconds (in production)
 
 JSON_FILE_SERVICES = "services.json"
 services = Services.load_from_json_file(JSON_FILE_SERVICES)

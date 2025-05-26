@@ -10,12 +10,16 @@ try:
     from flask_babel import Babel, _
     # _ to evaluate the text and translate it
     from flask_babel import lazy_gettext as _l
+    import sqlite3
     # lazy_gettext is like the _ but handle the later evaluation of the text
-    
-    import csv
-    from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
+        
+    # To handle apscheduler
+    from apscheduler.schedulers.asyncio import AsyncIOScheduler
+    from apscheduler.jobstores.memory import MemoryJobStore
+    from contextlib import asynccontextmanager
+    from lock import *
+    #from apscheduler.schedulers.background import BackgroundScheduler  # To schedule the check
     #import datetime
-    import atexit
     
     # Own modules
     from models import *
@@ -23,8 +27,7 @@ try:
     from utilities import *
     from logger_config import *
     
-    # For compatibility
-    import dataReport
+    import sql
 except ImportError as e:
     logger.warning(f"[LOG] Error on startup: not all packages could be properly imported:\n{e}.")
     raise exit(1)
@@ -40,67 +43,49 @@ JSON_FILE_SERVICES = "services.json"
 services = Services.load_from_json_file(JSON_FILE_SERVICES, webhooks=webhooks)
 webhooks._set_services(webhooks)
 
-
-def updateStatusService(service: str, session=None):
-    url = services.get_service(service).url
-    if not url:
-        logger.info("[LOG]: You passed a service that is not tracked")
-        return False
-    
-    logger.info(f"[LOG]: HTTP request for {url}")
-    
-    services.get_service(service).status_changed(session)
-
-    logger.info("[LOG]: got status ")
-    # REALLY IMPORTANT TO KEEP USING dataReport Library
-    dataReport.reportStatus(services, service)
-    
-    return True
-
-
-def statusService(service):
-    url = services.get_service(service).url
-    if not url:
-        logger.info("[LOG]: You passed a service that is not tracked")
-        return False
-    
-    return services[service]["Last status"]
-
+# APSCHEDULER ##########################################################################################################
 
 def refreshServices():
     logger.info("[LOG]: Refreshing the services")
     session = requests.Session()
     
-    for service in services:
-        logger.info(service)
-        updateStatusService(service.name, session)
+    services.update_status(session)
 
     session.close()
+    
+    services_name = services.names
+    
+    # Connect to the SQLite database
+    conn = sqlite3.connect('data/outage.sqlite3')
+    cursor = conn.cursor()
+    
+    for service in services_name:
+        up, time = services.get_service(service).up_time()
+        # convert time into unix timestamp
+        time = int(time.timestamp())
+        
+        table_name = service.replace('.', '_')  # Replace dots with underscores for table name
+        table_name = table_name.replace('-', '_')  # Replace dashes with underscores for table name
 
-    # To archive the current report daily to spare some memory
-    dataReport.archiveStatus()
+        logger.info(f"[LOG]: Updating {service} status to {up} at {time}")
+        
+        # Insert the status update
+        cursor.execute(f'''
+            INSERT INTO {table_name} (timestamp, status, user)
+            VALUES (?, ?, ?)
+        ''', (time, up, 0))
+        
+        logger.info(f"[LOG]: {service} status updated successfully")
+    
+    # Commit the transaction
+    conn.commit()
+
+    # Close the connection
+    conn.close()
+
     logger.info("[LOG]: Finished Refreshing the services")
 
-def plotServices():
-    for service in services:
-        logger.info("[LOG]: starting plot for outage")
-        dataReport.plot(service.name, True)
-        logger.info("[LOG]: Finished plot for outage")
-        logger.info("[LOG]: starting plot for user report")
-        dataReport.plot(service.name, False)
-        logger.info("[LOG]: Finished plot for user report")
-    
 
-# Setup Scheduler to periodically check the status of the website
-scheduler = BackgroundScheduler()
-refreshJob = scheduler.add_job(refreshServices, "interval", minutes=RECHECK_AFTER/60)
-plotJob = scheduler.add_job(plotServices, "interval", minutes=RECHECK_AFTER/60)
-
-# Start the scheduler
-scheduler.start()
-
-# When the scheduler need to be stopped
-atexit.register(lambda: scheduler.shutdown())
 
 # ------------------ Start the Flask app ------------------
 app = Flask("UCLouvainDown")
@@ -156,7 +141,7 @@ def requestServie():
             
     if len(serviceName) > 0:
         # If someone wrote in the form
-        dataReport.newRequest(serviceName, url, info)
+        # IF I REMOVE THIS LINE NO MORE NEED FOR THAT DEPRECATED FILE
         feedback = "Form submitted successfully!"
 
     return render_template("request.html", feedback=feedback)
@@ -171,25 +156,14 @@ def process():
     if user_choice == 'yes':
         logger.info('Great! The website is working for you.')
         
-        if service is None:
-            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
-        else:
-            # next_run_time_with_refresh = refreshJob.next_run_time
-            # scheduler.add_job(dataReport.addReport, "date", args=[service, True], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
-            # Extra 10 seconds to make sure it is done after the main task 
-            dataReport.addReport(service, True)
+        ### HERE GOES THE SQL FOR USER REPORT
 
         return _('Great! The website is working for you.')
     elif user_choice == 'no':
         logger.info('The website is down for me too.')
         
-        if service is None:
-            logger.warning("[LOG]: Something went wrong with the service reporting, please investigate")
-        else:
-            # next_run_time_with_refresh = refreshJob.next_run_time
-            # scheduler.add_job(dataReport.addReport, "date", args=[service, False], run_date=next_run_time_with_refresh + datetime.timedelta(10), max_instances=1) 
-            # Extra 10 seconds to make sure it is done after the main task
-            dataReport.addReport(service, False)
+        ### HERE GOES THE SQL FOR USER REPORT
+
 
         return _('The website is down for me too.')
     else:
@@ -199,40 +173,11 @@ def process():
 @app.route("/extract")
 def extractLog():
     get_what_to_extract = request.args.get("get")
-    
-    if services.get_service(get_what_to_extract.split("_")[0]) is not None or get_what_to_extract == "request" or get_what_to_extract == "log":
-        if get_what_to_extract == "log":
-            with open("my_log.log", "r") as file:
-                log_content = file.read()
 
-            response = make_response(log_content)
-
-            response.headers["Content-Type"] = "text/plain"  # Set the content type for log files
-            response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.log"
-
-            return response
-        
-        logger.info(get_what_to_extract.split("_"))
-        
-        if len(get_what_to_extract.split("_")) == 2:
-            # when we want to extract the past outages not the user outages
-            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReport.csv"
-        elif  len(get_what_to_extract.split("_")) == 3:
-            path = "data/" + get_what_to_extract.split("_")[0] + "/outageReportArchive.csv"
-        else:
-            path = "data/" + get_what_to_extract + "/log.csv"
-            
-        with open(path, "r") as file:
-            csv_data = list(csv.reader(file, delimiter=","))
-
-        response = make_response()
-        csv_write = csv.writer(response.stream)
-        csv_write.writerows(csv_data)
-
-        response.headers["Content-Type"] = "text/csv"
-        response.headers["Content-Disposition"] = f"attachment; filename={get_what_to_extract}.csv"
-        
-        return response
+    if get_what_to_extract.lower() == "all" or get_what_to_extract.lower == "outage":
+        # send the data/outage.sqlite3 file
+        return send_from_directory("data", "outage.sqlite3")
+    # Make some smarter query using SQL
     else:
         return render_template("404.html")
 
@@ -253,12 +198,52 @@ async def service_details_app(service: str):
     if service not in services:
         return page_not_found()
     print(f"[LOG]: HTTP request for {service}")
-    return render_template("itemWebsite.html", service=service_details(service))
+    """
+    data: looks like this: {"time": ["2021-10-10 10:10:10"], "status": [1]}
+    """
+    timeArray, UPArray = sql.get_latest_status(service)
+    userTimeArray, userUPArray = sql.get_latest_user_report(service)
+    percent_up = sql.get_percentage_uptime(service)
+    percent_down = 1 - percent_up
+        
+    return render_template("itemWebsite.html", service=service_details(service), data={"time": timeArray, "status": UPArray}, data_user={"time": userTimeArray, "status": userUPArray} , percent={"up": percent_up, "down": percent_down})
 
 
 @app.errorhandler(404)
 def page_not_found(_=None):
     return render_template("404.html")
+
+# Setup Scheduler to periodically check the status of the website
+# When the scheduler need to be stopped
+
+fd = acquire("myfile.lock")
+
+if fd is None:
+    logger.error("[LOG]: Could not acquire lock, exiting.")
+    @asynccontextmanager
+    async def lifespan(api: FastAPI):
+        #Dummy
+        yield
+else:
+    jobStores = {
+        "default": MemoryJobStore()
+    }
+
+    scheduler = AsyncIOScheduler(jobstores=jobStores, timezone="UTC")
+
+    # Execute the refreshServices function every RECHECK_AFTER minutes
+    @scheduler.scheduled_job("interval", seconds=RECHECK_AFTER, next_run_time=dt.datetime.utcnow())
+    def scheduledRefresh():
+        refreshServices() 
+    
+    @asynccontextmanager
+    async def lifespan(api: FastAPI):
+        # Start the scheduler
+        scheduler.start()
+        yield
+        # Stop the scheduler
+        scheduler.shutdown()
+
 
 
 # Define the FastAPI app and its routes ################################################################################
@@ -287,6 +272,7 @@ api = FastAPI(
         "name": "Wouter Vermeulen",
         "email": "wouter.vermeulen@student.uclouvain.be",
     },
+    lifespan=lifespan,
     # license_info={}, TODO
 )
 

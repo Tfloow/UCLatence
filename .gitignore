@@ -1,6 +1,8 @@
 !static/
 !templates/
 
+simulateHeroku.sh
+
 ### Flask ###
 instance/*
 !instance/.gitignore
