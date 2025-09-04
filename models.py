@@ -378,14 +378,16 @@ class Services(RootModel):
         except Exception as _:
             raise ValueError(f"[LOG]: Something went wrong with creating the folder {name}")
         
-        with open(filepath + name + "/log.csv", "w") as log:
+        
+        
+        """with open(filepath + name + "/log.csv", "w") as log:
             log.write(cols)
             
         with open(filepath + name + "/outageReport.csv", "w") as out:
             out.write(cols)
             
         with open(filepath + name + "/outageReportArchive.csv", "w") as out:
-            out.write(cols)
+            out.write(cols)"""
         
         self.dump_json()
 

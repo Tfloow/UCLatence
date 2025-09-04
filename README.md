@@ -11,7 +11,7 @@
   - [Translation](#translation)
   - [License](#license)
 
-Test the app [here](https://www.uclouvain-down.be)
+Test the app [here](https://uclatence.onrender.com/)
 
 ## Introduction
 
@@ -66,4 +66,4 @@ Check [this document](/translations/contribue.md) to see how you can contribute 
 
 ## License
 
-This work is protected under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). For the favicon, I used the UCLouvain's logo and 2 images that doesn't belong to me but to their rightful owner (*Check compliance with the license*).
+This work is protected under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).

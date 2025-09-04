@@ -177,6 +177,12 @@ def extractLog():
     if get_what_to_extract.lower() == "all" or get_what_to_extract.lower == "outage":
         # send the data/outage.sqlite3 file
         return send_from_directory("data", "outage.sqlite3")
+    if get_what_to_extract.lower() == "log":
+        # send the my_log.log file
+        return send_from_directory(".", "my_log.log")
+    if get_what_to_extract.lower() == "services":
+        # send the services.json file
+        return send_from_directory(".", "services.json")
     # Make some smarter query using SQL
     else:
         return render_template("404.html")

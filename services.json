@@ -3,7 +3,7 @@
     "name": "ADE",
     "url": "https://horaire.uclouvain.be:443",
     "is_up": false,
-    "last_checked": "2025-09-04T14:22:48.033392",
+    "last_checked": "2025-09-04T15:15:03.576505",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -11,7 +11,7 @@
     "name": "ADE-Scheduler",
     "url": "https://ade-scheduler.info.ucl.ac.be/calendar/",
     "is_up": true,
-    "last_checked": "2025-09-04T14:22:48.179689",
+    "last_checked": "2025-09-04T15:15:03.736671",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -19,7 +19,7 @@
     "name": "Comproved",
     "url": "https://app.comproved.com/universite-de-louvain",
     "is_up": true,
-    "last_checked": "2025-09-04T14:22:48.333458",
+    "last_checked": "2025-09-04T15:15:03.877516",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -27,7 +27,7 @@
     "name": "Gradescope",
     "url": "https://www.gradescope.com/",
     "is_up": true,
-    "last_checked": "2025-09-04T14:22:48.845513",
+    "last_checked": "2025-09-04T15:15:04.053541",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -35,7 +35,7 @@
     "name": "Intranet",
     "url": "https://intranet.uclouvain.be",
     "is_up": false,
-    "last_checked": "2025-09-04T14:22:49.710480",
+    "last_checked": "2025-09-04T15:11:08.317840",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -43,7 +43,7 @@
     "name": "Moodle",
     "url": "https://moodle.uclouvain.be/",
     "is_up": false,
-    "last_checked": "2025-09-04T14:22:49.865868",
+    "last_checked": "2025-09-04T15:11:08.679590",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -51,7 +51,7 @@
     "name": "UCLouvain",
     "url": "https://www.uclouvain.be/",
     "is_up": false,
-    "last_checked": "2025-09-04T14:22:50.007677",
+    "last_checked": "2025-09-04T15:11:08.939912",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -59,7 +59,7 @@
     "name": "Inginious",
     "url": "https://inginious.info.ucl.ac.be/",
     "is_up": true,
-    "last_checked": "2025-09-04T14:22:50.155330",
+    "last_checked": "2025-09-04T15:11:09.132386",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -67,7 +67,7 @@
     "name": "UDS",
     "url": "https://uds.siws.ucl.ac.be/",
     "is_up": false,
-    "last_checked": "2025-09-04T14:19:33.991085",
+    "last_checked": "2025-09-04T15:11:09.293654",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -75,31 +75,31 @@
     "name": "UCLSport",
     "url": "https://sites.uclouvain.be/uclsport/",
     "is_up": false,
-    "last_checked": "2025-09-04T14:15:44.973966",
+    "last_checked": "2025-09-04T14:57:49.010143",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "LEPL1104": {
     "name": "LEPL1104",
     "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1104.php",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:17.901717",
+    "is_up": false,
+    "last_checked": "2025-09-04T14:59:52.632138",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "LEPL1110": {
     "name": "LEPL1110",
     "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1110.php",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:18.249568",
+    "is_up": false,
+    "last_checked": "2025-09-04T15:01:58.552425",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "LEPL1201": {
     "name": "LEPL1201",
     "url": "https://perso.uclouvain.be/vincent.legat/zouLab/epl1201.php",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:18.296213",
+    "is_up": false,
+    "last_checked": "2025-09-04T15:04:02.188972",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -107,7 +107,7 @@
     "name": "IDP-Logging",
     "url": "https://idp.uclouvain.be",
     "is_up": true,
-    "last_checked": "2024-06-19T15:29:18.337713",
+    "last_checked": "2025-09-04T15:06:08.133423",
     "is_up_user": true,
     "last_user_report": "2024-01-25T15:27:38.889172"
   },
@@ -115,8 +115,24 @@
     "name": "Test-404",
     "url": "https://www.google.com/404",
     "is_up": false,
-    "last_checked": "2024-06-19T15:29:18.432339",
+    "last_checked": "2025-09-04T15:06:08.281261",
     "is_up_user": true,
     "last_user_report": "2024-01-25T15:27:38.889172"
+  },
+  "Studies": {
+    "name": "Studies",
+    "url": "https://studies.uclouvain.be/",
+    "is_up": false,
+    "last_checked": "2025-09-04T15:06:08.526357",
+    "is_up_user": true,
+    "last_user_report": "2025-09-04T14:55:27.973416"
+  },
+  "Mobi": {
+    "name": "Mobi",
+    "url": "https://app.uclouvain.be/Mobi",
+    "is_up": true,
+    "last_checked": "2025-09-04T15:08:11.749904",
+    "is_up_user": true,
+    "last_user_report": "2025-09-04T14:55:27.974948"
   }
 }

@@ -2,6 +2,7 @@ import json
 import datetime
 import csv
 import os
+import sql
 
 from logger_config import *
 from models import *
@@ -34,7 +35,7 @@ def deltaTime():
     
     currentDate = datetime.datetime.utcnow()
     for k in listServices():
-        # pastDate = datetime.datetime.strptime(j[k]["Last access time"], datetimeFormat)
+        pastDate = datetime.datetime.strptime(j[k]["Last access time"], datetimeFormat)
         print((currentDate - pastDate).total_seconds())
         
 def deltaTimeService(services, service):
@@ -55,7 +56,8 @@ def updateStatus(services, service, newStatus):
         json.dump(services, out, indent=4, sort_keys=True, default=str)
         
 def addNewService(service, url):
-    services.add_service(service, url)
+    #services.add_service(service, url)
+    sql.add_new_service_entry(service)
         
 def addBlankCSVService(service: Service):
     service = service.name
@@ -91,13 +93,14 @@ if __name__ == "__main__":
     
     #acceptRequest()
     
-    """
-    name = [ "Inginious","UDS", "UCLSport","LEPL1104","LEPL1201"]
-    url = ["https://inginious.info.ucl.ac.be/","https://uds.siws.ucl.ac.be/","https://sites.uclouvain.be/uclsport/",
-           "https://perso.uclouvain.be/vincent.legat/zouLab/epl1104.php","https://perso.uclouvain.be/vincent.legat/zouLab/epl1201.php" ]
     
-    for i in range(len(name)):    
-        services.add_service(name[i], url[i])
-    """
+    name = [ "Studies", "Mobi"]
+    url = ["https://studies.uclouvain.be/", "https://app.uclouvain.be/Mobi"  ]
+    
+    """for i in range(len(name)):    
+        addNewService(name[i], url[i])"""
+        
+        
+    
     #print(deltaTimeService(j, "UCLouvain"))
     

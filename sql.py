@@ -61,6 +61,23 @@ def get_percentage_uptime(service_name):
     
     return up/total
 
+def add_new_service_entry(service_name):
+    conn = sqlite3.connect('data/outage.sqlite3')
+    cursor = conn.cursor()
+    table_name = service_name #convert_to_table_name(service_name)
+    
+    print(table_name)
+    
+    cursor.execute(f'''
+        CREATE TABLE IF NOT EXISTS {table_name} (
+            timestamp INTEGER,
+            status INTEGER,
+            user INTEGER
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
 if __name__ == "__main__":
     print(get_latest_status("ADE"))
     print(get_latest_user_report("ADE"))
