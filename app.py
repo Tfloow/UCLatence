@@ -88,7 +88,7 @@ def refreshServices():
 
 
 # ------------------ Start the Flask app ------------------
-app = Flask("UCLouvainDown")
+app = Flask("UCLatence")
 
 LANGUAGES=["en", "fr"]
 wanted_language = None
@@ -249,16 +249,16 @@ else:
 # Define the FastAPI app and its routes ################################################################################
 # !!! DO NOT move the `api.mount(...)` statement before the `@api....` functions !!! ###################################
 api = FastAPI(
-    title="UCLouvainDown API",
+    title="UCLatence API",
     version="v0.1.0",
-    summary="**A simple interface with the *UCLouvainDown* backend!**",
+    summary="**A simple interface with the *UCLatence* backend!**",
     # Do not descend the following line after the """ down, it will break openapi
-    description="""This API provides an interface with the *UCLouvainDown* backend, allowing to check if services of the 
+    description="""This API provides an interface with the *UCLatence* backend, allowing to check if services of the 
     University of Louvain (UCLouvain), as well as some other services often used by its students, are up and running 
     (or not).
     </br>
     <ul>
-      <li>Non-developpers might be better of using the [UCLouvainDown website](/) rather than passing by this API. It
+      <li>Non-developpers might be better of using the [UCLatence website](/) rather than passing by this API. It
         is a graphic representation of the same data.</li>
       <li>A webhook interface is also provided, please refer to [the webhook section](/api/docs#tag/Webhooks) of the 
         documentation for the details.</li>
@@ -541,7 +541,7 @@ def delete_webhook(
 def api_request_not_found() -> JSONResponse:
     """
     Any paths with `/api` and `/api/...` that have not been catched before are invalid.
-    If this endpoint wasn't added, the client would recieve the 404 HTML site from the UCLouvainDown website.
+    If this endpoint wasn't added, the client would recieve the 404 HTML site from the UCLatence website.
     """
     return api_unkown_url_response
 
