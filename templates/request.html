@@ -1,23 +1,50 @@
 {% extends "base.html" %}
+
 {% block head %}
     <title>Request</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleRequest.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleServiceList.css') }}">
 {% endblock %}
 
-{% block content%}
-<form id="form">
-    <label for="service-name">{{ _("Service Name:") }}</label><br>
-    <input type="text" id="service-name" name="service-name"><br>
+{% block content %}
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-2xl">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">{{ _("Submit a Service Request") }}</h1>
 
-    <label for="url">{{ _("Service's URL:") }}</label><br>
-    <input type="url" id="url" name="url"><br>
+    <form id="form" class="space-y-5">
+        <!-- Service Name -->
+        <div>
+            <label for="service-name" class="block text-sm font-medium text-gray-700">
+                {{ _("Service Name:") }}
+            </label>
+            <input type="text" id="service-name" name="service-name"
+                class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2">
+        </div>
 
-    <label for="info">{{ _("Extra Info:") }}</label><br>
-    <textarea id="info" name="info" rows="4" cols="50"></textarea><br>
+        <!-- Service URL -->
+        <div>
+            <label for="url" class="block text-sm font-medium text-gray-700">
+                {{ _("Service's URL:") }}
+            </label>
+            <input type="url" id="url" name="url"
+                class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2">
+        </div>
 
-    <input type="submit" value={{ _("Submit (DISABLED ATM)") }} id="submit" >
-    <div id="feedback">{{ feedback }}</div>
-</form>
+        <!-- Extra Info -->
+        <div>
+            <label for="info" class="block text-sm font-medium text-gray-700">
+                {{ _("Extra Info:") }}
+            </label>
+            <textarea id="info" name="info" rows="4"
+                class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submit" disabled
+            class="w-full py-2 px-4 rounded-lg bg-gray-300 text-gray-600 font-semibold cursor-not-allowed">
+            {{ _("Submit (DISABLED ATM)") }}
+        </button>
+
+        <!-- Feedback -->
+        <div id="feedback" class="text-sm text-red-600 mt-2">{{ feedback }}</div>
+    </form>
+</div>
 {% endblock %}

@@ -2,8 +2,8 @@
   "ADE": {
     "name": "ADE",
     "url": "https://horaire.uclouvain.be:443",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:08.692569",
+    "is_up": false,
+    "last_checked": "2025-09-04T14:22:48.033392",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -11,7 +11,7 @@
     "name": "ADE-Scheduler",
     "url": "https://ade-scheduler.info.ucl.ac.be/calendar/",
     "is_up": true,
-    "last_checked": "2024-06-19T15:29:13.822189",
+    "last_checked": "2025-09-04T14:22:48.179689",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -19,7 +19,7 @@
     "name": "Comproved",
     "url": "https://app.comproved.com/universite-de-louvain",
     "is_up": true,
-    "last_checked": "2024-06-19T15:29:14.195258",
+    "last_checked": "2025-09-04T14:22:48.333458",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -27,31 +27,31 @@
     "name": "Gradescope",
     "url": "https://www.gradescope.com/",
     "is_up": true,
-    "last_checked": "2024-06-19T15:29:14.512562",
+    "last_checked": "2025-09-04T14:22:48.845513",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "Intranet": {
     "name": "Intranet",
     "url": "https://intranet.uclouvain.be",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:15.626793",
+    "is_up": false,
+    "last_checked": "2025-09-04T14:22:49.710480",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "Moodle": {
     "name": "Moodle",
     "url": "https://moodle.uclouvain.be/",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:16.074359",
+    "is_up": false,
+    "last_checked": "2025-09-04T14:22:49.865868",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "UCLouvain": {
     "name": "UCLouvain",
     "url": "https://www.uclouvain.be/",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:16.706384",
+    "is_up": false,
+    "last_checked": "2025-09-04T14:22:50.007677",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
@@ -59,23 +59,23 @@
     "name": "Inginious",
     "url": "https://inginious.info.ucl.ac.be/",
     "is_up": true,
-    "last_checked": "2024-06-19T15:29:17.016749",
+    "last_checked": "2025-09-04T14:22:50.155330",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "UDS": {
     "name": "UDS",
     "url": "https://uds.siws.ucl.ac.be/",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:17.305040",
+    "is_up": false,
+    "last_checked": "2025-09-04T14:19:33.991085",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },
   "UCLSport": {
     "name": "UCLSport",
     "url": "https://sites.uclouvain.be/uclsport/",
-    "is_up": true,
-    "last_checked": "2024-06-19T15:29:17.578229",
+    "is_up": false,
+    "last_checked": "2025-09-04T14:15:44.973966",
     "is_up_user": true,
     "last_user_report": "2024-01-25T13:39:26.809039"
   },

@@ -14,8 +14,7 @@
 
 {% block head %}
     <title>{{ service.name }} - UCLatence Down</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js to visualize data -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {% if service.is_up %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoUP.png">
     {% else %}
@@ -23,187 +22,111 @@
     {% endif %}
 {% endblock %}
 
-
 {% block content %}
-    <h2>{{ _("Status for %(servicename)s ", servicename=service.name) }} @ <a href={{ service.url }} id="urlTO"> {{ _("%(url)s", url=service.url ) }} </a> </h2>
-
-    {% if service.is_up %}
-    <div class="container">
-        <a href="/{{ service.name }}" target="_blank" id="up"> {{ _("Up") }} </a>
-    </div>
-    {% else %}
-    <div class="container">
-        <a href="/{{ service.name }}"  target="_blank" id="down"> {{ _("Down") }} </a>
-    </div>
-    {% endif %}
-
-    <br>
-    <br>
-
-    <!-- Temporary disabled while I polish the backend
-    <p id="down-user">
-        <h3> {{ _("Is this website currently working for you ?") }}</h3>
-        <br>
-        <button class="yes" onclick="sendChoice('yes', '{{ service.name }}')"  >{{ _("Yes !") }} </button>     
-        <button class="no"  onclick="sendChoice('no', '{{ service.name }}')"  >{{ _("No !") }} </button>      
-    </p>-->
-
-    <div id="result"></div>
-
-    <div class="container-plot">
-        <div class="graph-container">
-            <div class="canvas-container">
-                <canvas id="myChart"></canvas>
-            </div>
-        </div>
-        <div class="graph-container">
-            <div class="canvas-container">
-                <canvas id="myChart_user"></canvas>
-            </div>
-        </div>
-        <div class="graph-container">
-            <div class="canvas-container">
-                <canvas id="stat"></canvas>
-            </div>
-        </div>
-    </div>
+<div class="max-w-5xl mx-auto px-6 py-10 space-y-10">
     
+    <!-- Header Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
+            {{ _("Status for %(servicename)s ", servicename=service.name) }}
+            <a href="{{ service.url }}" target="_blank" class="text-blue-600 hover:underline text-lg font-medium">
+                {{ _("%(url)s", url=service.url ) }}
+            </a>
+        </h2>
 
+        {% if service.is_up %}
+        <span class="inline-block px-4 py-2 text-green-700 bg-green-100 rounded-xl font-semibold">
+            ✅ {{ _("Up") }}
+        </span>
+        {% else %}
+        <span class="inline-block px-4 py-2 text-red-700 bg-red-100 rounded-xl font-semibold">
+            ❌ {{ _("Down") }}
+        </span>
+        {% endif %}
+    </div>
 
+    <!-- Charts -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">{{ _('UPTime of the website') }}</h3>
+            <canvas id="myChart" class="w-full h-64"></canvas>
+        </div>
 
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">{{ _('Reported UPTime from User') }}</h3>
+            <canvas id="myChart_user" class="w-full h-64"></canvas>
+        </div>
 
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">{{ _('Global Status') }}</h3>
+            <canvas id="stat" class="w-full h-64"></canvas>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
-    <script src="../static/script/itemWebsite.js"></script>
-
+    <script src="{{ url_for('static', filename='script/itemWebsite.js')}}"></script>
     <script>
         var pointBackgroundColors = [];
-        
         {% for up in data.status %}
-            if ({{ up }} == 1) {
-                pointBackgroundColors.push('green');
-            } else {
-                pointBackgroundColors.push('red');
-            }
+            pointBackgroundColors.push({{ up }} == 1 ? 'green' : 'red');
         {% endfor %}
 
         var pointBackgroundColors_user = [];
-
         {% for up in data_user.status %}
-            if ({{ up }} == 1) {
-                pointBackgroundColors_user.push('green');
-            } else {
-                pointBackgroundColors_user.push('red');
-            }
+            pointBackgroundColors_user.push({{ up }} == 1 ? 'green' : 'red');
         {% endfor %}
 
-        var ctx = document.getElementById('myChart');
-        var myChart = new Chart(ctx, {
+        // Website uptime chart
+        new Chart(document.getElementById('myChart'), {
             type: 'line',
             data: {
-                labels: [
-                    {% for t in data.time %}
-                        '{{ t }}',
-                    {% endfor %}
-                ],
+                labels: [{% for t in data.time %}'{{ t }}',{% endfor %}],
                 datasets: [{
-                    label: "{{ _("Status") }}",
-                    data: [
-                        {% for up in data.status %}
-                            {{ up }},
-                        {% endfor %}
-                    ],
+                    label: "{{ _('Status') }}",
+                    data: [{% for up in data.status %}{{ up }},{% endfor %}],
                     fill: false,
                     backgroundColor: pointBackgroundColors,
                     borderColor: pointBackgroundColors,
-                    borderWidth: 1,
                     tension: 0.1
                 }]
             },
             options: {
-                scales: {
-                    y: {
-                        min: 0,
-                        max: 1.1
-                    }
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: "{{ _('UPTime of the website') }}"
-                    }
-                }
+                scales: { y: { min: 0, max: 1.1 } }
             }
         });
 
-        var ctx_user = document.getElementById('myChart_user');
-        var myChart_user = new Chart(ctx_user, {
+        // User reports chart
+        new Chart(document.getElementById('myChart_user'), {
             type: 'line',
             data: {
-                labels: [
-                    {% for t in data_user.time %}
-                        '{{ t }}',
-                    {% endfor %}
-                ],
+                labels: [{% for t in data_user.time %}'{{ t }}',{% endfor %}],
                 datasets: [{
                     label: "{{ _('Status from User') }}",
-                    data: [
-                        {% for up in data_user.status %}
-                            {{ up }},
-                        {% endfor %}
-                    ],
+                    data: [{% for up in data_user.status %}{{ up }},{% endfor %}],
                     fill: false,
                     backgroundColor: pointBackgroundColors_user,
                     borderColor: pointBackgroundColors_user,
-                    borderWidth: 1,
                     tension: 0.1
                 }]
             },
             options: {
-                scales: {
-                    y: {
-                        min: 0,
-                        max: 1.1
-                    }
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: "{{ _('Reported UPTime from User') }}"
-                    }
-                }
+                scales: { y: { min: 0, max: 1.1 } }
             }
         });
 
-        var ctx_stat = document.getElementById('stat');
-        var myChart_stat = new Chart(ctx_stat, {
+        // Global status doughnut chart
+        new Chart(document.getElementById('stat'), {
             type: 'doughnut',
             data: {
                 labels: ['{{ _("UP") }}', '{{ _("DOWN") }}'],
                 datasets: [{
-                    label: "{{ _('Status') }}",
                     data: [{{ percent.up }}, {{ percent.down }}],
-                    backgroundColor: [
-                        'green',
-                        'red'
-                    ],
-                    borderColor: [
-                        'green',
-                        'red'
-                    ],
+                    backgroundColor: ['green', 'red'],
                     hoverOffset: 4
                 }]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: "{{ _('Global Status ') }} {{ percent.up * 100}}  %"
-                    }
-                }
             }
         });
     </script>
 {% endblock %}
-

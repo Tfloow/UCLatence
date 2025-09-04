@@ -1,45 +1,62 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleInfo.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 {% endblock %}
 
 {% block content %}
-    <h1>UCLatence Down - Is it down ?</h1>
-    <div id="info">
-        <p>
-            {{ _("We are") }} <b> {{ _("not associated with UCLouvain") }} </b>. {{ _("UCLouvain Down is a little student project initiated by Thomas Debelle and Wouter Vermeulen from the EPL.
-            You can find all contributors of this project ") }} <a href="https://github.com/Tfloow/UCLouvainDown/graphs/contributors"> {{ _("here") }} </a>.
-            <br>
-            <span class="indent"> {{ _("If you have any issue with the website feel free to send an email at ") }} <a href="mailto:contact@uclouvain-down.be?subject=Inquiry about UCLouvain Down">contact@uclouvain-down.be</a> </span>
+<div class="max-w-4xl mx-auto px-6 py-12 space-y-10">
+    <!-- Page Title -->
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-800">
+        UCLatence Down – Is it down?
+    </h1>
+
+    <!-- About Section -->
+    <section class="bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold text-gray-700 mb-3">{{ _("Who are we?") }}</h2>
+        <p class="text-gray-600 leading-relaxed">
+            {{ _("We are") }} 
+            <b>{{ _("not associated with UCLouvain") }}</b>. 
+            {{ _("UCLouvain Down is a little student project initiated by Thomas Debelle and Wouter Vermeulen from the EPL. You can find all contributors of this project ") }} 
+            <a href="https://github.com/Tfloow/UCLouvainDown/graphs/contributors" class="text-blue-600 hover:underline"> {{ _("here") }} </a>.
         </p>
-    </div>
-    <h2>{{ _("What is UCLatence Down ?") }}</h2>
-    <div id="info">
-        <p>
+        <p class="mt-3 text-gray-600 leading-relaxed">
+            {{ _("If you have any issue with the website feel free to send an email at ") }} 
+            <a href="mailto:contact@uclouvain-down.be?subject=Inquiry about UCLouvain Down" class="text-blue-600 hover:underline">contact@uclouvain-down.be</a>.
+        </p>
+    </section>
+
+    <!-- What is UCLatence Down -->
+    <section class="bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold text-gray-700 mb-3">{{ _("What is UCLatence Down?") }}</h2>
+        <p class="text-gray-600 leading-relaxed">
             {{ _("UCLatence Down is a website that allows you to check the status of the UCLouvain services. It is a simple and easy way to know if the services are up or down.") }}
-            <br>
-            <span class="indent"> {{ _("The status of every websites or services are updated every 5 minutes. We do not display the status of the previous days and the reset is done at 3 AM each day. You can still access past status of a service with requesting a url looking like: ") }} <a href="/extract?get=404-Test_archive"> /extract?get=SERVICENAME_archive </a> 
-            
+        </p>
+        <p class="mt-3 text-gray-600 leading-relaxed">
+            {{ _("The status of every website or service is updated every 5 minutes. We do not display the status of the previous days and the reset is done at 3 AM each day. You can still access past status of a service by requesting a URL like:") }}
+            <span class="block mt-1 font-mono bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                /extract?get=SERVICENAME_archive
             </span>
         </p>
-    </div>
-    <h2>{{ _("Add a new service") }}</h2>
-    <div id="info">
-        <p>
-            {{ _("If you want to add a new service to the list, you just need to fill in this forms ") }} <a href="/request"> {{ _("here") }} </a>. {{ _("We will review your request and add the service if it is relevant. Please provide some extra info as it helps us with the validation process") }}
+    </section>
+
+    <!-- Add Service -->
+    <section class="bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold text-gray-700 mb-3">{{ _("Add a new service") }}</h2>
+        <p class="text-gray-600 leading-relaxed">
+            {{ _("If you want to add a new service to the list, you just need to fill in this form ") }}
+            <a href="/request" class="text-blue-600 hover:underline">{{ _("here") }}</a>. 
+            {{ _("We will review your request and add the service if it is relevant. Please provide some extra info as it helps us with the validation process.") }}
         </p>
+    </section>
 
-    </div>
-    <h2>{{ _("Bug report") }}</h2>
-    <div id="info">
-        <p>
-            {{ _("If you find a bug or an issue with the website, feel free to open an issue at ") }} <a href="https://github.com/Tfloow/UCLouvainDown/issues"> {{ _("this link") }} </a>.
+    <!-- Bug Report -->
+    <section class="bg-white p-6 rounded-2xl shadow-sm">
+        <h2 class="text-xl font-semibold text-gray-700 mb-3">{{ _("Bug report") }}</h2>
+        <p class="text-gray-600 leading-relaxed">
+            {{ _("If you find a bug or an issue with the website, feel free to open an issue at ") }} 
+            <a href="https://github.com/Tfloow/UCLouvainDown/issues" class="text-blue-600 hover:underline">{{ _("this link") }}</a>.
         </p>
-    </div>
-
-
+    </section>
+</div>
 {% endblock %}

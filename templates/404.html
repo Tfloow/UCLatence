@@ -1,13 +1,22 @@
 {% extends "base.html" %}
+
 {% block head %}
     <title>404</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 {% endblock %}
 
 {% block content %}
-
-    <h1>{{ _("404 - Not Found") }}</h1>
-    <h2>{{ _("The page you are looking for is certainly not here") }}</h2>
-
+<div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-6">
+    <h1 class="text-6xl font-extrabold text-red-600 mb-4">404</h1>
+    <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+        {{ _("The page you are looking for is certainly not here") }}
+    </h2>
+    <p class="text-gray-600 mb-6">
+        {{ _("It might have been moved, deleted, or maybe it never existed.") }}
+    </p>
+    <a href="/" 
+       class="px-5 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
+        {{ _("Go back home") }}
+    </a>
+</div>
 {% endblock %}

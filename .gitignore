@@ -1,6 +1,8 @@
 !static/
 !templates/
 
+.venv
+
 simulateHeroku.sh
 
 ### Flask ###

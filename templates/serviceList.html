@@ -1,42 +1,76 @@
 {% extends "base.html" %}
+
 {% block head %}
     <title>ServiceList</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleServiceList.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 {% endblock %}
 
-
 {% block content %}
-    <table border="0">
+<div class="max-w-6xl mx-auto mt-10">
+    <div class="overflow-x-auto rounded-lg shadow-lg">
+        <table class="w-full border-collapse bg-white text-left text-sm text-gray-700">
+            <!-- Table Head -->
+            <thead class="bg-gray-100 text-gray-900 text-base">
+                <tr>
+                    <th class="px-6 py-4 font-semibold">{{ _("Service") }}</th>
+                    <th class="px-6 py-4 font-semibold">{{ _("URL") }}</th>
+                    <th class="px-6 py-4 font-semibold">{{ _("Reported Status by Users") }}</th>
+                    <th class="px-6 py-4 font-semibold">{{ _("Status") }}</th>
+                </tr>
+            </thead>
 
-        <tr> 
-            <th> <h3>{{ _("Service") }}</h3> </th>
-            <th> <h3>{{ _("URL") }}</h3> </th>
-            <th> <h3>{{ _("Reported Status by Users") }}</h3> </th>
-            <th> <h3>{{ _("Status") }}</h3> </th>
-        </tr>
-        {% for serviceInfo in servicesInfo %}
-        <tr>
-           
+            <!-- Table Body -->
+            <tbody class="divide-y divide-gray-200">
+                {% for serviceInfo in servicesInfo %}
+                <tr class="hover:bg-gray-50 transition">
+                    <!-- Service Name -->
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        {{ serviceInfo["service"].name }}
+                    </td>
 
-            <th> <h4>{{ serviceInfo["service"].name }}</h4> </th>
-            <th> <h5><a href={{ serviceInfo["service"].url }}>{{ serviceInfo["service"].url }}</a></h5> </th>
-            {% if serviceInfo["service"].is_up_user  %}
-                <th class="report-up"> <div class="thumb"> {{ serviceInfo["service"].is_up_user }} </div> </th>
-            {% elif serviceInfo["reportedStatus"] == False %}
-                <th class="report-down"> <div class="thumb"> {{ serviceInfo["service"].is_up_user }} </div> </th>
-            {% else %}
-                <th class="report-none"> <div class="thumb"> {{ serviceInfo["service"].is_up_user }} </div> </th>
-            {% endif %}
-            
-            {% if serviceInfo["service"].status %}
-                <th > <a href="/{{ serviceInfo["service"].name }}"  id="up"> {{ _("Up") }} </a> </th>
-            {% else %}
-                <th > <a href="/{{ serviceInfo["service"].name }}"  id="down"> {{ _("Down") }} </a> </th>
-            {% endif %}
-        </tr>
-        {% endfor %}
+                    <!-- URL -->
+                    <td class="px-6 py-4">
+                        <a href="{{ serviceInfo['service'].url }}" 
+                           class="text-blue-600 hover:underline">
+                           {{ serviceInfo["service"].url }}
+                        </a>
+                    </td>
 
-    </table>
+                    <!-- Reported Status -->
+                    <td class="px-6 py-4">
+                        {% if serviceInfo["service"].is_up_user %}
+                            <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                                {{ serviceInfo["service"].is_up_user }}
+                            </span>
+                        {% elif serviceInfo["reportedStatus"] == False %}
+                            <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
+                                {{ serviceInfo["service"].is_up_user }}
+                            </span>
+                        {% else %}
+                            <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-700">
+                                {{ serviceInfo["service"].is_up_user }}
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Live Status -->
+                    <td class="px-6 py-4">
+                        {% if serviceInfo["service"].status %}
+                            <a href="/{{ serviceInfo['service'].name }}"
+                               class="inline-block px-3 py-1 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600 transition">
+                                {{ _("Up") }}
+                            </a>
+                        {% else %}
+                            <a href="/{{ serviceInfo['service'].name }}"
+                               class="inline-block px-3 py-1 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition">
+                                {{ _("Down") }}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
