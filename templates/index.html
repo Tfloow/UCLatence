@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>UCLouvain Down</title>
+    <title>UCLatence Down</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styleItem.css') }}">
     <link rel="icon" type="image/x-icon" href="/static/ico/icoDOWN.png">
 {% endblock %}
 
 {% block content %}
-    <h1>UCLouvain Down - Is it down ?</h1>
+    <h1>UCLatence Down - Is it down ?</h1>
     <h2 style="color: red;">Will be shutting down at the end of June due to Hosting Cost</h2>
     <div class="homepanel">
         {% for service in serviceList %} 
