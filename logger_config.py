@@ -17,7 +17,7 @@ logging.basicConfig(
     format=LOG_FORMAT,
 )
 
-logger = logging.getLogger("UCLouvain-Down")
+logger = logging.getLogger("UCLatence-Down")
 
 file_handler = logging.FileHandler('my_log.log')
 file_handler.setLevel(logging.DEBUG)

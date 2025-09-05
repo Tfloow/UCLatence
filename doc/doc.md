@@ -1,6 +1,6 @@
-# Documentation of UCLatence Down 
+# Documentation of UCLatence 
 
-- [Documentation of UCLatence Down](#documentation-of-uclatence-down)
+- [Documentation of UCLatence](#documentation-of-uclatence)
   - [Introduction](#introduction)
   - [Overview](#overview)
     - [Backend:](#backend)

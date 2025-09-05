@@ -4,6 +4,8 @@ import csv
 import os
 import sql
 
+import requests
+
 from logger_config import *
 from models import *
 
@@ -87,8 +89,19 @@ def acceptRequest():
     
     with open("data\\request\\log.csv", "w") as f:
         f.write("time,service,url,reason\n")
-    
         
+def sync_services():
+    # retrieve from UCLatence.be/extract?get=services
+    response = requests.get("https://uclatence.be/extract?get=services")
+    if response.status_code == 200:
+        services_data = response.json()
+        # Process the services_data as needed
+    else:
+        logger.error(f"[LOG]: Failed to retrieve services - {response.status_code}")
+        
+    with open("services.json", "w") as out:
+        json.dump(services_data, out, indent=2, sort_keys=True, default=str)
+
 if __name__ == "__main__":
     
     #acceptRequest()
@@ -99,7 +112,10 @@ if __name__ == "__main__":
     
     """for i in range(len(name)):    
         addNewService(name[i], url[i])"""
-        
+    
+    # Sync with UCLatence.be    
+    sync_services()
+    sql.sync_database()
         
     
     #print(deltaTimeService(j, "UCLouvain"))

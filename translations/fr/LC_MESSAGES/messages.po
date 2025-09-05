@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-07 14:30+0200\n"
-"PO-Revision-Date: 2024-04-07 14:33+0200\n"
+"POT-Creation-Date: 2025-09-05 10:43+0200\n"
+"PO-Revision-Date: 2025-09-05 10:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -16,242 +16,266 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Generated-By: Babel 2.14.0\n"
-"X-Generator: Poedit 3.4.2\n"
+"Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.7\n"
 
-#: ../app.py:182
+#: ../app.py:161
 msgid "Great! The website is working for you."
 msgstr "Parfait ! Le site fonctionne pour vous."
 
-#: ../app.py:194
+#: ../app.py:168
 msgid "The website is down for me too."
 msgstr "Le site est aussi en panne pour moi."
 
-#: ../app.py:196
+#: ../app.py:170
 msgid "Invalid choice or no choice provided"
 msgstr "Choix invalide ou aucun choix fourni"
 
-#: ../templates/404.html:10
-msgid "404 - Not Found"
-msgstr "Erreur 404 - Page introuvable"
-
-#: ../templates/404.html:11
+#: ../templates/404.html:12
 msgid "The page you are looking for is certainly not here"
 msgstr "La page que vous recherchez n'est certainement pas là"
 
-#: ../templates/base.html:27
+#: ../templates/404.html:15
+msgid "It might have been moved, deleted, or maybe it never existed."
+msgstr ""
+"Il se peut que la page a été déplacée, supprimée ou n'a peut-être jamais "
+"existée."
+
+#: ../templates/404.html:19
+msgid "Go back home"
+msgstr "Retour à la page d'accueil"
+
+#: ../templates/base.html:25
 msgid ""
-"UCLouvain Down Detector - Real-time outage reports for UCLouvain services. "
+"UCLatence Detector - Real-time outage reports for UCLouvain services. "
 "Check if moodle, intranet, your mail are down. Report the status of a "
 "website easily and see past outages"
 msgstr ""
-"UCLouvain Down Detector - Rapport en temps réel du statut des services et "
-"site de L'UCLouvain. Vois si Moodle, l'intranet ou tes mails sont en "
-"panne. Rapporte le statut d'un site facilement et voit les anciennes "
-"pannes et problèmes"
+"UCLatence Detector - Rapport en temps réel du statut des services et site "
+"de L'UCLouvain. Vois si Moodle, l'intranet ou tes mails sont en panne. "
+"Rapporte le statut d'un site facilement et voit les anciennes pannes et "
+"problèmes"
 
-#: ../templates/base.html:28
+#: ../templates/base.html:26
 msgid ""
-"UCLouvain, monitoring, outage, status, university services, downtime, "
+"UCLatence, monitoring, outage, status, university services, downtime, "
 "downdetector, students"
 msgstr ""
-"UCLouvain, surveillance de statut, panne, statut, service universitaire, "
+"UCLatence, surveillance de statut, panne, statut, service universitaire, "
 "interruption, downdetector, étudiants"
 
-#: ../templates/base.html:29
+#: ../templates/base.html:27
 msgid "EPL Students"
 msgstr "Étudiants de l'EPL"
 
 #: ../templates/base.html:32
-msgid "UCLouvain Down Detector"
-msgstr "UCLouvain Down Detector"
+msgid "UCLatence Detector"
+msgstr "UCLatence Detector"
 
 #: ../templates/base.html:33
-msgid "Real-time outage reports for UCLouvain services"
-msgstr "Rapports de panne en temps réel pour les services de l'UCLouvain"
+msgid "Real-time outage reports for UCLatence services"
+msgstr "Rapports de panne en temps réel pour les services de l'UCLatence"
 
-#: ../templates/base.html:55 ../templates/base.html:64
+#: ../templates/base.html:65 ../templates/base.html:94
 msgid "Home"
 msgstr "Accueil"
 
-#: ../templates/base.html:56 ../templates/base.html:65
+#: ../templates/base.html:66 ../templates/base.html:95
 msgid "ServiceList"
 msgstr "Liste de services"
 
-#: ../templates/base.html:57 ../templates/base.html:66
+#: ../templates/base.html:67 ../templates/base.html:96
 msgid "Request Service"
 msgstr "Demande de service"
 
-#: ../templates/base.html:90
+#: ../templates/base.html:113
 msgid "Issue or Request ?"
 msgstr "Un Problème ou Une Requête ?"
 
-#: ../templates/base.html:91
+#: ../templates/base.html:114
 msgid "What is this ?"
 msgstr "Qu'est-ce ?"
 
-#: ../templates/index.html:15 ../templates/itemWebsite.html:15
+#: ../templates/index.html:18
+msgid ""
+"Note: The status results are based on periodic checks and may not reflect "
+"real-time availability. Moreover, some web services and websites may "
+"return false positives and vice versa. 🛠️ We are working on it!"
+msgstr ""
+"Note: Les statuts affichés sont basés sur des tests périodiques et peuvent "
+"ne pas refléter précisément l'état actuel. De plus, certains services et "
+"sites peuvent retourner de faux positifs et vice versa. 🛠️ Nous y "
+"travaillons!"
+
+#: ../templates/index.html:26 ../templates/itemWebsite.html:31
 #, python-format
 msgid "Status for %(servicename)s "
 msgstr "Statut pour %(servicename)s "
 
-#: ../templates/index.html:15 ../templates/itemWebsite.html:15
+#: ../templates/index.html:29 ../templates/itemWebsite.html:33
 #, python-format
 msgid "%(url)s"
 msgstr "%(url)s"
 
-#: ../templates/index.html:19 ../templates/itemWebsite.html:19
-#: ../templates/serviceList.html:34
+#: ../templates/index.html:38 ../templates/itemWebsite.html:39
+#: ../templates/serviceList.html:61
 msgid "Up"
 msgstr "Fonctionne"
 
-#: ../templates/index.html:23 ../templates/itemWebsite.html:23
-#: ../templates/serviceList.html:36
+#: ../templates/index.html:45 ../templates/itemWebsite.html:43
+#: ../templates/serviceList.html:66
 msgid "Down"
 msgstr "En Panne"
 
-#: ../templates/info.html:14
+#: ../templates/info.html:16
+msgid "Who are we?"
+msgstr "Qui sommes-nous ?"
+
+#: ../templates/info.html:18
 msgid "We are"
 msgstr "Nous ne sommes"
 
-#: ../templates/info.html:14
+#: ../templates/info.html:19
 msgid "not associated with UCLouvain"
 msgstr "pas affiliés à l'UCLouvain"
 
-#: ../templates/info.html:14
+#: ../templates/info.html:20
 msgid ""
-"UCLouvain Down is a little student project initiated by Thomas Debelle and "
-"Wouter Vermeulen from the EPL.\n"
-"            You can find all contributors of this project "
+"UCLatence is a little student project initiated by Thomas Debelle and "
+"Wouter Vermeulen from the EPL. You can find all contributors of this "
+"project "
 msgstr ""
-"UCLouvain Down est un petit projet d'étudiant débuté par Thomas Debelle et "
-"Wouter Vermeulen de l'EPL\n"
-"          Vous pouvez retrouver tous les contributeurs du projet "
+"UCLatence est un petit projet d'étudiant débuté par Thomas Debelle et "
+"Wouter Vermeulen de l'EPL. Vous pouvez retrouver tous les contributeurs du "
+"projet "
 
-#: ../templates/info.html:15 ../templates/info.html:33
+#: ../templates/info.html:21 ../templates/info.html:48
 msgid "here"
 msgstr "ici"
 
-#: ../templates/info.html:17
+#: ../templates/info.html:24
 msgid "If you have any issue with the website feel free to send an email at "
 msgstr ""
 "Si vous avez un quelconque soucis avec le site, n'hésitez pas à m'envoyer "
 "un mail à "
 
-#: ../templates/info.html:20
-msgid "What is UCLouvain Down ?"
-msgstr "Qu'est-ce que UCLouvain Down Detector ?"
+#: ../templates/info.html:31
+msgid "What is UCLatence?"
+msgstr "Qu'est-ce que UCLatence ?"
 
-#: ../templates/info.html:23
+#: ../templates/info.html:33
 msgid ""
-"UCLouvain Down is a website that allows you to check the status of the "
+"UCLatence is a website that allows you to check the status of the "
 "UCLouvain services. It is a simple and easy way to know if the services "
 "are up or down."
 msgstr ""
-"UCLouvain Down est un site qui vous permet de vérifier le status des "
-"services de l'UCLouvain. Il est facile et simple de vérifier le statut "
-"d'un site."
+"UCLatence est un site qui vous permet de vérifier le status des services "
+"de l'UCLouvain. Il est facile et simple de vérifier le statut d'un site."
 
-#: ../templates/info.html:25
+#: ../templates/info.html:36
 msgid ""
-"The status of every websites or services are updated every 5 minutes. We "
-"do not display the status of the previous days and the reset is done at 3 "
-"AM each day. You can still access past status of a service with requesting "
-"a url looking like: "
+"The status of every website or service is updated every 5 minutes. We do "
+"not display the status of the previous days and the reset is done at 3 AM "
+"each day. You can still access past status of a service by requesting a "
+"URL like:"
 msgstr ""
 "Le statut de tous les sites et services sont mises à jour toutes les 5 "
 "minutes. Nous n'affichons pas les statuts des jours précédents et on reset "
 "tous les jours à 3 heures du matin. Vous pouvez toujours accéder aux "
-"status précédent en utilisant un url de la sorte: "
+"status précédent en utilisant un url de la sorte:"
 
-#: ../templates/info.html:30
+#: ../templates/info.html:45
 msgid "Add a new service"
 msgstr "Ajouter un nouveau service"
 
-#: ../templates/info.html:33
+#: ../templates/info.html:47
 msgid ""
 "If you want to add a new service to the list, you just need to fill in "
-"this forms "
+"this form "
 msgstr ""
 "Si vous voulez ajouter un nouveau service à la liste, remplissez "
 "simplement ce formulaire "
 
-#: ../templates/info.html:33
+#: ../templates/info.html:49
 msgid ""
 "We will review your request and add the service if it is relevant. Please "
-"provide some extra info as it helps us with the validation process"
+"provide some extra info as it helps us with the validation process."
 msgstr ""
 "Nous regardons les demandes périodiquement et ajoutons les services qui "
 "sont en lien avec l'UCLouvain. Merci d'ajouter des informations "
-"supplémentaires, c'est fort utile"
+"supplémentaires, c'est fort utile "
 
-#: ../templates/info.html:37
+#: ../templates/info.html:55
 msgid "Bug report"
 msgstr "Bug"
 
-#: ../templates/info.html:40
+#: ../templates/info.html:57
 msgid ""
 "If you find a bug or an issue with the website, feel free to open an issue "
 "at "
 msgstr "Si vous rencontrez un bug, ouvrez une issue à "
 
-#: ../templates/info.html:40
+#: ../templates/info.html:58
 msgid "this link"
 msgstr "ce lien"
 
-#: ../templates/itemWebsite.html:31
-msgid "Is this website currently working for you ?"
-msgstr "Est-ce que le site web fonctionne-t-il actuellement pour vous ?"
-
-#: ../templates/itemWebsite.html:33
-msgid "Yes !"
-msgstr "Oui !"
-
-#: ../templates/itemWebsite.html:34
-msgid "No !"
-msgstr "Non !"
-
-#: ../templates/itemWebsite.html:92 ../templates/serviceList.html:17
-msgid "Status"
-msgstr "Statut"
-
-#: ../templates/itemWebsite.html:120
+#: ../templates/itemWebsite.html:51
 msgid "UPTime of the website"
 msgstr "UPTime pour le service"
 
-#: ../templates/itemWebsite.html:136
-msgid "Status from User"
-msgstr "Statut des Utilisateurs"
-
-#: ../templates/itemWebsite.html:164
+#: ../templates/itemWebsite.html:56
 msgid "Reported UPTime from User"
 msgstr "Statut rapporté par les Utilisateurs"
 
-#: ../templates/request.html:11
+#: ../templates/itemWebsite.html:61
+msgid "Global Status"
+msgstr "Statut"
+
+#: ../templates/itemWebsite.html:87 ../templates/serviceList.html:18
+msgid "Status"
+msgstr "Statut"
+
+#: ../templates/itemWebsite.html:106
+msgid "Status from User"
+msgstr "Statut des Utilisateurs"
+
+#: ../templates/itemWebsite.html:123
+msgid "UP"
+msgstr "Fonctionne"
+
+#: ../templates/itemWebsite.html:123
+msgid "DOWN"
+msgstr "En Panne"
+
+#: ../templates/request.html:10
+msgid "Submit a Service Request"
+msgstr "Demande de service"
+
+#: ../templates/request.html:16
 msgid "Service Name:"
 msgstr "Nom du Service:"
 
-#: ../templates/request.html:14
+#: ../templates/request.html:25
 msgid "Service's URL:"
 msgstr "URL du service:"
 
-#: ../templates/request.html:17
+#: ../templates/request.html:34
 msgid "Extra Info:"
 msgstr "Informations supplémentaires:"
 
-#: ../templates/request.html:20
-msgid "Submit"
-msgstr "Envoyer"
+#: ../templates/request.html:43
+msgid "Submit (DISABLED ATM)"
+msgstr "Soumettre (interrompu pour le moment)"
 
-#: ../templates/serviceList.html:14
+#: ../templates/serviceList.html:15
 msgid "Service"
 msgstr "Service"
 
-#: ../templates/serviceList.html:15
+#: ../templates/serviceList.html:16
 msgid "URL"
 msgstr "URL"
 
-#: ../templates/serviceList.html:16
+#: ../templates/serviceList.html:17
 msgid "Reported Status by Users"
 msgstr "Statut rapporté par les Utilisateurs"
 
@@ -276,3 +300,18 @@ msgstr "Statut rapporté par les Utilisateurs"
 
 #~ msgid "Graph of previous status for %(name)s "
 #~ msgstr "Graphe du statut rapporté pour %(name)s "
+
+#~ msgid "404 - Not Found"
+#~ msgstr "Erreur 404 - Page introuvable"
+
+#~ msgid "Is this website currently working for you ?"
+#~ msgstr "Est-ce que le site web fonctionne-t-il actuellement pour vous ?"
+
+#~ msgid "Yes !"
+#~ msgstr "Oui !"
+
+#~ msgid "No !"
+#~ msgstr "Non !"
+
+#~ msgid "Submit"
+#~ msgstr "Envoyer"

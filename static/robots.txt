@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 Disallow: /cgi-bin/
-Sitemap: https://www.uclouvain-down.be/sitemap.xml
+Sitemap: https://www.uclatence.be/sitemap.xml

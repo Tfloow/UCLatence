@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block card %}
-<meta name="og:title" content="{{ service.name }} - UCLatence Down Detector">
+<meta name="og:title" content="{{ service.name }} - UCLatence Detector">
 <meta name="og:description" content="{{ service.name }}: {{ service.is_up }} More information on the website">
 <meta name="og:type" content="website">
 <meta name="og:url" content="https://www.uclouvain-down.be">
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block head %}
-    <title>{{ service.name }} - UCLatence Down</title>
+    <title>{{ service.name }} - UCLatence</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {% if service.is_up %}
         <link rel="icon" type="image/x-icon" href="/static/ico/icoUP.png">

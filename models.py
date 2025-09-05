@@ -24,7 +24,7 @@ webhook_tracked_services = Body(
         )
 webhook_callback_url = Body(
             description="The url to which should be sent the `POST` requests containing updates.",
-            examples=["https://somesite/api/webhooks/UCLouvainDownResponses"]
+            examples=["https://somesite/api/webhooks/UCLatenceResponses"]
         )
 
 

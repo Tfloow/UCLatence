@@ -1,5 +1,6 @@
 import sqlite3
 import datetime as dt
+import requests
 
 def convert_to_table_name(service_name):
     table_name = service_name.replace('.', '_')
@@ -77,6 +78,18 @@ def add_new_service_entry(service_name):
     ''')
     conn.commit()
     conn.close()
+    
+def sync_database():
+    # retrieve from UCLatence.be/extract?get=all
+    response = requests.get("https://uclatence.be/extract?get=all")
+    if response.status_code == 200:
+        print("Successfully retrieved the latest database.")
+        # save content
+        content = response.content
+        with open("data/outage.sqlite3", "wb") as f:
+            f.write(content)
+    else:
+        print(f"Failed to retrieve services: {response.status_code}")
 
 if __name__ == "__main__":
     print(get_latest_status("ADE"))

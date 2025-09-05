@@ -1,6 +1,6 @@
-# UCLouvain website DownDetector
+# UCLatence website DownDetector
 
-- [UCLouvain website DownDetector](#uclouvain-website-downdetector)
+- [UCLatence website DownDetector](#uclatence-website-downdetector)
   - [Introduction](#introduction)
   - [How does it work ?](#how-does-it-work-)
   - [How to run it ?](#how-to-run-it-)
