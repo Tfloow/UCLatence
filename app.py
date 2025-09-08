@@ -269,7 +269,7 @@ api = FastAPI(
       <li>A webhook interface is also provided, please refer to [the webhook section](/api/docs#tag/Webhooks) of the 
         documentation for the details.</li>
     </ul>
-    An issue or request? Please let us know [over on github](https://github.com/Tfloow/UCLouvainDown).
+    An issue or request? Please let us know [over on github](https://github.com/Tfloow/UCLatence).
     """,
     docs_url=None,
     redoc_url="/api/docs",

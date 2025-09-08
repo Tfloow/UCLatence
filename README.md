@@ -35,7 +35,7 @@ I am tracking and storing the last status in the JSON and only doing request eve
 
 First, you need to use **python 3.11** version (we suggest you to use a virtual environnement).
 
-1. `git clone git@github.com:Tfloow/UCLouvainDown.git` (*or fork it*)
+1. `git clone git@github.com:Tfloow/UCLatence.git` (*or fork it*)
 2. `pip install -r requirements.txt`
 3. `python app.py`
 
