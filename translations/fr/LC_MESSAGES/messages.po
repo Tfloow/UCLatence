@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-05 10:43+0200\n"
-"PO-Revision-Date: 2025-09-05 10:49+0200\n"
+"POT-Creation-Date: 2025-09-08 16:09+0200\n"
+"PO-Revision-Date: 2025-09-08 16:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.10.3\n"
 "X-Generator: Poedit 3.7\n"
 
 #: ../app.py:161
@@ -149,7 +149,7 @@ msgstr ""
 "Wouter Vermeulen de l'EPL. Vous pouvez retrouver tous les contributeurs du "
 "projet "
 
-#: ../templates/info.html:21 ../templates/info.html:48
+#: ../templates/info.html:21 ../templates/info.html:58
 msgid "here"
 msgstr "ici"
 
@@ -160,10 +160,29 @@ msgstr ""
 "un mail à "
 
 #: ../templates/info.html:31
+msgid "Support us"
+msgstr "Nous soutenir"
+
+#: ../templates/info.html:33
+msgid "If you want to support the project, you can make a donation via "
+msgstr "Si vous souhaitez soutenir le projet, vous pouvez faire un don via "
+
+#: ../templates/info.html:35
+msgid ""
+"7$/month is needed to cover hosting fees. Currently, it is running with "
+"the free plan which adds a loading time you may encounter. All donations "
+"will help fund this project."
+msgstr ""
+"7$/mois sont nécessaires pour couvrir les frais d'hébergement. "
+"Actuellement, il fonctionne avec le plan gratuit, ce qui ajoute un temps "
+"de chargement que vous pouvez rencontrer. Tous les dons aideront à "
+"financer ce projet."
+
+#: ../templates/info.html:41
 msgid "What is UCLatence?"
 msgstr "Qu'est-ce que UCLatence ?"
 
-#: ../templates/info.html:33
+#: ../templates/info.html:43
 msgid ""
 "UCLatence is a website that allows you to check the status of the "
 "UCLouvain services. It is a simple and easy way to know if the services "
@@ -172,7 +191,7 @@ msgstr ""
 "UCLatence est un site qui vous permet de vérifier le status des services "
 "de l'UCLouvain. Il est facile et simple de vérifier le statut d'un site."
 
-#: ../templates/info.html:36
+#: ../templates/info.html:46
 msgid ""
 "The status of every website or service is updated every 5 minutes. We do "
 "not display the status of the previous days and the reset is done at 3 AM "
@@ -184,11 +203,11 @@ msgstr ""
 "tous les jours à 3 heures du matin. Vous pouvez toujours accéder aux "
 "status précédent en utilisant un url de la sorte:"
 
-#: ../templates/info.html:45
+#: ../templates/info.html:55
 msgid "Add a new service"
 msgstr "Ajouter un nouveau service"
 
-#: ../templates/info.html:47
+#: ../templates/info.html:57
 msgid ""
 "If you want to add a new service to the list, you just need to fill in "
 "this form "
@@ -196,7 +215,7 @@ msgstr ""
 "Si vous voulez ajouter un nouveau service à la liste, remplissez "
 "simplement ce formulaire "
 
-#: ../templates/info.html:49
+#: ../templates/info.html:59
 msgid ""
 "We will review your request and add the service if it is relevant. Please "
 "provide some extra info as it helps us with the validation process."
@@ -205,17 +224,17 @@ msgstr ""
 "sont en lien avec l'UCLouvain. Merci d'ajouter des informations "
 "supplémentaires, c'est fort utile "
 
-#: ../templates/info.html:55
+#: ../templates/info.html:65
 msgid "Bug report"
 msgstr "Bug"
 
-#: ../templates/info.html:57
+#: ../templates/info.html:67
 msgid ""
 "If you find a bug or an issue with the website, feel free to open an issue "
 "at "
 msgstr "Si vous rencontrez un bug, ouvrez une issue à "
 
-#: ../templates/info.html:58
+#: ../templates/info.html:68
 msgid "this link"
 msgstr "ce lien"
 
